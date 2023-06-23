@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>商品管理</title>
+        <title>首頁</title>
+        <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+<style>
+#add {
+	border: 0.5px solid rgb(195, 195, 195);
+	float: right;
+	font-size: 14px;
+	background-color: #d1f0c2;
+}
+
+#back {
+	border: 0.5px solid rgb(195, 195, 195);
+	float: right;
+	font-size: 14px;
+	background-color: #c2f0ec;
+}
+
+#del {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #ffadadd4;
+}
+
+#editStudio {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #d1f0c2;
+}
+
+#enter {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #c2f0ec;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 0.5px solid rgb(195, 195, 195);
+	padding: 8px;
+	text-align: left;
+	border-radius: 5%;
+}
+</style>
+</head>
+<body class="sb-nav-fixed">
+	<ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
+	<div id="layoutSidenav">
+		<div th:replace="~{backstage/shared_layout/layout-static :: sidebar}"
+			id="layoutSidenav_nav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">設備管理</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+						<li class="breadcrumb-item active">相機設備管理</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-body">
+							新增相機資料 <br>
+							<form method="get" th:action="@{/lenss}">
+								<button id="back">回到上一頁</button>
+							</form>
+						</div>
+					</div>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> 相機管理
+						</div>
+						<div class="card-body">
+
+							<form th:action="@{/product/insertlens}" method="post"
+								enctype="multipart/form-data">
+								<table>
+									<thead>
+										<tr>
+											<th>項目</th>
+											<th>輸入</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>鏡頭型號:</td>
+											<td><input type="text" id="lensModel"
+												name="lensModel"></td>
+										</tr>
+										<tr>
+											<td>鏡頭品牌:</td>
+											<td><input type="text" id="lensBrand"
+												name="lensBrand"></td>
+										</tr>
+										<tr>
+											<td>鏡頭價格:</td>
+											<td><input type="number" id="lensPrice"
+												name="lensPrice"></td>
+										</tr>
+										<tr>
+											<td>鏡頭接環:</td>
+											<td><input type="text" id="lensMount"
+												name="lensMount"></td>
+										</tr>
+										<tr>
+											<td>鏡頭焦距:</td>
+											<td><input type="text" id="lensFocalLength"
+												name="lensFocalLength"></td>
+										</tr>
+										<tr>
+											<td>鏡頭鏡組:</td>
+											<td><input type="text" id="lensGroup" 
+											name="lensGroup">
+											</td>
+										</tr>
+										<tr>
+											<td>光學防手震:</td>
+											<td><input type="text" id="lensOIS"
+												name="lensOIS"></td>
+										</tr>
+										<tr>
+											<td>放大倍率:</td>
+											<td><input type="text" id="lensMagnification" 
+											name="lensMagnification">
+											</td>
+										</tr>
+										<tr>
+											<td>最近對焦距離:</td>
+											<td><input type="text" id="lensMinFocusDist" 
+											name="lensMinFocusDist">
+											</td>
+										</tr>
+										<tr>
+											<td>最小光圈:</td>
+											<td><input type="number" id="lensApertureMin" 
+											name="lensApertureMin">
+											</td>
+										</tr>
+										<tr>
+											<td>最大光圈:</td>
+											<td><input type="number" id="lensApertureMax"
+												name="lensApertureMax"></td>
+										</tr>
+										<tr>
+											<td>光圈葉片:</td>
+											<td><input type="text" id="lensBlades"
+												name="lensBlades"></td>
+										</tr>
+										<tr>
+											<td>濾鏡尺寸:</td>
+											<td><input type="text" id="lensFilterSize"
+												name="lensFilterSize"></td>
+										</tr>
+										<tr>
+											<td>鏡頭尺寸:</td>
+											<td><input type="text" id="lensDims"
+												name="lensDims"></td>
+										</tr>
+										<tr>
+											<td>鏡頭重量:</td>
+											<td><input type="number" id="lensWeight"
+												name="lensWeight"></td>
+										</tr>
+										<tr>
+											<td>鏡頭視角:</td>
+											<td><input type="text" id="lensFOV"
+												name="lensFOV"></td>
+										</tr>
+										<tr>
+											<td>驅動方式:</td>
+											<td><input type="text" id="lensDrive"
+												name="lensDrive"></td>
+										</tr>
+										<tr>
+											<td>照片</td>
+											<td>
+											<input type="file" id="lensPhoto" name="lensPhoto"  onchange="previewFile()"/>
+											<img width="200px" id="previewImage" src="#" alt="Preview Image" /></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<br> <input id="add" type="submit" value="儲存" ;/>
+							</form>
+							<button id="fillDataButton">test用一鍵填寫</button>
+						</div>
+					</div>
+			</main>
+		<div
+				th:replace="~{backstage/shared_layout/layout-static :: footer}"
+				class="py-4 bg-light mt-auto"></div>
+		</div>
+	</div>
+	<script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+	<script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script>
+	function previewFile() {
+  var preview = document.getElementById('previewImage');
+  var file = document.getElementById('lensPhoto').files[0];
+  var reader = new FileReader();
+
+  reader.onloadend = function() {
+    preview.src = reader.result;
+  }
+
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = "";
+  }
+}
+	
+   document.getElementById("fillDataButton").addEventListener("click", function() {
+        document.getElementById("lensModel").value = "A9";
+        document.getElementById("lensBrand").value = "Sony";
+        document.getElementById("lensPrice").value = "98700";
+        document.getElementById("lensMount").value = "全片幅 CMOS (35.6 × 23.8 mm)，Exmor RS CMOS 感光元件";
+        document.getElementById("lensFocalLength").value = "2420";
+        document.getElementById("lensGroup").value = "XAVC S 4K：3840 x 2160";
+        document.getElementById("lensOIS").value = "Sony E";
+        document.getElementById("lensMagnification").value = "5 軸影像穩定系統";
+        document.getElementById("lensMinFocusDist").value = "368萬畫素 1.3 cm (0.5 型) OLED電子觀景窗";
+        document.getElementById("lensApertureMin").value = "2";
+        document.getElementById("lensApertureMax").value = "78";
+        document.getElementById("lensBlades").value = "1200 區評價測光";
+        document.getElementById("lensFilterSize").value = "100";
+        document.getElementById("lensDims").value = "51200";
+        document.getElementById("lensWeight").value = "90000";
+        document.getElementById("lensFOV").value = "機械快門 最大 5 fps / 電子快門 最大 20 fps";
+        document.getElementById("lensDrive").value = "Sony Memory Stick / SD / SDHC / SDXC";
+        })
+        </script>
+</body>
+</html>

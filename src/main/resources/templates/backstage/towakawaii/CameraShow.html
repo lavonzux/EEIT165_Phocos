@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>商品管理</title>
+<title>首頁</title>
+<link th:href="@{/backstage/shared_layout/css/styles.css}"
+	rel="stylesheet" />
+<style>
+#add {
+	border: 0.5px solid rgb(195, 195, 195);
+	float: right;
+	font-size: 14px;
+	background-color: #d1f0c2;
+}
+
+#back {
+	border: 0.5px solid rgb(195, 195, 195);
+	float: right;
+	font-size: 14px;
+	background-color: #c2f0ec;
+}
+
+#del {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #ffadadd4;
+}
+
+#editStudio {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #d1f0c2;
+}
+
+#enter {
+	border: 0.5px solid rgb(195, 195, 195);
+	font-size: 14px;
+	background-color: #c2f0ec;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 0.5px solid rgb(195, 195, 195);
+	padding: 8px;
+	text-align: left;
+	border-radius: 5%;
+}
+
+.table-img {
+	position: absolute;
+	right: 17px;
+	top: 99px;
+	width: 600px;
+	height: auto;
+	z-index: 1;
+}
+</style>
+</head>
+<body class="sb-nav-fixed">
+	<ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
+	<div id="layoutSidenav">
+		<div th:replace="~{backstage/shared_layout/layout-static :: sidebar}"
+			id="layoutSidenav_nav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">設備管理</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+						<li class="breadcrumb-item active">相機設備管理</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-body">
+							相機資料 <br>
+							<form method="get" th:action="@{/cameras}">
+								<button id="back">回到上一頁</button>
+							</form>
+						</div>
+					</div>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> 相機管理
+						</div>
+						<div class="card-body">
+
+							<form th:action="@{/cameras}" method="post">
+								<table>
+									<thead>
+										<tr>
+											<th>項目</th>
+											<th>輸入</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>相機型號:</td>
+											<td><span id="cameraModel" name="cameraModel"
+												th:text="${camera.cameraModel}"></span><img
+												class="table-img"
+												th:src="@{'/downloadcameraImage/' + ${camera.productID}}" /></td>
+
+										</tr>
+										<tr>
+											<td>相機品牌:</td>
+											<td><span type="text" id="cameraBrand"
+												name="cameraBrand" th:text="${camera.cameraBrand}"></span></td>
+										</tr>
+										<tr>
+											<td>相機價格:</td>
+											<td><span type="number" id="cameraPrice"
+												name="cameraPrice" th:text="${camera.cameraPrice}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraMount">相機接環:</td>
+											<td><span type="text" id="cameraMount"
+												name="cameraMount" th:text="${camera.cameraSensor}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraSensor">感光元件類型:</td>
+											<td><span type="text" id="cameraSensor"
+												name="cameraSensor" th:text="${camera.cameraSensor}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraPx">像素數量:</td>
+											<td><span type="text" id="cameraPx" name="cameraPx"
+												th:text="${camera.cameraPx}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraRecPx">最高解析度:</label>
+											<td><span type="text" id="cameraRecPx"
+												name="cameraRecPx" th:text="${camera.cameraRecPx}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraIBIS">防震功能:</td>
+											<td><span type="text" id="cameraIBIS" name="cameraIBIS"
+												th:text="${camera.cameraIBIS}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraEVF">觀景窗:</td>
+											<td><span type="text" id="cameraEVF" name="cameraEVF"
+												th:text="${camera.cameraEVF}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraLCD">屏幕類型:</td>
+											<td><span type="text" id="cameraLCD" name="cameraLCD"
+												th:text="${camera.cameraLCD}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraFocusSys">對焦系統:</label>
+											<td><span type="number" id="cameraFocusSys"
+												name="cameraFocusSys" th:text="${camera.cameraFocusSys}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraPhotometry">測光方式:</td>
+											<td><span type="number" id="cameraPhotometry"
+												name="cameraPhotometry" th:text="${camera.cameraPhotometry}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraISOMin">最低ISO:</td>
+											<td><span type="number" id="cameraISOMin"
+												name="cameraISOMin" th:text="${camera.cameraISOMin}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraISOMax">最高ISO:</td>
+											<td><span type="number" id="cameraISOMax"
+												name="cameraISOMax" th:text="${camera.cameraISOMax}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraShutter">快門類型:</td>
+											<td><span type="number" id="cameraShutter"
+												name="cameraShutter" th:text="${camera.cameraShutter}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraBurst">連拍速度:</td>
+											<td><span type="text" id="cameraBurst"
+												name="cameraBurst" th:text="${camera.cameraBurst}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraMemCard">存儲卡類型:</label>
+											<td><span type="text" id="cameraMemCard"
+												name="cameraMemCard" th:text="${camera.cameraMemCard}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraBattery">電池類型:</td>
+											<td><span type="text" id="cameraBattery"
+												name="cameraBattery" th:text="${camera.cameraBattery}"></span>
+											</td>
+										</tr>
+										<tr>
+											<td for="cameraDims">尺寸:</label>
+											<td><span type="text" id="cameraDims" name="cameraDims"
+												th:text="${camera.cameraDims}"></span></td>
+										</tr>
+										<tr>
+											<td for="cameraWeight">重量:</label>
+											<td><span type="number" id="cameraWeight"
+												name="cameraWeight" th:text="${camera.cameraWeight}"></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+
+						</div>
+					</div>
+			</main>
+			<div th:replace="~{layout/layout-static :: footer}"
+				class="py-4 bg-light mt-auto"></div>
+		</div>
+	</div>
+	<script
+		th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}"
+		crossorigin="anonymous"></script>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+		crossorigin="anonymous"></script>
+	<script
+		th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+	<script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script>
+
+
+        </script>
+</body>
+</html>

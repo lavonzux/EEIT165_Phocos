@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>修改會員</title>
+	<link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
+
+	<div id="layoutSidenav">
+		<div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">會員管理</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+						<li class="breadcrumb-item active">會員管理</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-body">
+							修改會員資料 <br>
+						</div>
+					</div>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> 單筆會員表格
+							<div class="card-body">
+								<form th:action="@{/dashboard/member/updated}" method="post">
+
+									<input type="hidden" id="memberID" name="memberID" th:value="${member.memberID}">
+									<label for="memberAccount">帳號：</label>
+									<input type="text" id="memberAccount" name="memberAccount"
+										th:value="${member.memberAccount}" required><br> <br>
+									<label for="memberPassword">密碼：</label> <input type="password" id="memberPassword"
+										name="memberPassword" th:value="${member.memberPassword}" required><br> <br>
+									<label for="memberEmail">Email：</label> <input type="email" id="memberEmail"
+										name="memberEmail" th:value="${member.memberEmail}" required><br> <br>
+									<label for="memberName">姓名：</label> <input type="text" id="memberName"
+										name="memberName" th:value="${member.memberName}" required><br> <br> <label
+										for="memberGender">性別：</label>
+									<select id="memberGender" name="memberGender" value="th:${member.memberGender}"
+										required>
+										<option value="Male">男性</option>
+										<option value="Female">女性</option>
+										<option value="Other">其他</option>
+									</select><br> <br> <input type="submit" value="確定修改">
+								</form>
+
+							</div>
+						</div>
+
+					</div>
+			</main>
+			<div th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"></div>
+		</div>
+	</div>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/scripts.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+</body>
+
+</html>
