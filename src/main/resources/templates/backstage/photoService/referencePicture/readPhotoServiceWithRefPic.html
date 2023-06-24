@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Upload photo for PService</title>
+<style>
+*{
+	font-family: "Microsoft Yahei";
+}
+</style>
+</head>
+
+<head th:replace="~{/backstage/shared_layout/scriptSource.html}"> </head>
+
+<body>
+<div th:replace="~{backstage/shared_layout/layout-static :: navbar}"></div>
+<div class="container">
+	<h1>Test upload referencePicture</h1>
+	
+	<div class="card">
+		<div class="card-head mt-4 ms-4">
+			<h3>以下為 <span th:text="${resultBean.serviceName}"></span> 的詳細資訊</h3>
+			<span>最後更新時間為: </span><span th:text="${resultBean.formattedUpdatedOn}"></span>
+		</div>
+		<div class="card-body">
+			<table>
+				<tr>
+					<td>攝影服務ID</td>
+					<td><input type="text" class="disabled" disabled th:value="${resultBean.serviceID}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務名稱</td>
+					<td><input type="text" disabled th:value="${resultBean.serviceName}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務類型</td>
+					<td><input type="text" disabled th:value="${resultBean.serviceType}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務價格</td>
+					<td><input type="text" disabled th:value="${resultBean.servicePrice}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務時長</td>
+					<td><input type="text" disabled th:value="${resultBean.serviceDuration}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務地點</td>
+					<td><input type="text" disabled th:value="${resultBean.serviceLocation}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務創建者</td>
+					<td><input type="text" disabled th:value="${resultBean.serviceCreator}"></td>
+				</tr>
+				<tr>
+					<td>攝影服務更新日期</td>
+					<td><input type="text" disabled th:value="${resultBean.formattedCreatedOn}" /></td>
+				</tr>
+			</table>
+			<a th:href="@{UpdatePhotoService.controller(serviceID=${resultBean.serviceID})}">修改</a>
+			<a th:href="@{DeletePhotoService.controller(serviceID=${resultBean.serviceID})}">刪除</a>
+			<hr>
+			<img class="img-fluid rounded" style="width: 30%;" th:src="@{/referencePicture/getRefPic(serviceID=${resultBean.serviceID})}"></img>		
+		</div>
+	</div>
+	
+	
+</div>
+
+
+<script>
+	const uploadBtn = document.getElementById('submitBtn')
+
+	uploadBtn.addEventListener('click',(e)=>{
+		e.preventDefault()
+		console.log('pressed');
+		let form = document.getElementById('myForm')
+		let formdataObject = new FormData(form)
+		// - 打包 form 表單的 js 物件, 適合表單內很多 input 時使用
+		// 有檔案相關的一定要用 formdata 包成 js 物件, ajax 才能送
+		sendPhoto(formdataObject)
+	})
+
+	function sendPhoto(formData) {
+		axios({
+			method: 'post',
+			url:'http://localhost:8080/phocos/referencePicture/upload',
+			data:formData,
+			//headers:{"Content-Type":"multipart/form-data"} // axios, jQuery 會自動做這件事，但fetch(), XMLHttpRequest不會
+		})
+		.then(res=>{
+			console.log('upload successed!');
+			console.log(res.data);
+			let resultBlock = document.getElementById('upload_results')
+			resultBlock.innerHTML = res.data
+		})
+		.catch(err=>{
+			console.log('upload failed!');
+			let resultBlock = document.getElementById('upload_results')
+			resultBlock.innerHTML = '上船失敗，請重新再試一次'
+		})
+		.finally(function(){
+			document.getElementById('myForm').reset()
+		})
+	}
+
+</script>
+</body>
+</html>

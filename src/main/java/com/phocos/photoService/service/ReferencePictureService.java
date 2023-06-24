@@ -1,19 +1,29 @@
-package com.phocos.photoService.model;
+package com.phocos.photoService.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
-@Controller
+import com.phocos.photoService.model.PhotoService;
+import com.phocos.photoService.model.PhotoServiceRepository;
+import com.phocos.photoService.model.ReferencePicture;
+import com.phocos.photoService.model.ReferencePictureRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
 public class ReferencePictureService {
 
 	
 	@Autowired
 	private ReferencePictureRepository rpRepo;
 	
+	@Autowired
+	private PhotoServiceRepository psRepo;
 	
 	
 	public ReferencePicture createEntry(ReferencePicture pic) {
@@ -49,5 +59,24 @@ public class ReferencePictureService {
 		return pictureList;
 	}
 	
+	
+	public ReferencePicture readByPhotoServiceID(int serviceID) {
+		
+		Optional<PhotoService> optional = psRepo.findById(serviceID);
+		if (optional.isEmpty()) {
+			System.out.println("Cannot find the PhotoService!");
+			return null;
+		}
+		
+		List<ReferencePicture> refPic = rpRepo.findAllByPhotoServiceServiceID(optional.get().getServiceID());
+		if (refPic.size()==0) {
+			System.out.println("Cannot find related ref Pics!");
+			return null;
+		}
+		
+		System.out.println("Returning the first ref pic!");
+		return refPic.get(1);
+		
+	}
 	
 }
