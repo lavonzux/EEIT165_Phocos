@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Upload photo for PService</title>
+<style>
+*{
+	font-family: "Microsoft Yahei";
+}
+</style>
+</head>
+
+<head th:replace="~{/backstage/shared_layout/scriptSource.html}"> </head>
+
+<body>
+<div th:replace="~{backstage/shared_layout/layout-static :: navbar}"></div>
+<div class="container">
+	<h1>Test upload referencePicture</h1>
+	<form method="post" action="#" id="myForm">
+		
+		<table>
+			<tr>
+				<td> <label for="serviceID">PhotoServiceID：</label> </td>
+				<td> <input name="serviceID" id="serviceID" /> </td>
+			</tr>
+			<tr>
+				<td> <label for="photoName">圖片名稱：</label> </td>
+				<td> <input name="photoName" id="photoName"/></td>
+			</tr>
+			<tr>
+				<td> <label for="photoFile">檔案：</label> </td>
+				<td> <input type="file" name="photoFile" id="photoFile"/><br> </td>
+			</tr>				
+		</table>
+		<hr>
+		<button type="submit" id="submitBtn" class="btn btn-outline-primary">上傳圖片</button> 
+	</form>
+	<div id="upload_results">
+		<h3 th:text=${errorMsg}></h3>		
+	</div>
+	
+</div>
+
+
+<script>
+	const uploadBtn = document.getElementById('submitBtn')
+
+	uploadBtn.addEventListener('click',(e)=>{
+		e.preventDefault()
+		console.log('pressed');
+		let form = document.getElementById('myForm')
+		let formdataObject = new FormData(form)
+		// - 打包 form 表單的 js 物件, 適合表單內很多 input 時使用
+		// 有檔案相關的一定要用 formdata 包成 js 物件, ajax 才能送
+		sendPhoto(formdataObject)
+	})
+
+	function sendPhoto(formData) {
+		axios({
+			method: 'post',
+			url:'http://localhost:8080/phocos/referencePicture/upload',
+			data:formData,
+			//headers:{"Content-Type":"multipart/form-data"} // axios, jQuery 會自動做這件事，但fetch(), XMLHttpRequest不會
+		})
+		.then(res=>{
+			console.log('upload successed!');
+			console.log(res.data);
+			let resultBlock = document.getElementById('upload_results')
+			resultBlock.innerHTML = res.data
+		})
+		.catch(err=>{
+			console.log('upload failed!');
+			let resultBlock = document.getElementById('upload_results')
+			resultBlock.innerHTML = '上船失敗，請重新再試一次'
+		})
+		.finally(function(){
+			document.getElementById('myForm').reset()
+		})
+	}
+
+</script>
+</body>
+</html>

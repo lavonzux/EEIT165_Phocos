@@ -1,6 +1,7 @@
 package com.phocos.photoService.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +87,21 @@ public class PhotoService implements java.io.Serializable{
 	}
 	*/
 
+	public String getFormattedCreatedOn() {
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		String formatedCreatedOn = createdOn.format(format);
+		
+		return formatedCreatedOn;
+	}
+	
+	
+	public String getFormattedUpdatedOn() {
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		String formatedUpdatedOn = updatedOn.format(format);
+		
+		return formatedUpdatedOn;
+	}
+	
 
 	/**
 	/* ==================== DEPRICATED MULTI-GETTER ====================
