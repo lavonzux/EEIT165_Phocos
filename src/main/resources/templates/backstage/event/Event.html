@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="zh-TW">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>活動管理</title>
 	<title>首頁</title>
 	<link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
 	<style>
@@ -48,8 +53,7 @@
 					</ol>
 					<div class="card mb-4">
 						<div class="card-body">
-							管理活動資料 <br>
-							<form method="get" th:action="@{/insert}">
+							<form method="get" th:action="@{/event/insert}">
 								<button id="add">新增活動資料</button>
 							</form>
 						</div>
@@ -145,7 +149,7 @@
 
 				Swal.fire({
 					title: '確認删除？',
-					text: '您确定要删除這個活動資料吗？',
+					text: '您確定要刪除這個活動資料吗？',
 					icon: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
@@ -156,8 +160,8 @@
 					if (result.isConfirmed) {
 						// 使用Ajax向後端傳送刪除請求
 						$.ajax({
-							url: 'http://localhost:8080/TaptacEvent/deleteEvent', // 替換成你的後端處理刪除的URL
-							method: 'POST',
+							url: 'http://localhost:8080/phocos/event/delete', 
+							method: 'delete',
 							data: {eventID: eventID},
 							complete: function () {
 								// 刪除完成後強制重新載入頁面
@@ -168,7 +172,7 @@
 				});
 			});
 		});
-	</script>
-</body>
 
+        </script>
+    </body>
 </html>
