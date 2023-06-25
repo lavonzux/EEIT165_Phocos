@@ -7,13 +7,14 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Static Navigation - SB Admin</title>
-        <link th:href="@{/backstage/css/styles.css}" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link th:href="@{backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
     </head>
     <body>
         <nav th:fragment="navbar" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" th:href="@{/dashboard}">Start Bootstrap</a>
+            <a class="navbar-brand ps-3" th:href="@{/dashboard}">Phocos 影遇</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -43,13 +44,13 @@
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" th:href="@{/dashboard}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
+                                <div class="sb-nav-link-icon"><i class="fa fa-gears"></i></div>
+                                後台管理首頁
                             </a>
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" th:href="@{/}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                首頁
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                回到前台首頁
                             </a>
                             <!-- 
                             <div class="sb-sidenav-menu-heading">Interface</div>
@@ -96,7 +97,7 @@
                                 </nav>
                             </div>	
 							-->
-                            <div class="sb-sidenav-menu-heading">資料表管理</div>
+                            <div class="sb-sidenav-menu-heading">主要實體資料表管理</div>
                             <a class="nav-link" th:href="@{/dashboard/member}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 會員資料管理
