@@ -56,7 +56,7 @@ public class CameraController {
 			@RequestParam("cameraShutter") String shutter, @RequestParam("cameraBurst") String burst,
 			@RequestParam("cameraMemCard") String memcard, @RequestParam("cameraBattery") String battery,
 			@RequestParam("cameraDims") String dims, @RequestParam("cameraWeight") Integer weight,
-			@RequestParam("cameraPhoto") MultipartFile cameraphoto) {
+			@RequestParam("cameraPhoto") MultipartFile cameraphoto,@RequestParam("cameraStocks") int stocks) {
 		try {
 			Camera camera = new Camera();
 			camera.setCameraModel(model);
@@ -80,6 +80,7 @@ public class CameraController {
 			camera.setCameraDims(dims);
 			camera.setCameraWeight(weight);
 			camera.setCameraPhoto(cameraphoto.getBytes());
+			camera.setCmaeraStocks(stocks);
 			cameraService.insert(camera);
 			return "redirect:/cameras";
 		} catch (IOException e) {
@@ -124,12 +125,13 @@ public class CameraController {
 			@RequestParam("cameraBurst") String burst, @RequestParam("cameraMemCard") String memcard,
 			@RequestParam("cameraBattery") String battery, @RequestParam("cameraDims") String dims,
 			@RequestParam("cameraWeight") Integer weight, @RequestParam("cameraPhoto") MultipartFile cameraPhoto,
+			@RequestParam("cameraStocks") int stocks,
 			Model model1) throws IOException {
 		byte[] camerabyte = null;
 		camerabyte = cameraPhoto.getBytes();
 		Camera updateCamera = cameraService.updateCameraById(productID, model, brand, price, sensor, px, recpx, mount,
 				ibis, evf, lcd, focussys, photometry, isomin, isomax, shutter, burst, memcard, battery, dims, weight,
-				camerabyte);
+				camerabyte,stocks);
 		ResponseEntity<byte[]> imagEntity = downloadImage(productID);
 		byte[] cameraphoto = imagEntity.getBody();
 		model1.addAttribute("cameraphoto", cameraphoto);

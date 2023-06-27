@@ -76,7 +76,7 @@ public class CameraService {
 			@RequestParam String cameraShutter, @RequestParam String cameraBurst,
 			@RequestParam String cameraMemCard, @RequestParam String cameraBattery,
 			@RequestParam String cameraDims, @RequestParam Integer cameraWeight
-			,@RequestParam byte[] cameraPhoto
+			,@RequestParam byte[] cameraPhoto, @RequestParam int cmaeraStocks
 ) throws IOException{
 		Optional<Camera> optional = cameraRepo.findById(productID);
 		if(optional.isPresent()) {
@@ -102,6 +102,7 @@ public class CameraService {
 			camera.setCameraDims(cameraDims);
 			camera.setCameraWeight(cameraWeight);
 			camera.setCameraPhoto(cameraPhoto);
+			camera.setCmaeraStocks(cmaeraStocks);
 			
 			return cameraRepo.save(camera);
 		}
