@@ -73,6 +73,7 @@ a {
 										<th>相機廠商</th>
 										<th>相機名稱</th>
 										<th>相機價格</th>
+										<th>庫存數量</th>
 										<th>配件介紹</th>
 										<th>編輯</th>
 										<th>刪除</th>
@@ -84,6 +85,7 @@ a {
 										<th>相機廠商</th>
 										<th>相機名稱</th>
 										<th>相機價格</th>
+										<th>庫存數量</th>
 										<th>配件介紹</th>
 										<th>編輯</th>
 										<th>刪除</th>
@@ -97,6 +99,7 @@ a {
 											<td id="productID" th:text="${camera.cameraBrand}"></td>
 											<td th:text="${camera.cameraModel}"></td>
 											<td th:text="${camera.cameraPrice}"></td>
+											<td th:text="${camera.cameraStocks}"></td>
 											<td>
 												<form th:action="@{/product/cameradetail}" method="get">
 													<input type="hidden" name="productID"

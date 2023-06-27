@@ -74,7 +74,8 @@ public class LensService {
 			@RequestParam Integer lensApertureMax, @RequestParam String lensBlades,
 			@RequestParam String lensFilterSize, @RequestParam String lensDims,
 			@RequestParam Integer lensWeight, @RequestParam String lensFOV,
-			@RequestParam String lensDrive, @RequestParam byte[] lensPhoto
+			@RequestParam String lensDrive, @RequestParam byte[] lensPhoto,
+			@RequestParam int lensStocks
 ) throws IOException{
 		Optional<Lens> optional = lensRepo.findById(productID);
 		if(optional.isPresent()) {
@@ -98,6 +99,7 @@ public class LensService {
 			lens.setLensFOV(lensFOV);
 			lens.setLensDrive(lensDrive);
 			lens.setLensPhoto(lensPhoto);
+			lens.setLensStocks(lensStocks);
 			
 			return lensRepo.save(lens);
 		}
