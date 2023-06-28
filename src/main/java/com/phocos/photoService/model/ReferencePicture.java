@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "ReferencePhoto")
+@Table(name = "ReferencePicture")
 @Data
 public class ReferencePicture {
 
