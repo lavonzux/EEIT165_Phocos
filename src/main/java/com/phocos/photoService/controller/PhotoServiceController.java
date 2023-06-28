@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.phocos.photoService.model.PhotoService;
+import com.phocos.photoService.model.PhotoServiceDto;
 import com.phocos.photoService.service.PhotoServiceService;
 
 @Controller
@@ -96,6 +97,7 @@ public class PhotoServiceController {
 			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
 			queryPhotoServiceBean = psService.readEntry(serviceID);
 			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
+			model.addAttribute("oldPhotoServiceBean", queryPhotoServiceBean);
 			return "backstage/photoService/UpdatePhotoService";
 		}
 
@@ -107,10 +109,12 @@ public class PhotoServiceController {
 		System.out.printf("========== Updating PhotoServiceID: %d ==========%n",serviceID);
 
 		PhotoService oldPhotoServiceBean = psService.readEntry(queryPhotoServiceBean.getServiceID());
-		model.addAttribute("oldPhotoServiceBean", oldPhotoServiceBean);
-
+		PhotoServiceDto oldPSBDto = oldPhotoServiceBean.toDto();
+		model.addAttribute("oldPhotoServiceBean", oldPSBDto);
+		
 		PhotoService newPhotoServiceBean = psService.updateEntry(queryPhotoServiceBean.getServiceID(), queryPhotoServiceBean);
 		model.addAttribute("newPhotoServiceBean", newPhotoServiceBean);
+		
 		return "backstage/photoService/ConfirmUpdatedPhotoService";
 		}
 

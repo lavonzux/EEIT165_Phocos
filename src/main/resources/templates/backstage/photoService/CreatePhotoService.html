@@ -19,83 +19,13 @@
         <nav th:replace="~{backstage/shared_layout/layout-static :: navbar}"> </nav>
 
         <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" th:href="@{index}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                管理平台
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="studio.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                場地管理
-                            </a>
-                        </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
-                    </div>
-                </nav>
-            </div>
+            <div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"> </div>
+            
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">攝影服務管理</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a th:href="@{index}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">攝影服務管理</li>
-                        </ol>
+                        <ol th:replace="~{backstage/photoService/shared_templates/breadcrumbs :: ps-breadcrumb-Create}"> </ol>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h5>攝影服務管理頁面</h5>
@@ -114,24 +44,38 @@
 
 							    <form method="post" action="CreatePhotoService.controller" >
 							    	<table>
+										<tr>
+											<td>攝影服務ID : </td>
+											<td><input readonly id="serviceID" name="serviceID" /></td>
+										</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務名稱 : </td>
 							        		<td><input id="serviceName" name="serviceName" ></input></td>
+							        	</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務類型 : </td>
 							        		<td><input id="serviceType" name="serviceType" ></input></td>
+							        	</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務價格 : </td>
 							        		<td><input id="servicePrice" name="servicePrice" /></td>
+							        	</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務時長 : </td>
 							        		<td><input id="serviceDuration" name="serviceDuration" /></td>
+							        	</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務地點 : </td>
 							        		<td><input id="serviceLocation" name="serviceLocation" /></td>
+							        	</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務創建者 : </td>
 							        		<td><input id="serviceCreator" name="serviceCreator" /></td>
+							        	</tr>
+							        	<tr>
+											<td>上傳風格範例圖片 : </td>
+											<td><input type="file" id="referencePictures" name="referencePictures"/></td>
+										</tr>
 							    	</table>
 							        <input type="Submit" value="新增資料" />
 							        <input type="reset" value="重置" />
@@ -143,18 +87,7 @@
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <footer th:replace="~{backstage/shared_layout/layout-static :: footer}"> </footer>
             </div>
         </div>
 
@@ -176,6 +109,7 @@
             	$('#serviceCreator').val(1021);
             });
         });
+
 
         </script>
     </body>
