@@ -80,7 +80,7 @@ public class CameraController {
 			camera.setCameraDims(dims);
 			camera.setCameraWeight(weight);
 			camera.setCameraPhoto(cameraphoto.getBytes());
-			camera.setCmaeraStocks(stocks);
+			camera.setCameraStocks(stocks);
 			cameraService.insert(camera);
 			return "redirect:/cameras";
 		} catch (IOException e) {

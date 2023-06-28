@@ -104,8 +104,8 @@ public class Camera {
 	private byte[] cameraPhoto;
 	
 	@Nullable
-	@Column(name = "cmaeraStocks")
-	private int cmaeraStocks;
+	@Column(name = "cameraStocks")
+	private int cameraStocks;
 
 
 }
