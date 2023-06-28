@@ -17,8 +17,8 @@ public class ArticleService {
 	@Autowired
 	private ArticleRepository articleRepo;
 
-	public void insert(Article article) {
-		articleRepo.save(article);
+	public Article insert(Article article) {
+		return articleRepo.save(article);
 	}
 
 	public List<Article> findAll() {
@@ -29,6 +29,16 @@ public class ArticleService {
 		articleRepo.deleteById(articleId);
 	}
 
+	@Transactional
+	public void fakeDelete(Integer articleId) {
+		Optional<Article> optional = articleRepo.findById(articleId);
+		if (optional.isPresent()) {
+			Article article = optional.get();
+			article.setArticleState(0);
+			articleRepo.save(article);
+		}
+	}
+
 	public Article findById(Integer articleId) {
 		Optional<Article> optional = articleRepo.findById(articleId);
 		if (optional.isPresent()) {
@@ -36,22 +46,22 @@ public class ArticleService {
 		}
 		return null;
 	}
-	
-	@Transactional
-	 public Article updateArticleById(Integer articleId, String articleTitle, String articleContent,String hashtag) {
-	  Optional<Article> optional = articleRepo.findById(articleId);
 
-	  if (optional.isPresent()) {
-	   Article article = optional.get();
-	   article.setArticleTitle(articleTitle); // 需要設定傳入的值，而非原本的值
-	   article.setArticleContent(articleContent); // 需要設定傳入的值，而非原本的值
-	   article.setHashtag(hashtag);
-	   article.setArticleUpdateTime(new Date());
-	   articleRepo.save(article);
-	   return article;
-	  }
-	  System.out.println("no update data");
-	  return null;
-	 }
+	@Transactional
+	public Article updateArticleById(Integer articleId, String articleTitle, String articleContent, String hashtag) {
+		Optional<Article> optional = articleRepo.findById(articleId);
+
+		if (optional.isPresent()) {
+			Article article = optional.get();
+			article.setArticleTitle(articleTitle); // 需要設定傳入的值，而非原本的值
+			article.setArticleContent(articleContent); // 需要設定傳入的值，而非原本的值
+			article.setHashtag(hashtag);
+			article.setArticleUpdateTime(new Date());
+			articleRepo.save(article);
+			return article;
+		}
+		System.out.println("no update data");
+		return null;
+	}
 
 }
