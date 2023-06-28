@@ -102,7 +102,7 @@ public class CameraService {
 			camera.setCameraDims(cameraDims);
 			camera.setCameraWeight(cameraWeight);
 			camera.setCameraPhoto(cameraPhoto);
-			camera.setCmaeraStocks(cmaeraStocks);
+			camera.setCameraStocks(cmaeraStocks);
 			
 			return cameraRepo.save(camera);
 		}
