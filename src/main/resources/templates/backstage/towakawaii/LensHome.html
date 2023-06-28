@@ -71,6 +71,7 @@ a {
 										<th>鏡頭廠商</th>
 										<th>鏡頭名稱</th>
 										<th>鏡頭價格</th>
+										<th>庫存數量</th>
 										<th>配件介紹</th>
 										<th>編輯</th>
 										<th>刪除</th>
@@ -82,6 +83,7 @@ a {
 										<th>鏡頭廠商</th>
 										<th>鏡頭名稱</th>
 										<th>鏡頭價格</th>
+										<th>庫存數量</th>
 										<th>配件介紹</th>
 										<th>編輯</th>
 										<th>刪除</th>
@@ -95,6 +97,7 @@ a {
 											<td id="productID" th:text="${lens.lensBrand}"></td>
 											<td th:text="${lens.lensModel}"></td>
 											<td th:text="${lens.lensPrice}"></td>
+											<td th:text="${lens.lensStocks}"></td>
 											<td>
 												<form th:action="@{/product/lensdetail}" method="get">
 													<input type="hidden" name="productID"

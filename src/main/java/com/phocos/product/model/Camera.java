@@ -103,6 +103,9 @@ public class Camera {
 	@Column(name = "cameraPhoto")
 	private byte[] cameraPhoto;
 	
-	
+	@Nullable
+	@Column(name = "cameraStocks")
+	private int cameraStocks;
+
 
 }

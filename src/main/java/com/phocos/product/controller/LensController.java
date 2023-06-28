@@ -55,7 +55,8 @@ public class LensController {
 			@RequestParam("lensApertureMax") Integer lensApertureMax, @RequestParam("lensBlades") String lensBlades,
 			@RequestParam("lensFilterSize") String lensFilterSize, @RequestParam("lensDims") String lensDims,
 			@RequestParam("lensWeight") Integer lensWeight, @RequestParam("lensFOV") String lensFOV,
-			@RequestParam("lensDrive") String lensDrive, @RequestParam("lensPhoto") MultipartFile lensPhoto) {
+			@RequestParam("lensDrive") String lensDrive, @RequestParam("lensPhoto") MultipartFile lensPhoto,
+			@RequestParam("lensStocks") int lensStocks) {
 		try {
 			Lens lens = new Lens();
 			lens.setLensModel(lensModel);
@@ -76,6 +77,7 @@ public class LensController {
 			lens.setLensFOV(lensFOV);
 			lens.setLensDrive(lensDrive);
 			lens.setLensPhoto(lensPhoto.getBytes());
+			lens.setLensStocks(lensStocks);
 			lensService.insert(lens);
 			return "redirect:/lenss";
 		} catch (IOException e) {
@@ -120,12 +122,13 @@ public class LensController {
 			@RequestParam("lensFilterSize") String lensFilterSize, @RequestParam("lensDims") String lensDims,
 			@RequestParam("lensWeight") Integer lensWeight, @RequestParam("lensFOV") String lensFOV,
 			@RequestParam("lensDrive") String lensDrive, @RequestParam("lensPhoto") MultipartFile lensPhoto,
+			@RequestParam("lensStocks") int lensStocks,
 			Model model1) throws IOException {
 		byte[] lensbyte = null;
 		lensbyte = lensPhoto.getBytes();
 		Lens updatelens = lensService.updateLensById(productID, lensModel, lensBrand, lensPrice, lensMount,
 				lensFocalLength, lensGroup, lensOIS, lensMagnification, lensMinFocusDist, lensApertureMin,
-				lensApertureMax, lensBlades, lensFilterSize, lensDims, lensWeight, lensFOV, lensDrive, lensbyte);
+				lensApertureMax, lensBlades, lensFilterSize, lensDims, lensWeight, lensFOV, lensDrive, lensbyte,lensStocks);
 		ResponseEntity<byte[]> imagEntity = downloadImage(productID);
 		byte[] lensphoto = imagEntity.getBody();
 		model1.addAttribute("lensphoto", lensphoto);

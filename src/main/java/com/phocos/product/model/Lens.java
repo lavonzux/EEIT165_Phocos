@@ -92,4 +92,8 @@ public class Lens{
 	@Column(name = "lensPhoto")
 	private byte[] lensPhoto;
 	
+	@Nullable
+	@Column(name = "lensStocks")
+	private int lensStocks;
+
 }
