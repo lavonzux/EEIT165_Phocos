@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<title>驗證帳號</title>
+<link th:href="@{/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/forestage/register/css/registerVerify.css}" rel="stylesheet" />
+</head>
+<body>
+	<div class="row justify-content-center mt-7">
+		<div class="col-lg-5 text-center">
+			<a href="index.html"> <img src="assets/img/svg/logo.svg" alt="">
+			</a>
+			<div class="card mt-5">
+				<div class="card-body py-5 px-lg-5">
+					<div class="svg-icon svg-icon-xl text-purple">
+						<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"
+							viewBox="0 0 512 512">
+							<title>ionicons-v5-g</title><path
+								d="M336,208V113a80,80,0,0,0-160,0v95"
+								style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+							<rect x="96" y="208" width="320" height="272" rx="48" ry="48"
+								style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect></svg>
+					</div>
+					<h3 class="fw-normal text-dark mt-4">兩步驟驗證</h3>
+					<p class="mt-4 mb-1">已將驗證碼寄向你的信箱中，請前去收取
+					</p>
+					<p>並請在下方輸入驗證碼</p>
+
+					<div class="row mt-4 pt-2">
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1" autofocus="">
+						</div>
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1">
+						</div>
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1">
+						</div>
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1">
+						</div>
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1">
+						</div>
+						<div class="col">
+							<input type="text"
+								class="form-control form-control-lg text-center py-4"
+								maxlength="1">
+						</div>
+					</div>
+
+					<a href="#!"
+						class="btn btn-purple btn-lg w-100 hover-lift-light mt-4">
+						驗證我的帳號 </a>
+				</div>
+			</div>
+
+			<p class="text-center text-muted mt-4">
+				沒有收到信嗎? <a href="#!" class="text-decoration-none ms-2">
+					重新發送驗證碼 </a>
+			</p>
+		</div>
+	</div>
+	        <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+	
+</body>
+</html>

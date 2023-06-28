@@ -23,6 +23,17 @@ public class MemberService {
 		
 	}
 	
+	// 帳號是否真的存在
+	public boolean checkMemberAccountExists(String memberAccount) {
+		boolean result = memberRepo.existsByMemberAccount(memberAccount);
+		if (result) {
+			return result;
+		}else {
+			return false;
+		}
+		
+	}
+	
 	
 	// 用ID查詢
 	public Member findById(Integer memberID) {

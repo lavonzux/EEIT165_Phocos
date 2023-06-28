@@ -32,7 +32,7 @@ public class Member {
 	@Column(nullable = false)
 	private Integer memberID;
 	
-	@Column(nullable = false)
+	@Column(nullable = false , unique = true)	
     private String memberAccount;
 	
 	@Column(nullable = false)
@@ -49,11 +49,12 @@ public class Member {
 	
     private String memberAvatar;
     
-    private int accountStatusId;
+    private int accountStatusId = 0;
     
     @JsonManagedReference // 由這邊做JSON序列化
 	@OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true )
 	private List<Login> login = new ArrayList<>();
+    
 
-   
+    
 }
