@@ -77,7 +77,7 @@
 								</div>
 									
 								<div class="col" id="entry-RefPic"> 
-									<img class="img-fluid rounded" th:src="@{/referencePicture/getRefPic(serviceID=${resultBean.serviceID})}"></img>	
+										<img class="img-fluid rounded" th:src="@{'/referencePicture/getRefPic/'+${resultBean.serviceID}}"></img>	
 								</div>
                             </div>
                         </div>

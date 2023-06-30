@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,6 +50,7 @@ public class PhotoService implements java.io.Serializable{
 	private LocalDateTime updatedOn;
 	
 	@OneToMany(mappedBy = "photoService", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<ReferencePicture> referencePictures = new ArrayList<>();
 
 
