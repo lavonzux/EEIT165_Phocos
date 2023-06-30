@@ -33,6 +33,8 @@
 								<form th:action="@{/dashboard/member/updated}" method="post">
 
 									<input type="hidden" id="memberID" name="memberID" th:value="${member.memberID}">
+									<input type="hidden" id="accountStatusId" name="accountStatusId" th:value="${member.accountStatusId}">
+									
 									<label for="memberAccount">帳號：</label>
 									<input type="text" id="memberAccount" name="memberAccount"
 										th:value="${member.memberAccount}" required><br> <br>

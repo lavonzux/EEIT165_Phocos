@@ -20,8 +20,8 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);
         message.setSubject("Verification Code");
-        message.setText("Please click the following link to verify your email:\n\n" +
-                "http://localhost:8080/phocos/register/verifyPage?email="+ recipientEmail +"&code=" + verificationCode);
+        message.setText("這是你的驗證碼:" + verificationCode + "，請點擊下方連結來輸入驗證碼完成帳號的驗證。" + 
+                "http://localhost:8080/phocos/register/verifyPage?email="+ recipientEmail );
         mailSender.send(message);
     }
 	

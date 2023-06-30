@@ -15,10 +15,18 @@ public class OldMemberController {
 
 	@Autowired
 	private MemberService memberService;
-
+	
+	@GetMapping("/member/profile")
+	public String profile() {
+		return "forestage/member/profile";
+	}
+	
+	
+	
 	@GetMapping("/dashboard/member")
 	public String processMainAction(Model m) {
 		List<Member> members = memberService.findAll();
+		System.out.println(members);
 		m.addAttribute("members", members);
 		return "backstage/member/member";
 	}
@@ -27,8 +35,8 @@ public class OldMemberController {
 	public String insertPage() {
 		return "backstage/member/CreateMember";
 	}
-
-	@PostMapping("/dashboard/member/created")
+	
+	@PostMapping("/dashboard/member/created" )
 	public String createMember(@ModelAttribute("members") Member mem2) {
 		memberService.insert(mem2);
 		return "redirect:/dashboard/member";
