@@ -13,6 +13,8 @@ public class Shed {
 	@Id
 	@Column(name = "shedID")
 	private Integer shedID;
+	@Column(name = "studioID")
+	private Integer studioID;
 	@Column(name = "shedName")
 	private String shedName;
 	@Column(name = "shedSize")

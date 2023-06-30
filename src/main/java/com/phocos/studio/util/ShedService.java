@@ -17,11 +17,24 @@ public class ShedService {
 	@Autowired
 	private ShedRepository sRepo;
 
-	//取得所有資料
-	public List<Shed> findAll(){
-		return sRepo.findAll();
+	public List<Shed> findShedByStudioId(Integer studioID) {
+	    return sRepo.findAllByStudioID(studioID);
 	}
 
+	//新增取額資料
+	@GetMapping("/shed/{id}")
+	public Integer getStudioID(Integer shedID) {
+	    Optional<Shed> optional = sRepo.findById(shedID);
+
+	    if (optional.isPresent()) {
+	        Shed shed = optional.get();
+	        return shed.getStudioID();
+	    }
+
+	    // If the Shed with the specified ID is not found, return null or an appropriate value
+	    return null;
+	}
+	
 	//新增資料
 	public void insertShed(Shed shed) {
 		sRepo.save(shed);
@@ -57,6 +70,7 @@ public class ShedService {
 	    
 	    if (optional.isPresent()) {
 	        Shed shed = optional.get();
+	        shed.setShedID(shedID);
 	        shed.setShedName(shedName);
 	        shed.setShedSize(shedSize);
 	        shed.setShedFee(shedFee);
