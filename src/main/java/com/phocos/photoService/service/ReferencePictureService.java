@@ -60,7 +60,7 @@ public class ReferencePictureService {
 	}
 	
 	
-	public ReferencePicture readByPhotoServiceID(int serviceID) {
+	public ReferencePicture readFirstByPhotoServiceID(int serviceID) {
 		
 		Optional<PhotoService> optional = psRepo.findById(serviceID);
 		if (optional.isEmpty()) {
@@ -75,8 +75,38 @@ public class ReferencePictureService {
 		}
 		
 		System.out.println("Returning the first ref pic!");
-		return refPic.get(1);
+		return refPic.get(0);
 		
 	}
 	
+	
+	
+	public List<ReferencePicture> readAllPicturesByServiceID(int serviceID) {
+		
+		System.out.println("checking if "+serviceID+" exist......");
+		Optional<PhotoService> optional = psRepo.findById(serviceID);
+		if (optional.isEmpty()) {
+			System.out.println("Cannot find the PhotoService!");
+			return null;
+		}
+		
+		System.out.println("looking for Ref Pic IDs for: "+optional.get().getServiceID());
+		List<ReferencePicture> refPicsList = rpRepo.findAllByPhotoServiceServiceID(optional.get().getServiceID());
+		if (refPicsList.size()==0) {
+			System.out.println("Cannot find related ref Pics!");
+			return null;
+		}
+		
+		return refPicsList;
+	}
+	
+	
+	public ReferencePicture deleteReferencePicture(int pictureID) {
+		Optional<ReferencePicture> optional = rpRepo.findById(pictureID);
+		
+		if (optional.isEmpty()) { return null; }
+		
+		rpRepo.deleteById(optional.get().getPictureID());
+		return optional.get();
+	}
 }

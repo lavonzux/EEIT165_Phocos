@@ -1,5 +1,7 @@
 package com.phocos.photoService.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,6 +36,7 @@ public class ReferencePicture {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "serviceID")
+	@JsonBackReference
 	private PhotoService photoService;
 	
 }
