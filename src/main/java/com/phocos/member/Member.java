@@ -49,7 +49,8 @@ public class Member {
 	
     private String memberAvatar;
     
-    private int accountStatusId = 0;
+    private Integer accountStatusId = 0;
+    
     
     @JsonManagedReference // 由這邊做JSON序列化
 	@OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true )

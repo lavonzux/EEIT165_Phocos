@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>註冊帳號</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet" />
+<link
+	href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i"
+	rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link th:href="@{/forestage/shared_layout/css/styles.css}"
+	rel="stylesheet" />
+<!-- Font Awesome -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+	rel="stylesheet" />
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+	rel="stylesheet" />
+<!-- MDB -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
+	rel="stylesheet" />
+
+<link th:href="@{/forestage/register/css/register.css}" rel="stylesheet" />
+<style>
+body{
+	background-image: url(https://color-hex.org/colors/ddbea9.png);
+	
+}
+
+.redword {
+	color: red;
+}
+</style>
+
+</head>
+<body class="bg-primary">
+	<div th:replace="~{/forestage/shared_layout/layout :: navbar}"></div>
+	<section class="vh-100 bg-image">
+		<div class="">
+			<div class="container h-100">
+				<div
+					class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col-12 col-md-9 col-lg-7 col-xl-6">
+						<div class="card" style="border-radius: 15px;">
+							<div class="card-body p-5">
+								<h2 class="text-uppercase text-center mb-5">註冊帳號</h2>
+
+								<form th:action="@{/dashboard/member/created}" method="post">
+
+									<div class="form-outline mb-4">
+										<input type="text" id="memberName" name="memberName"
+											class="form-control form-control-lg" /> <label
+											class="form-label" for="memberName">輸入會員名稱</label>
+									</div>
+
+									<div class="form-outline mb-4">
+										<input type="text" id="memberAccount" name="memberAccount"
+											class="form-control form-control-lg" /> 
+											<label
+											class="form-label" for="memberAccount">輸入會員帳號</label>
+										
+										<span id="accountResult">7777</span>
+										
+									</div>
+									
+
+									<div class="form-outline mb-4">
+										<input type="email" id="memberEmail" name="memberEmail"
+											class="form-control form-control-lg" /> <label
+											class="form-label" for="memberEmail">請輸入信箱</label>
+									</div>
+
+									<div class="form-outline mb-4">
+										<input type="password" id="memberPassword"
+											name="memberPassword" class="form-control form-control-lg" />
+										<label class="form-label" for="memberPassword">請輸入密碼</label>
+									</div>
+
+									<label for="memberGender">性別：</label> <select id="memberGender"
+										name="memberGender" required>
+										<option value="Male">男性</option>
+										<option value="Female">女性</option>
+										<option value="Other">其他</option>
+									</select><br> <br>
+									<button id="fillFormButton">一鍵輸入</button>
+									<br>
+
+									<div class="form-check d-flex justify-content-center mb-5">
+										<input class="form-check-input me-2" type="checkbox" value=""
+											id="form2Example3cg" /> <label class="form-check-label"
+											for="form2Example3g"> I agree all statements in <a
+											href="#!" class="text-body"><u>Terms of service</u></a>
+										</label>
+									</div>
+
+									<div class="d-flex justify-content-center">
+										<button type="submit" id="registerButton"
+											class="btn btn-success btn-block btn-lg gradient-custom-4 text-body ">註冊</button>
+									</div>
+
+									<p class="text-center text-muted mt-5 mb-0">
+										已經有帳號了嗎? <a th:href="@{/login}" class="fw-bold text-body"><u>從這裡登入</u></a>
+									</p>
+
+
+								</form>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- MDB -->
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script>
+		
+		$(document).ready(function () {
+  			$('#memberAccount').blur(function () {
+  			event.preventDefault();
+  			
+   			 var memberAccount = $(this).val();
+    
+    			$.ajax({
+      				url: 'http://localhost:8080/phocos/register/checkAccount',
+      				method: 'POST',
+      				data: { memberAccount: memberAccount },
+      				success: function (response) {
+       				$('#accountResult').text(response);
+       				
+       				 if (response === '帳號已存在，請更換一個') {
+      					   // 禁用註冊按鈕
+       					   $('#registerButton').prop('disabled', true);
+       					   $('#accountResult').addClass('redword');
+     			   } else {
+      			    // 啟用註冊按鈕
+         			 $('#registerButton').prop('disabled', false);
+         			 $('#accountResult').removeClass('redword');
+       				}
+      				},
+      				
+     				 error: function (xhr, status, error) {
+        			console.log(error);
+      				}
+    			});
+  			});
+		});
+		
+		$(document).ready(function () {
+			$('#fillFormButton').click(function (event) {
+				event.preventDefault();
+
+				$('#memberAccount').val('user1');
+				$('#memberAccount').addClass('active');
+				$('#memberPassword').val('pass2');
+				$('#memberPassword').addClass('active');
+				$('#memberEmail').val('user1@example.com');
+				$('#memberEmail').addClass('active');
+				$('#memberName').val('黃惶皇');
+				$('#memberName').addClass('active');
+				$('#memberGender').val('Male'); // 選擇對應的性別選項值
+				
+				
+			});
+		});
+	</script>
+</body>
+</html>

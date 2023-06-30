@@ -47,6 +47,7 @@ public class MemberService {
 	// 查詢全部
 	public List<Member> findAll() {
 		return memberRepo.findAll();
+
 	}
 	
 	@Transactional
@@ -56,6 +57,7 @@ public class MemberService {
 		String memberAccount = updateBean.getMemberAccount();
 		String memberPassword = updateBean.getMemberPassword();
 		String memberEmail = updateBean.getMemberEmail();
+		Integer accountStatusId = updateBean.getAccountStatusId();
 		String memberAvatar = updateBean.getMemberAvatar();
 		String memberGender = updateBean.getMemberGender();
 		String memberName = updateBean.getMemberName();
@@ -64,6 +66,7 @@ public class MemberService {
 			member.setMemberAccount(memberAccount);
 			member.setMemberPassword(memberPassword);
 			member.setMemberEmail(memberEmail);
+			member.setAccountStatusId(accountStatusId);
 			member.setMemberAvatar(memberAvatar);
 			member.setMemberGender(memberGender);
 			member.setMemberName(memberName);
