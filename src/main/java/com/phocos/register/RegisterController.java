@@ -34,12 +34,12 @@ public class RegisterController {
 		if (result) {
 			return "帳號已存在，請更換一個";
 		} else {
-			return null;
+			return "帳號可使用";
 		}
 
 	}
 
-	@GetMapping("/register/verify")
+	@PostMapping("/register/verify")
 	public String verify(@RequestParam("verificationCode") String inputCode, HttpSession session) {
 		String storedCode = (String) session.getAttribute("code");
 		Integer memberID = (Integer) session.getAttribute("memberID");
@@ -61,7 +61,11 @@ public class RegisterController {
 	}
 
 	@GetMapping("/register/verifyPage")
-	public String verifyPage() {
+	public String verifyPage(HttpSession session) {
+		String storedCode = (String) session.getAttribute("code");
+		if (storedCode ==null) {
+			return "redirect:/";
+		}
 		return "forestage/register/registerVerify";
 	}
 

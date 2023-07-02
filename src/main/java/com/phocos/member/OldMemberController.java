@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.websocket.server.PathParam;
 
 @Controller
 public class OldMemberController {
@@ -16,17 +19,13 @@ public class OldMemberController {
 	@Autowired
 	private MemberService memberService;
 	
-	@GetMapping("/member/profile")
-	public String profile() {
-		return "forestage/member/profile";
-	}
+
 	
 	
 	
 	@GetMapping("/dashboard/member")
-	public String processMainAction(Model m) {
+	public String dashboardMemberTable(Model m) {
 		List<Member> members = memberService.findAll();
-		System.out.println(members);
 		m.addAttribute("members", members);
 		return "backstage/member/member";
 	}
@@ -37,25 +36,25 @@ public class OldMemberController {
 	}
 	
 	@PostMapping("/dashboard/member/created" )
-	public String createMember(@ModelAttribute("members") Member mem2) {
-		memberService.insert(mem2);
+	public String createMember(@ModelAttribute("members") Member createdMember) {
+		memberService.insert(createdMember);
 		return "redirect:/dashboard/member";
 	}
 
 	@PostMapping("/dashboard/member/delete")
-	public void deleteMember(@RequestParam("memberID") int memberID) {
+	public void deleteMember(@RequestParam("memberID") Integer memberID) {
 		memberService.deleteById(memberID);
 	}
 
 	@PostMapping("/dashboard/member/update")
-	public String updateMember1(@RequestParam("memberID") int memberID, Model m) {
+	public String updateMember1(@RequestParam("memberID") Integer memberID, Model m) {
 		Member member = memberService.findById(memberID);
 		m.addAttribute("member", member);
 		return "backstage/member/UpdateMember";
 	}
 
 	@PostMapping("/dashboard/member/updated")
-	public String updateMember2(@RequestParam("memberID") int memberID,
+	public String updateMember2(@RequestParam("memberID") Integer memberID,
 			@ModelAttribute("updateBean") Member updatedMember) {
 		memberService.updateMemberById(memberID, updatedMember);
 		return "redirect:/dashboard/member";

@@ -30,6 +30,7 @@
 			font-size: 14px;
 			background-color: #c2f0ec;
 		}
+
 	</style>
 </head>
 
@@ -63,6 +64,7 @@
 								<thead>
 									<tr>
 										<th>會員編號</th>
+										<th>會員頭像</th>
 										<th>會員名稱</th>
 										<th>會員狀態</th>
 										<th>會員帳號</th>
@@ -76,6 +78,7 @@
 								<tfoot>
 									<tr>
 										<th>會員編號</th>
+										<th>會員頭像</th>
 										<th>會員名稱</th>
 										<th>會員狀態</th>
 										<th>會員帳號</th>
@@ -91,6 +94,12 @@
 										<tr>
 
 											<td id="memberID" th:text="${member.memberID}"></td>
+											<td id="avatar">
+												<img th:if="${member.memberAvatar != null}" style="width: 50px; height: 50px;"
+													th:src="@{'/avatar/' + ${member.memberID}}" alt="Member Avatar">
+												<img th:unless="${member.memberAvatar != null}" style="width: 50px; height: 50px;"
+													th:src="@{/forestage/member/assets/memberDefaultAvatar.png}" alt="Default Image">
+											</td>
 											<td th:text="${member.memberName}"></td>
 											<td class="accountStatusId" th:text="${member.accountStatusId}"></td>
 											<td th:text="${member.memberAccount}"></td>
@@ -182,7 +191,7 @@
 						$.ajax({
 							url: 'http://localhost:8080/phocos/dashboard/member/delete', // 替換成你的後端處理刪除的URL
 							method: 'POST',
-							data: { memberID: memberID },
+							data: {memberID: memberID},
 							complete: function () {
 								// 刪除完成後強制重新載入頁面
 								location.reload();
