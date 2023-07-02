@@ -1,6 +1,7 @@
-package com.phocos.photoService.controller;
+package com.phocos.photoService.controllerRestful;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.PhotoServiceDto;
 import com.phocos.photoService.service.PhotoServiceService;
 
-@Controller
-public class PhotoServiceController {
+@RestController
+public class PhotoServiceRestController {
 
 
 	@Autowired
@@ -26,7 +29,7 @@ public class PhotoServiceController {
 
 
 	
-	@GetMapping(path = "/photoService/CreatePhotoService.controller")
+//	@GetMapping(path = "/photoService/CreatePhotoService.controller")
 	public String gotoCreatePage(Model model) {
 			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
 
@@ -35,8 +38,7 @@ public class PhotoServiceController {
 			return "backstage/photoService/CreatePhotoService";
 	}
 	
-	
-	@PostMapping(path = "/photoService/CreatePhotoService.controller")
+//	@PostMapping(path = "/photoService/CreatePhotoService.controller")
 	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result, Model model) throws IOException {
 		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
 		
@@ -55,21 +57,14 @@ public class PhotoServiceController {
 	}
 
 
-	@GetMapping(path = "/photoService/ReadAllPhotoService.controller")
-	public String processReadAllPhotoServiceAction(Model model) {
+	@GetMapping(path = "/photoService/api/ReadAll")
+	public List<PhotoService> processReadAllPhotoServiceAction(Model model) {
 		List<PhotoService> resultList = psService.readAllEntries();
-		model.addAttribute("resultList",resultList);
-		return "backstage/photoService/ReadAllPhotoService";
-	}
-	
-	
-	@GetMapping(path = "/photoService/ReadAllPhotoService")
-	public String gotoReadAllPhotoService() {
-		return "forestage/photoService/ReadAllPhotoService";
+		return resultList;
 	}
 
 
-	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
+//	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
 	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
 		model.addAttribute("resultBean", resultBean);
@@ -80,7 +75,7 @@ public class PhotoServiceController {
 
 	
 	
-	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
+//	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
 	public String processUpdatePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
 
 		// If there's no confirmed parameter, QPSB is null, or binding have error, means the first time requesting data for updating
@@ -117,7 +112,7 @@ public class PhotoServiceController {
 
 
 
-	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
+//	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
 	public String processDeletePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
 		System.out.println("==================== Incoming deletion request... ====================");
 

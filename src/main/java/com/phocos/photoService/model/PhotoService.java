@@ -2,7 +2,6 @@ package com.phocos.photoService.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -51,7 +51,7 @@ public class PhotoService implements java.io.Serializable{
 	
 	@OneToMany(mappedBy = "photoService", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
-	private List<ReferencePicture> referencePictures = new ArrayList<>();
+	private List<ReferencePicture> referencePictures;
 
 
 	// ==================== CONSTRUCTOR ====================
