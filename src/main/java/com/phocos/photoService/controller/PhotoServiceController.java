@@ -63,8 +63,11 @@ public class PhotoServiceController {
 	}
 	
 	
-	@GetMapping(path = "/photoService/ReadAllPhotoService")
-	public String gotoReadAllPhotoService() {
+	
+	@GetMapping(path = "/photoService/ReadAll")
+	public String gotoReadAllPhotoService(Model model) {
+		List<PhotoService> resultList = psService.readAllEntries();
+		model.addAttribute("resultList",resultList);
 		return "forestage/photoService/ReadAllPhotoService";
 	}
 

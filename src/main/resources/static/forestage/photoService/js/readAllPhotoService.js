@@ -11,11 +11,20 @@ const output = document.querySelector('.output');
 
 
 window.onload = function () {
-    grabAllPhotoServices();
+    // grabAllPhotoServices();
     // grabRefPicImg(1003);
 
-    grabRefPicIds(1030);
+    // grabRefPicIds(1030);
+    grabAllCarousel();
+}
 
+async function grabAllCarousel() {
+    const carouselNodes = document.querySelectorAll('.carousel-card')
+
+    carouselNodes.forEach(node => {
+        let dataServiceID = node.dataset.serviceid
+        let refPicsHtml = grabRefPicIds(dataServiceID);
+    })
 }
 
 
@@ -23,56 +32,27 @@ window.onload = function () {
 
 function grabAllPhotoServices() {
     const url = ContextPathname + '/photoService/api/ReadAll'
-    axios.get(url)
-        .then(res => {
-            const data = res.data
-            data.forEach(entry => {
-                console.log(entry);
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    return axios.get(url)
 }
-
-function photoServiceCardMaker(photoService) {
-    const output = document.getElementById('card-top')
-    output.innerHTML += '<h5>回傳的 Data</h5>'
-    photoService.forEach((el, index) => {
-        const div = document.createElement('div');
-        div.innerHTML += `<div> id: ${el.id}</div>`
-        div.innerHTML += `<div> 會員姓名: ${el.name}</div>`
-        div.innerHTML += `<div> 會員等級: ${el.level}</div><br>`
-        output.append(div);
-    })
-}
-
-
-
 
 function grabRefPicIds(serviceID) {
     const url = ContextPathname + '/referencePicture/api/getPicIds?serviceID=' + serviceID
-    let data
-    axios.get(url)
+    return axios.get(url)
         .then(res => {
-            console.log(res.data);
-            data = res.data
-            cardCarouselMaker(data)
-        })
-        .catch(err => {
-            console.log(err);
+            let carouselhtml = carouselHtmlMaker(res.data, serviceID);
+            console.log(carouselhtml);
         })
 }
 
 
-function cardCarouselMaker(RefPicIds) {
-    const cardCarousel = document.getElementById('card-carousel')
+function carouselHtmlMaker(RefPicIds, serviceid) {
+    const targetCarouselCard = document.querySelector(`[data-serviceid="${serviceid}"]`)
 
     let htmlStr = `
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
             <div class="carousel-indicators">
-        `
+    `
     RefPicIds.forEach((pictureID, index) => {
         if (index == 0) {
             htmlStr += `
@@ -88,12 +68,11 @@ function cardCarouselMaker(RefPicIds) {
             </div>
         `
     RefPicIds.forEach((pictureID, index) => {
-        let picImgElement = grabRefPicImg(pictureID)
-        htmlStr +=
-            `
-                <div class="p-1 carousel-item ${index == 0 ? 'active' : ''}">
-                    ${picImgElement}
-                </div>
+        let picImgElement = refPicImgHtmlMaker(pictureID)
+        htmlStr += `
+            <div class="p-1 carousel-item ${index == 0 ? 'active' : ''}">
+                ${picImgElement}
+            </div>
         `
     });
     htmlStr += `
@@ -106,27 +85,15 @@ function cardCarouselMaker(RefPicIds) {
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-        </div>`
-    cardCarousel.innerHTML = htmlStr
+        </div>
+    `
+    targetCarouselCard.innerHTML = htmlStr
 }
 
 
-function grabRefPicImg(pictureID) {
-
+function refPicImgHtmlMaker(pictureID) {
     const url = ContextPathname + '/referencePicture/api/getPicById?pictureID=' + pictureID
     // const targetImg = document.getElementById('targetImg')
-    console.log('fetcing pic for' + pictureID + '......');
-
+    // console.log('fetcing pic for' + pictureID + '......');
     return `<img class="d-block w-100 sclDwn" src="${url}" id="targetImg"/>`
-    /*
-    axios.get(url)
-    .then(res => {
-        console.log(res);
-        return `<img class="card-img-top" src="${url}" id="targetImg"/>`
-    })
-    .catch(err => {
-        console.log(err);
-        return `<img class="card-img-top" src="${ContextPathname + '0'}" id="targetImg">`
-    })
-*/
 }
