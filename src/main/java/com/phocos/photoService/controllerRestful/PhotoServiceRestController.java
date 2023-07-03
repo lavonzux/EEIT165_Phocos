@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,6 +64,12 @@ public class PhotoServiceRestController {
 		return resultList;
 	}
 
+	@GetMapping(path = "/photoService/api/ReadAllPage")
+	public Page<PhotoService> gotoReadAllPhotoService(Model model) {
+		
+		Page<PhotoService> resultPage = psService.readAllByPage();
+		return resultPage;
+	}
 
 //	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
 	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {

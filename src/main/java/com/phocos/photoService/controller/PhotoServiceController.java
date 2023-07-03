@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,13 +66,26 @@ public class PhotoServiceController {
 	
 	
 	
-	@GetMapping(path = "/photoService/ReadAll")
+//	@GetMapping(path = "/photoService/ReadAll")
 	public String gotoReadAllPhotoService(Model model) {
 		List<PhotoService> resultList = psService.readAllEntries();
 		model.addAttribute("resultList",resultList);
+		
+		Page<PhotoService> resultPage = psService.readAllByPage();
+		model.addAttribute("resultPage", resultPage);
 		return "forestage/photoService/ReadAllPhotoService";
 	}
 
+	
+	@GetMapping(path = "/photoService/ReadAll")
+	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, Model model) {
+		if (page == null) { page = 1; }
+		Page<PhotoService> resultPage = psService.readAllByPage(page-1, 5);
+		model.addAttribute("resultPage", resultPage);
+		return "forestage/photoService/ReadAllPhotoService";
+	}
+	
+	
 
 	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
 	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
