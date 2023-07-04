@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -51,7 +52,14 @@ public class Login {
 		if( lastLoginTime == null) {
 			lastLoginTime = new Date();
 		}
-		
 	}
+	
+    @PreUpdate
+    public void onUpdate() {
+        this.lastLoginTime = new Date();
+    }
    
+	
+	
+	
 }

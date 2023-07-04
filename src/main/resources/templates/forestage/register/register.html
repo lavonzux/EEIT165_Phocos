@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>註冊帳號</title>
+	<link
+		href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+
+	<link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+	<link th:href="@{/forestage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<style>
+		body {
+			background-image:
+				url(https://memeprod.ap-south-1.linodeobjects.com/user-template/64b3e0854cb3e2ce030e9189d32c3fd7.png);
+		}
+		.redword{
+			color: red;
+		}
+		.greenword{
+			color: #6B705C ;
+		}
+	</style>
+
+</head>
+
+<body class="bg-primary">
+	<div th:replace="~{/forestage/shared_layout/layout :: navbar}"></div>
+	<div id="layoutAuthentication">
+		<div id="layoutAuthentication_content">
+			<main>
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-5">
+							<div class="card shadow-lg border-0 rounded-lg mt-5">
+								<div class="card-header">
+									<h3 class="text-center font-weight-light my-4">註冊帳號</h3>
+								</div>
+								<div class="card-body">
+									<form>
+										<div class="form-floating mb-3">
+											<input class="form-control" id="memberName" name="memberName" type="text"
+												placeholder="name@example.com" /> <label
+												for="memberName">請輸入會員名稱</label>
+										</div>
+										<div class="form-floating mb-3">
+											<input class="form-control" id="memberAccount" name="memberAccount"
+												type="text" placeholder="name@example.com" /> <label
+												for="mebmerAccount">輸入帳號</label>
+											<span id="accountResult"></span>
+										</div>
+										<div class="form-floating mb-3">
+											<input class="form-control" id="memberEmail" name="memberEmail" type="text"
+												placeholder="Password" /> <label for="memberEmail">請輸入信箱</label>
+										</div>
+										<div class="form-floating mb-3">
+											<input class="form-control" id="memberPassword" name="memberPassword"
+												type="password" placeholder="Password" />
+											<label for="inputPassword">請輸入密碼</label>
+										</div>
+										<div class="form-check mb-3">
+											<input class="form-check-input" id="show_hide_password" type="checkbox"
+												value="" />
+											<label class="form-check-label" for="show_hide_password">顯示密碼</label>
+										</div>
+
+										<label for="memberGender">性別：</label> <select id="memberGender"
+											name="memberGender" required>
+											<option value="男性">男性</option>
+											<option value="女性">女性</option>
+											<option value="其他">其他</option>
+										</select><br>
+
+										<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+											<div class="d-flex justify-content-center">
+												<button id="fillFormButton" class="btn btn-primary ">一鍵輸入</button>
+											</div>
+											<div class="d-flex justify-content-center">
+												<button type="submit" id="registerButton"
+													class="btn btn-primary ">確定註冊</button>
+											</div>
+
+										</div>
+
+									</form>
+								</div>
+								<div class="card-footer text-center py-3">
+									<div class="small">
+										已經有帳號了嗎？
+										<a th:href="@{/login}">前往登入頁面</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		<div th:replace="~{/forestage/shared_layout/layout :: footer}"></div>
+	</div>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{backstage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script>
+
+		// 顯示or關閉密碼
+		$(document).ready(function () {
+			$('#show_hide_password').change(function () {
+				var passwordField = $('#memberPassword');
+
+				if ($(this).is(':checked')) {
+					passwordField.attr('type', 'text');
+				} else {
+					passwordField.attr('type', 'password');
+				}
+			});
+		});
+
+		//發出驗證信的按鈕
+		$(document).ready(function () {
+			$('#registerButton').click(function () {
+				event.preventDefault();
+
+				var memberEmail = $('#memberEmail').val();
+				console.log(memberEmail);
+
+				Swal.fire({
+					title: '確認要註冊嗎？',
+					text: '您确定要註冊這個帳號嗎？',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: '確認',
+					cancelButtonText: '取消'
+				}).then(result => {
+					if (result.isConfirmed) {
+						var memberName = $('#memberName').val();
+						var memberAccount = $('#memberAccount').val();
+						var memberEmail = $('#memberEmail').val();
+						var memberPassword = $('#memberPassword').val();
+						var memberGender = $('#memberGender').val();
+
+
+						$.ajax({
+							url: 'http://localhost:8080/phocos/register/sendVerificationCode',
+							method: 'POST',
+							data: {memberEmail: memberEmail},
+							success: function (response) {
+								// Send the member data to the server for database insertion
+								console.log(memberAccount);
+								$.ajax({
+									url: 'http://localhost:8080/phocos/register/addMember',
+									method: 'POST',
+									contentType: 'application/json',
+									data: JSON.stringify({
+										memberName: memberName,
+										memberAccount: memberAccount,
+										memberEmail: memberEmail,
+										memberPassword: memberPassword,
+										memberGender: memberGender
+									}),
+									success: function (addMemberResponse) {
+										Swal.fire({
+											title: '註冊成功',
+											text: '註冊會員成功，請至信箱領取驗證碼',
+											icon: 'success',
+											confirmButtonText: '確定'
+										});
+									},
+									error: function (addMemberError) {
+										Swal.fire({
+											title: '註冊失敗',
+											text: '註冊會員發生錯誤，請重新再試一次',
+											icon: 'error',
+											confirmButtonText: '確定'
+										});
+									}
+								});
+							},
+							error: function (error) {
+								Swal.fire({
+									title: '註冊失敗',
+									text: '註冊會員發生錯誤，請重新再試一次',
+									icon: 'error',
+									confirmButtonText: '確定'
+								});
+							}
+						});
+					}
+				})
+
+
+
+
+			})
+
+		})
+
+		$(document).ready(function () {
+			$('#memberAccount').blur(function () {
+				event.preventDefault();
+
+				var memberAccount = $(this).val();
+				
+				console.log(memberAccount);
+				$.ajax({
+					url: 'http://localhost:8080/phocos/register/checkAccount',
+					method: 'POST',
+					data: {memberAccount: memberAccount},
+					success: function (response) {
+						$('#accountResult').text(response);
+
+						if (response === '帳號已存在，請更換一個') {
+							// 禁用註冊按鈕
+							$('#registerButton').prop('disabled', true);
+							$('#accountResult').addClass('redword');
+						} 
+						if(response === '帳號可使用'){
+							// 啟用註冊按鈕
+							$('#registerButton').prop('disabled', false);
+							$('#accountResult').removeClass('redword');
+							$('#accountResult').addClass('greenword');
+							
+						}
+						
+					},
+
+					error: function (xhr, status, error) {
+						console.log(error);
+					}
+				});
+			});
+		});
+
+		$(document).ready(function () {
+			$('#fillFormButton').click(function (event) {
+				event.preventDefault();
+
+				$('#memberAccount').val('phocosMember001');
+				$('#memberPassword').val('phocos');
+				$('#memberEmail').val('a10912555@gmail.com');
+				$('#memberName').val('黃柏翔');
+				$('#memberGender').val('男性'); // 選擇對應的性別選項值
+
+
+			});
+		});
+	</script>
+</body>
+
+</html>

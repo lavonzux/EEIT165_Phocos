@@ -23,6 +23,22 @@ public class MemberService {
 		
 	}
 	
+	// 以帳號做查詢會員資料
+	public Member findByMemberAccount(String memberAccount) {
+		return memberRepo.findByMemberAccount(memberAccount);
+	}
+	
+	// 帳號是否真的存在
+	public boolean checkMemberAccountExists(String memberAccount) {
+		boolean result = memberRepo.existsByMemberAccount(memberAccount);
+		if (result) {
+			return result;
+		}else {
+			return false;
+		}
+		
+	}
+	
 	
 	// 用ID查詢
 	public Member findById(Integer memberID) {
@@ -36,6 +52,7 @@ public class MemberService {
 	// 查詢全部
 	public List<Member> findAll() {
 		return memberRepo.findAll();
+
 	}
 	
 	@Transactional
@@ -45,7 +62,6 @@ public class MemberService {
 		String memberAccount = updateBean.getMemberAccount();
 		String memberPassword = updateBean.getMemberPassword();
 		String memberEmail = updateBean.getMemberEmail();
-		String memberAvatar = updateBean.getMemberAvatar();
 		String memberGender = updateBean.getMemberGender();
 		String memberName = updateBean.getMemberName();
 		if(optional.isPresent()) {
@@ -53,13 +69,24 @@ public class MemberService {
 			member.setMemberAccount(memberAccount);
 			member.setMemberPassword(memberPassword);
 			member.setMemberEmail(memberEmail);
-			member.setMemberAvatar(memberAvatar);
 			member.setMemberGender(memberGender);
 			member.setMemberName(memberName);
 			return member;
 		}
 		return null;
 	}
+	// 修改圖片
+	@Transactional
+	public Member updateMemberAvatar(Integer memberID, byte[] avatarData) {
+	    Optional<Member> optional = memberRepo.findById(memberID);
+	    if (optional.isPresent()) {
+	        Member member = optional.get();
+	        member.setMemberAvatar(avatarData);
+	        return memberRepo.save(member);
+	    }
+	    return null;
+	}
+	
 	
 	//刪除
 	public void deleteById(Integer memberID) {

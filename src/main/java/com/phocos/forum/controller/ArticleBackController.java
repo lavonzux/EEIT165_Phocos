@@ -58,5 +58,7 @@ public class ArticleBackController {
 		articleService.realDelete(articleId);
 		return "redirect:/forum/backPage";
 	}
+	
+
 
 }

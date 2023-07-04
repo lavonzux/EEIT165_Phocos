@@ -9,7 +9,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,19 +43,21 @@ public class PhotoService implements java.io.Serializable{
 	private String serviceCreator;
 
 	@CreationTimestamp
+	@Column(updatable = false)
 	private LocalDateTime createdOn;
 
 	@UpdateTimestamp
 	private LocalDateTime updatedOn;
 	
 	@OneToMany(mappedBy = "photoService", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<ReferencePicture> referencePictures = new ArrayList<>();
 
 
 	// ==================== CONSTRUCTOR ====================
 
 	public PhotoService() {
-		System.out.println("New PhotoService constructed!");
+//		System.out.println("New PhotoService constructed!");
 	}
 
 	/*
@@ -175,6 +180,9 @@ public class PhotoService implements java.io.Serializable{
 		return false;
 	}
 
+	public PhotoServiceDto toDto() {
+		return new PhotoServiceDto(this);
+	}
 
 	// ==================== DEPRICATED Utilities ====================
 	/*
