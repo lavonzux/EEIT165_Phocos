@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,15 +30,6 @@ public class PhotoServiceRestController {
 	private PhotoServiceService psService;
 
 
-	
-//	@GetMapping(path = "/photoService/CreatePhotoService.controller")
-	public String gotoCreatePage(Model model) {
-			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
-
-			PhotoServiceDto createPhotoServiceBean = new PhotoServiceDto();
-			model.addAttribute("createPhotoService", createPhotoServiceBean);
-			return "backstage/photoService/CreatePhotoService";
-	}
 	
 //	@PostMapping(path = "/photoService/CreatePhotoService.controller")
 	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result, Model model) throws IOException {
@@ -66,17 +58,14 @@ public class PhotoServiceRestController {
 
 	@GetMapping(path = "/photoService/api/ReadAllPage")
 	public Page<PhotoService> gotoReadAllPhotoService(Model model) {
-		
 		Page<PhotoService> resultPage = psService.readAllByPage();
 		return resultPage;
 	}
 
-//	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
-	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
+	@GetMapping(path = "/photoService/api/ReadOne")
+	public PhotoService processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
-		model.addAttribute("resultBean", resultBean);
-
-		return "backstage/photoService/ReadOnePhotoService";
+		return resultBean;
 	}
 
 
@@ -119,35 +108,25 @@ public class PhotoServiceRestController {
 
 
 
-//	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
-	public String processDeletePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
+	@DeleteMapping("/photoService/api/Delete")
+	public PhotoService processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result) {
 		System.out.println("==================== Incoming deletion request... ====================");
 
-		if (!confirmed || !queryPhotoServiceBean.dataIsValid() || result.hasErrors()) {
-			System.out.println("========== Reading data for updating... ==========");
-			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
-			queryPhotoServiceBean = psService.readEntry(serviceID);
-			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
-			return "backstage/photoService/DeletePhotoService";
-		}
 
-		// If confirmed parameter is valid, qPSB filled with updated data, binding have no error,
+		// qPSB can be found, binding have no error,
 		// Then store the old data, and go delete the data in DB.
-		if (confirmed && queryPhotoServiceBean!=null && !result.hasErrors()) {
+		if (queryPhotoServiceBean!=null && !result.hasErrors()) {
 
 		System.out.println("========== Confirmed to delete... ==========");
 		System.out.printf("========== Deleting PhotoServiceID: %d ==========%n",serviceID);
 
 		PhotoService deletedPhotoServiceBean = psService.readEntry(serviceID);
-		model.addAttribute("deletedPhotoServiceBean", deletedPhotoServiceBean);
-		psService.deleteEntry(queryPhotoServiceBean.getServiceID());
+//		psService.deleteEntry(queryPhotoServiceBean.getServiceID());
 
 
-		return "backstage/photoService/ConfirmDeletedPhotoService";
+		return deletedPhotoServiceBean;
 		}
-
-		// There should only be two situation defined above, other situation go to error page.
-		return "ErrorPage";
+		return null;
 	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.PhotoServiceDto;
+import com.phocos.photoService.model.ReferencePicture;
 import com.phocos.photoService.service.PhotoServiceService;
 
 @Controller
@@ -67,6 +68,7 @@ public class PhotoServiceController {
 	
 	
 //	@GetMapping(path = "/photoService/ReadAll")
+	/*
 	public String gotoReadAllPhotoService(Model model) {
 		List<PhotoService> resultList = psService.readAllEntries();
 		model.addAttribute("resultList",resultList);
@@ -75,6 +77,7 @@ public class PhotoServiceController {
 		model.addAttribute("resultPage", resultPage);
 		return "forestage/photoService/ReadAllPhotoService";
 	}
+	*/
 
 	
 	@GetMapping(path = "/photoService/ReadAll")
@@ -96,6 +99,12 @@ public class PhotoServiceController {
 	}
 
 
+	@GetMapping(path = "/photoService/ReadOne")
+	public String gotoReadOnePhotoService(@RequestParam("serviceID") int serviceID, Model model) {
+		PhotoService resultBean = psService.readEntry(serviceID);
+		model.addAttribute("resultBean", resultBean);
+		return "forestage/photoService/ReadOnePhotoService";
+	}
 	
 	
 	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
@@ -135,12 +144,13 @@ public class PhotoServiceController {
 
 
 
+//	@GetMapping("/photoService/DeletePhotoService.controller")
 	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
 	public String processDeletePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
 		System.out.println("==================== Incoming deletion request... ====================");
 
 		if (!confirmed || !queryPhotoServiceBean.dataIsValid() || result.hasErrors()) {
-			System.out.println("========== Reading data for updating... ==========");
+			System.out.println("========== Reading data for deleting... ==========");
 			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
 			queryPhotoServiceBean = psService.readEntry(serviceID);
 			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);

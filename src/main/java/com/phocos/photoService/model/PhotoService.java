@@ -2,6 +2,7 @@ package com.phocos.photoService.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,6 +41,8 @@ public class PhotoService implements java.io.Serializable{
 	private String serviceLocation;
 
 	private String serviceCreator;
+
+	private String serviceDesc;
 
 	@CreationTimestamp
 	@Column(updatable = false)
@@ -181,6 +184,15 @@ public class PhotoService implements java.io.Serializable{
 
 	public PhotoServiceDto toDto() {
 		return new PhotoServiceDto(this);
+	}
+	
+	
+	
+	public void encodeRefPicFile() {
+		for (ReferencePicture oneRefPic : referencePictures) {
+			byte[] pictureFile = oneRefPic.getPictureFile();
+			oneRefPic.setPictureFile(Base64.getEncoder().encode(pictureFile));
+		}
 	}
 
 	// ==================== DEPRICATED Utilities ====================

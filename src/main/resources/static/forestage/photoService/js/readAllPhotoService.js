@@ -4,12 +4,6 @@ const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') +
 // console.log(ContextPathname);
 
 
-const myBtn = document.querySelector('.my-customer-data-btn');
-const output = document.querySelector('.output');
-
-
-
-
 window.onload = function () {
     grabAllCarousel();
 }
