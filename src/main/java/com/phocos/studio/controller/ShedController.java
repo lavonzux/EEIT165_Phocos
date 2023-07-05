@@ -24,6 +24,8 @@ public class ShedController {
 	@Autowired
 	private ShedService sServ;
 
+	
+	
 	//取得所有資料
 	@GetMapping("/shed")
 	public String showShed(@RequestParam("studioID") Integer studioID, Model model) {
@@ -47,14 +49,18 @@ public class ShedController {
 	@PostMapping("/shed/insertData")
 	public String insertData(@ModelAttribute(name="StudioDetail") Shed shed) {
 	    sServ.insertShed(shed);  // 執行新增資料的邏輯
-	    return "redirect:/shed";
+	    Integer studioID = shed.getStudioID();
+	    String redirectUrl = "redirect:/shed?studioID=" + studioID;
+	    return redirectUrl;
 	}
 
 	//刪除資料
 	@DeleteMapping("/shed/delete")
 	public String deleteShed(@RequestParam("shedID") Integer shedID) {
-		sServ.deleteByShedId(shedID);
-		return "redirect:/sheds";
+	    sServ.deleteByShedId(shedID);
+	    Integer studioID = sServ.findStudioIdByShedId(shedID); 
+	    String redirectUrl = "redirect:/shed?studioID=" + studioID;
+	    return redirectUrl;
 	}
 
 //	//取得修改資料
@@ -76,15 +82,18 @@ public class ShedController {
 	//修改資料
 	@GetMapping("/shed/edit")
 	public String editPage(@RequestParam("shedID") Integer shedID, Model model) {
-		Shed shed = sServ.getById(shedID);
-		model.addAttribute("shed", shed);
-		return "backstage/shed/UpdateShed";
+	    System.out.println(shedID); 
+	    Shed shed = sServ.getById(shedID);
+	    model.addAttribute("shed", shed);
+	    return "backstage/studio/UpdateShed";
 	}
+
 	
 	@PutMapping("/shed/editData")
 	public String editPost(@ModelAttribute(name="StudioDetail") Shed shed) {
 		sServ.updateShedById(	        
 		shed.getShedID(),
+		shed.getStudioID(),
 		shed.getShedName(),
         shed.getShedSize(),
         shed.getShedFee(),
@@ -93,8 +102,9 @@ public class ShedController {
         shed.getShedType(),
         shed.getShedIntro(),
         shed.getStudioPicID());
-		
-		return "redirect:/shed";
+	    Integer studioID = shed.getStudioID();
+	    String redirectUrl = "redirect:/shed?studioID=" + studioID;
+	    return redirectUrl;
 	}
 
 }

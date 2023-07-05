@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.phocos.photoService.model.PhotoService;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -20,6 +22,14 @@ public class StudioService {
 	//取得所有資料
 	public List<Studio> findAll(){
 		return sRepo.findAll();
+	}
+	//取得單筆資料
+	public Studio readEntry(int studioID) {
+		Optional<Studio> optional = sRepo.findById(studioID);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
 	}
 
 	//新增資料
@@ -76,4 +86,5 @@ public class StudioService {
 		return null;
 		
 	}
+
 }

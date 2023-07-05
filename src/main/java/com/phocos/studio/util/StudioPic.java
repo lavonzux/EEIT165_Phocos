@@ -45,4 +45,45 @@ public class StudioPic {
 	public StudioPic() {
 		
 	}
+
+	public int getStudioPicID() {
+		return studioPicID;
+	}
+
+	public void setStudioPicID(int studioPicID) {
+		this.studioPicID = studioPicID;
+	}
+
+	public String getStudioPicName() {
+		return studioPicName;
+	}
+
+	public void setStudioPicName(String studioPicName) {
+		this.studioPicName = studioPicName;
+	}
+
+	public byte[] getStudioPicFile() {
+		return studioPicFile;
+	}
+
+	public void setStudioPicFile(byte[] studioPicFile) {
+		this.studioPicFile = studioPicFile;
+	}
+
+	public Studio getStudio() {
+		return studio;
+	}
+
+	public void setStudio(Studio studio) {
+		this.studio = studio;
+	}
+
+	public Shed getShed() {
+		return shed;
+	}
+
+	public void setShed(Shed shed) {
+		this.shed = shed;
+	}
+	
 }

@@ -30,6 +30,23 @@ public class StudioController {
 		model.addAttribute("studios",studios);
 		return "backstage/studio/Studio";
 	}
+	
+	//前台取得所有資料
+	@GetMapping("/browsestudios")
+	public String findAllForIndex(Model model) {
+		List<Studio> studios = sServ.findAll();
+		
+		model.addAttribute("studios",studios);
+		return "forestage/studio/studioForeIndex";
+	}
+	
+	//前台取得單筆資料
+	@GetMapping("/browsestudio")
+	public String getStudioByID(@RequestParam("studioID") Integer studioID, Model model) {
+		Studio studio = sServ.getById(studioID);
+		model.addAttribute("studio", studio);
+		return "forestage/studio/studioForePage";
+	}
 
 	//跳到新增頁面
 	@GetMapping("/studio/insert")

@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ShedRepository extends JpaRepository<Shed, Integer> {
 	List<Shed> findAllByStudioID(Integer studioID);
 
+	Shed findByShedID(Integer shedID);
+
 }

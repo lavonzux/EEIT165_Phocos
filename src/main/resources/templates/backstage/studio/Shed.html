@@ -12,10 +12,15 @@
         <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <style>
             #add{
-                border: 0.5px solid rgb(195, 195, 195);
                 float:right;
                 font-size: 14px;
-                background-color: #d1f0c2;
+                margin: 5px;
+            }
+            
+                        #back{
+                float:right;
+                font-size: 14px;
+                margin: 5px;
             }
 
             #editStudio{
@@ -46,6 +51,8 @@
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">攝影場地管理</li>
                         </ol>
+
+					<br>
                         <div class="card mb-4">
                             <div class="card-body">
                                 管理攝影棚資料
@@ -54,16 +61,19 @@
 							    <th:block th:if="${stat.last}">
 							        <form method="get" th:action="@{/shed/insert}">
 							            <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}" />
-							            <button id="add">新增攝影棚</button>
+							            <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
 							        </form>
 							    </th:block>
 							</th:block>
+							<form method="get" th:action="@{/studios}">
+							            <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
+							</form>
                             </div>
                             </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                子攝影棚管理
+                                攝影棚管理
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -96,18 +106,18 @@
 								            <td th:text="${shed.shedType}"></td>
 								                                        
 								            <td>                                
-								                <form method="get" th:action="@{/studio/edit}">
-								                    <input id="shedID" name="shedID" th:value="${shed.shedID}" type="hidden" />
-								                    <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
-								                </form>
+<form method="get" th:action="@{/shed/edit}">
+    <input id="shedID" name="shedID" th:value="${shed.shedID}" type="hidden" />
+    <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
+</form>
 								            </td>
 								
 								            <td>
-								                <form th:action="@{/shed/delete}" method="post">
-								                    <input name="_method" value="delete" type="hidden" />
-								                    <input name="shedID" th:value="${shed.shedID}" type="hidden" />
-								                    <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
-								                </form>
+											<form th:action="@{/shed/delete}" method="post">
+											    <input name="_method" value="DELETE" type="hidden" />
+											    <input name="shedID" th:value="${shed.shedID}" type="hidden" />
+											    <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
+											</form>
 								            </td>	
 								        </tr>
 								    </th:block>
@@ -136,7 +146,7 @@
 		$(function () {
 			$('tbody').on('click', '#del', function (shed) {
 				event.preventDefault();
-				let studioID = $(this).closest('tr').find('#shedID').val();
+				let shedID = $(this).closest('tr').find('#shedID').val();
 				console.log(shedID);
 
 				Swal.fire({

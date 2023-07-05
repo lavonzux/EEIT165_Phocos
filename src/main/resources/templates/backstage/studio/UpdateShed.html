@@ -8,15 +8,17 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>場地管理</title>
-        <title>編輯Studio</title>
+        <title>編輯攝影棚</title>
         <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <style>
             #add{
 
                 float:right;
                 font-size: 14px;
+
             }
             #back{
+  
                 float:right;
                 font-size: 14px;
 
@@ -63,11 +65,12 @@
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                編輯攝影棚工作室資料
+                                編輯攝影棚資料
                                 <br>
-                                <form method="get" th:action="@{/studios}">
-                                    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
-                                </form>
+							<form method="get" th:action="@{/shed} ">
+							    <input type="hidden" name="studioID" th:value="${shed.studioID}" />
+							    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
+							</form>
                             </div>
                             </div>
                         <div class="card mb-4">
@@ -76,7 +79,7 @@
                                 場地管理
                             </div>
                             <div class="card-body">
-                                <form th:method="put" th:action="@{/studio/editData}"  th:object="${studio}">
+                                <form th:method="put" th:action="@{/shed/editData}"  th:object="${shed}">
                                 <table >
                                     <thead>
                                         <tr>
@@ -85,54 +88,46 @@
 
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <input type="hidden" id="studioID" name="studioID" th:value="${studio.studioID}">
-									<tr>
-									    <td>管理者</td>
-									    <td><input type="text" name="memberID" th:value="${studio.memberID}"/></td>
-									</tr>
-									<tr>
-									    <td>名稱</td>
-									    <td><input type="text" name="studioName" th:value="${studio.studioName}"/></td>
-									</tr>
-									<tr>
-									    <td>地址</td>
-									    <td><input type="text" name="studioAddress" th:value="${studio.studioAddress}"/></td>
-									</tr>
-									<tr>
-									    <td>緯度</td>
-									    <td><input type="text" name="studioLong" th:value="${studio.studioLong}"/></td>
-									</tr>
-									<tr>
-									    <td>經度</td>
-									    <td><input type="text" name="studioLat" th:value="${studio.studioLat}"/></td>
-									</tr>
-									<tr>
-									    <td>聯絡電話</td>
-									    <td><input type="text" name="studioPhone" th:value="${studio.studioPhone}"/></td>
-									</tr>
-									<tr>
-									    <td>信箱</td>
-									    <td><input type="text" name="studioEmail" th:value="${studio.studioEmail}"/></td>
-									</tr>
-                                    <tr>
-                                        <td>營業時間</td>
-                                        <td><textarea name="studioTime" rows="3" cols="40" th:text="${studio.studioTime}"></textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <td>相關連結</td>
-                                        <td><textarea name="studioLink" rows="3" cols="40" th:text="${studio.studioLink}"></textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <td>介紹</td>
-                                        <td><textarea name="studioIntro" rows="7" cols="40" th:text="${studio.studioIntro}"></textarea></td>
-                                    </tr>
-									<tr>
-									    <td>照片</td>
-									    <td><input type="text" name="studioPicID" th:value="${studio.studioPicID}"/></td>
-									</tr>
-                                    </tbody>
-                                </table>
+ <tbody>
+    <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}">
+    <tr>
+        <td>攝影棚ID</td>
+        <td><input type="text" id="shedID" name="shedID" th:value="${shed.shedID}" /></td>
+    </tr>
+    <tr>
+        <td>名稱</td>
+        <td><input type="text" id="shedName" name="shedName" th:value="${shed.shedName}" /></td>
+    </tr>
+    <tr>
+        <td>尺寸</td>
+        <td><input type="text" id="shedSize" name="shedSize" th:value="${shed.shedSize}" /></td>
+    </tr>
+    <tr>
+        <td>費用</td>
+        <td><input type="text" id="shedFee" name="shedFee" th:value="${shed.shedFee}" /></td>
+    </tr>
+    <tr>
+        <td>特色</td>
+        <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="40" th:text="${shed.shedFeature}"></textarea></td>
+    </tr>
+    <tr>
+        <td>設備</td>
+        <td><textarea id="shedEquip" name="shedEquip" rows="3" cols="40" th:text="${shed.shedEquip}"></textarea></td>
+    </tr>
+    <tr>
+        <td>風格</td>
+        <td><textarea id="shedType" name="shedType" rows="3" cols="40" th:text="${shed.shedType}"></textarea></td>
+    </tr>
+    <tr>
+        <td>介紹</td>
+        <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="40" th:text="${shed.shedIntro}"></textarea></td>
+    </tr>
+    <tr>
+        <td>照片</td>
+        <td><input id="studioPicID" type="text" name="studioPicID" th:value="${shed.studioPicID}" /></td>
+    </tr>
+</tbody>
+</table>
                                 <br>
                                 <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存</button>
                             </form>

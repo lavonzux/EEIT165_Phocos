@@ -8,14 +8,12 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>場地管理</title>
-        <title>首頁</title>
         <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <style>
             #add{
-                border: 0.5px solid rgb(195, 195, 195);
+
                 float:right;
                 font-size: 14px;
-                background-color: #d1f0c2;
             }
 
             #editStudio{
@@ -51,7 +49,7 @@
                                 管理攝影棚工作室資料
                                 <br>
                                 <form method="get" th:action="@{/studio/insert}">
-                                    <button id="add">新增工作室</button>
+                                    <button id="add" class="btn btn-outline-success btn-sm">新增工作室</button>
                                 </form>
                             </div>
                             </div>

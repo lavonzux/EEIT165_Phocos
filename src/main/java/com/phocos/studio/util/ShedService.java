@@ -20,8 +20,18 @@ public class ShedService {
 	public List<Shed> findShedByStudioId(Integer studioID) {
 	    return sRepo.findAllByStudioID(studioID);
 	}
+	
+	public Integer findStudioIdByShedId(Integer shedID) {
+	    Shed shed = sRepo.findByShedID(shedID);
+	    if (shed != null) {
+	        return shed.getStudioID();
+	    }
+	    return null; 
+	}
+	
+	
 
-	//新增取額資料
+	//新增取得資料
 	@GetMapping("/shed/{id}")
 	public Integer getStudioID(Integer shedID) {
 	    Optional<Shed> optional = sRepo.findById(shedID);
@@ -63,7 +73,7 @@ public class ShedService {
 	
 	//修改資料
 	@Transactional
-	public Shed updateShedById(@RequestParam int shedID, @RequestParam String shedName, @RequestParam Integer shedSize, @RequestParam Integer shedFee,
+	public Shed updateShedById(@RequestParam int shedID, @RequestParam Integer studioID, @RequestParam String shedName, @RequestParam Integer shedSize, @RequestParam Integer shedFee,
 	                            @RequestParam String shedFeature, @RequestParam String shedEquip, @RequestParam String shedType,
 	                            @RequestParam String shedIntro, @RequestParam Integer studioPicID) {
 	    Optional<Shed> optional = sRepo.findById(shedID);
@@ -71,6 +81,7 @@ public class ShedService {
 	    if (optional.isPresent()) {
 	        Shed shed = optional.get();
 	        shed.setShedID(shedID);
+	        shed.setStudioID(studioID);
 	        shed.setShedName(shedName);
 	        shed.setShedSize(shedSize);
 	        shed.setShedFee(shedFee);

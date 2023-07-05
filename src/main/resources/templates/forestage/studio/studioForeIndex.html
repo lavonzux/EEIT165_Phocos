@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>攝影場地</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+		    .card-img-top:hover {
+		        opacity: 0.5;
+		         cursor: pointer;
+		    }
+		</style>
+    </head>
+    <body>
+        <link th:href="@{/forestage/forum/css/styles.css}" rel="stylesheet" />
+        <!-- Header-->
+<header class=" py-5" style="background-color: #DDBEA9;">
+    <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder">探索風格攝影棚</h1>
+        <p class="lead fw-normal " style="color: #6B705C;">包括全台各式各樣各種風格的攝影棚</p>
+    </div>
+</header>
+<div th:replace="~{/forestage/shared_layout/layout :: navbar}"></div>
+        <!-- Section-->
+<section>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+            <th:block th:each="studio : ${studios}">
+                <div class="col mb-5">
+                    <div class="card h-100" onclick="submitForm('${studio.studioID}')">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder" th:text="${studio.studioName}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script>
+		    function submitForm(studioID) {
+		        var form = document.createElement('form');
+		        form.method = 'get';
+		        form.action = '/browsestudio';
+		
+		        var input = document.createElement('input');
+		        input.type = 'hidden';
+		        input.name = 'studioID';
+		        input.value = studioID;
+		
+		        form.appendChild(input);
+		        document.body.appendChild(form);
+		        form.submit();
+		    }
+		</script>
+    </body>
+</html>

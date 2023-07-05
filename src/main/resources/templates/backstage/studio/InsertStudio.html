@@ -11,16 +11,13 @@
         <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <style>
             #add{
-                border: 0.5px solid rgb(195, 195, 195);
+
                 float:right;
                 font-size: 14px;
-                background-color: #d1f0c2;
             }
             #back{
-                border: 0.5px solid rgb(195, 195, 195);
                 float:right;
                 font-size: 14px;
-                background-color: #c2f0ec;
             }
             #fillFormButton{
                 border: 0.5px solid rgb(195, 195, 195);
@@ -70,10 +67,10 @@
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                新增攝影棚工作室資料
+                                新增攝影棚資料
                                 <br>
                                 <form method="get" th:action="@{/studios}">
-                                    <button id="back">回到上一頁</button>
+                                    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
                                 </form>
                             </div>
                             </div>
@@ -151,7 +148,7 @@
                                 </table>
                                 
                                 <br>
-                                <input id="add" type="submit" value="儲存";/>
+                                <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存</button>
                             
 								
                             </form>
