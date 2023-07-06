@@ -61,16 +61,24 @@ public class ReferencePictureRestController {
 		ReferencePicture result = rpService.readOneEntry(pictureID);
 		byte[] pictureFile=null;
 		
-		if (result != null) pictureFile=result.getPictureFile();
-		
-		try {
-			File notFoundImg=new ClassPathResource(NOT_FOUND_IMAGE_PATH).getFile();
-			FileInputStream notFoundImgFis=new FileInputStream(notFoundImg);
-			pictureFile=notFoundImgFis.readAllBytes();
-			notFoundImgFis.close();
-		} catch (IOException e) {
-			System.out.println("========== !!! Exception thorwn in getRefPicAPI !!! ==========");
-			e.printStackTrace();
+		if (result != null) {
+			pictureFile=result.getPictureFile();
+		}else {
+			FileInputStream notFoundImgFis = null;
+			try {
+				File notFoundImg=new ClassPathResource(NOT_FOUND_IMAGE_PATH).getFile();
+				notFoundImgFis=new FileInputStream(notFoundImg);
+				pictureFile=notFoundImgFis.readAllBytes();
+			} catch (IOException e) {
+				System.out.println("========== !!! Exception thorwn in getRefPicAPI !!! ==========");
+				e.printStackTrace();					
+			}finally {
+				try {
+					notFoundImgFis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}			
 		}
 		
 		HttpHeaders photoHeader=new HttpHeaders();
@@ -80,7 +88,7 @@ public class ReferencePictureRestController {
 	
 	
 	@GetMapping("/referencePicture/api/getPicIds")
-	public ArrayList<Integer> getRefPicIDs(@RequestParam(name = "serviceID") int serviceID) {
+	public List<Integer> getRefPicIDs(@RequestParam(name = "serviceID") int serviceID) {
 		
 		List<ReferencePicture> readAllByPhotoServiceID = rpService.readAllPicturesByServiceID(serviceID);
 		if (readAllByPhotoServiceID.size()>0) { System.out.println("Ref Pics Found!"); }
