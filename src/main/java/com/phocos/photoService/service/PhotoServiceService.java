@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,21 @@ public class PhotoServiceService {
 	public List<PhotoService> readAllEntries() {
 		return psRepo.findAll();
 	}
+
+	
+	public Page<PhotoService> readAllByPage() {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		Page<PhotoService> pages = psRepo.findAll(page);
+		return pages; 
+	}
+	
+	
+	public Page<PhotoService> readAllByPage(int index, int size) {
+		PageRequest page = PageRequest.of(index, size, Direction.DESC, "createdOn");
+		Page<PhotoService> pages = psRepo.findAll(page);
+		return pages; 
+	}
+	
 
 	/**
 	 * Find a entry by given {@code photoServiceID} first, 

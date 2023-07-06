@@ -56,7 +56,7 @@ public class PhotoServiceDto {
 	public void parsePhotoService(PhotoService photoService) {
 		this.setServiceID(photoService.getServiceID());
 		this.setServiceName(photoService.getServiceName());
-		this.setServiceType(photoService.getServiceType());
+		this.setServiceType(photoService.getServiceType().getTypeName());
 		this.setServicePrice(photoService.getServicePrice());
 		this.setServiceDuration(photoService.getServiceDuration());
 		this.setServiceLocation(photoService.getServiceLocation());
@@ -70,7 +70,7 @@ public class PhotoServiceDto {
         PhotoService returnPS = new PhotoService();
         returnPS.setServiceID(serviceID);
         returnPS.setServiceName(serviceName);
-        returnPS.setServiceType(serviceType);
+        returnPS.setServiceType(new ServiceType(serviceType));
         returnPS.setServicePrice(servicePrice);
         returnPS.setServiceDuration(serviceDuration);
         returnPS.setServiceLocation(serviceLocation);

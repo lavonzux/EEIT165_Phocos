@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title> 瀏覽攝影服務 </title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" th:href="@{assets/favicon.ico}" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/forestage/photoService/css/styles.css}" rel="stylesheet" />
+
+    <style>
+        .carousel-inner {
+            overflow: hidden;
+            /* object-fit: scale-down; */
+        }
+
+        .carousel-item {
+            background-color: rgb(167, 249, 207);
+            overflow: hidden;
+            /* padding: 5px; */
+            /* border-radius: 5px; */
+        }
+
+        .carousel-desc {
+            position: absolute;
+
+        }
+
+        .sclDwn {
+            width: 850px;
+            height: 350px;
+            object-fit: scale-down;
+        }
+
+        .sticky-side-tool {
+            position: sticky;
+            top: 5%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#!">Start Bootstrap</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Page header with logo and tagline-->
+    <header class="py-5 bg-light border-bottom mb-4">
+        <div class="container">
+            <div class="text-center my-5">
+                <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+                <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+            </div>
+        </div>
+    </header>
+    <!-- Page content-->
+    <div class="container">
+        <div class="row">
+            <!-- Blog entries-->
+
+
+
+            <div class="col-lg-8" id="photoService-container">
+
+                <!-- Featured blog post-->
+
+                <th:block th:each="oneBean : ${resultPage.content}">
+
+                    <div class="card mb-4" id="card-top">
+                        <a th:href="@{'/photoService/ReadOne/'+${oneBean.serviceID}}">
+                            <div class="carousel-card" th:data-serviceid="${oneBean.serviceID}">
+                                <div class="position-absolute top-50 start-50 translate-middle">尚未上傳參考圖片</div>
+                                <img class="card-img-top sclDwn" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="..." />
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <div class="small text-muted" th:text="${oneBean.formattedCreatedOn}+'  由  '+${oneBean.serviceCreator}+'  建立'"></div>
+                            <h2 class="card-title" th:text="${oneBean.serviceName}"></h2>
+                            <div>
+                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
+                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
+                            </div>
+                            <a class="btn btn-primary" th:href="@{/photoService/ReadOne?(serviceID=${oneBean.serviceID})}">詳細資訊 →</a>
+                        </div>
+                    </div>
+
+                </th:block>
+
+
+                <!-- Pagination-->
+                <nav aria-label="Pagination">
+                    <hr class="my-0" />
+
+                    <ul class="pagination justify-content-center my-4">
+                        <th:block th:switch="${resultPage.number==0}">
+                            <li th:case=${true} class="page-item disabled">
+                                <a class="page-link">上一頁</a>
+                            </li>
+
+                            <li th:case=${false} class="page-item">
+                                <a class="page-link" th:href="@{/photoService/ReadAll?(page=${resultPage.number})}">上一頁</a>
+                            </li>
+                        </th:block>
+
+                        <th:block th:each="pageNumber:${#numbers.sequence(1,resultPage.totalPages)}">
+
+                            <th:block th:switch="${resultPage.number==pageNumber-1}">
+                                <li th:case=${true} class="page-item">
+                                    <span class="page-link active" th:text=${pageNumber}></span>
+                                </li>
+                                <li th:case=${false} class="page-item">
+                                    <a class="page-link" th:href="@{/photoService/ReadAll(page=${pageNumber})}">[[${pageNumber}]]</a>
+                                </li>
+                            </th:block>
+
+                        </th:block>
+
+
+                        <th:block th:switch="${resultPage.number==resultPage.totalPages-1}">
+                            <li th:case=${true} class="page-item disabled">
+                                <a class="page-link">下一頁</a>
+                            </li>
+
+                            <li th:case=${false} class="page-item">
+                                <a class="page-link" th:href="@{/photoService/ReadAll?(page=${resultPage.number+2})}">下一頁</a>
+                            </li>
+                        </th:block>
+
+                    </ul>
+
+                </nav>
+            </div>
+
+            <!-- Side widgets-->
+            <div class="col-lg-4">
+                <div th:replace="~{forestage/photoService/thymeleafTemplates :: stickey-side-widgets}"> </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script th:src="@{/forestage/photoService/js/scripts.js}"></script>
+    <script th:src="@{/forestage/photoService/js/axios.min.js}"></script>
+    <script th:src="@{/forestage/photoService/js/readAllPhotoService.js}"></script>
+</body>
+
+</html>
