@@ -9,5 +9,5 @@ import com.phocos.photoService.model.ReferencePicture;
 
 public interface StudioRepository extends JpaRepository<Studio, Integer> {
 
-	public List<ReferencePicture> findAllByStudioPicID(Integer studioPicID);
+
 }

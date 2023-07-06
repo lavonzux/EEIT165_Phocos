@@ -119,10 +119,6 @@
                                             <td><input type="text" id="shedFee" name="shedFee" /></td>
                                         </tr>
 										<tr>
-										    <td>費用</td>
-										    <td><textarea id="shedFee" name="shedFee" rows="3" cols="40"></textarea></td>
-										</tr>
-										<tr>
 										    <td>特色</td>
 										    <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="40"></textarea></td>
 										</tr>
@@ -138,10 +134,6 @@
 										    <td>介紹</td>
 										    <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="40"></textarea></td>
 										</tr>
-                                        <tr>
-                                            <td>照片</td>
-                                            <td><input id="studioPicID" type="text" name="studioPicID" /></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                                 
@@ -167,24 +159,26 @@
         <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
         <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
         <script>
-$(document).ready(function () {
-  $('#fillFormButton').click(function (event) {
-    event.preventDefault();
+		$(document).ready(function () {
+		  $('#fillFormButton').click(function (event) {
+		    event.preventDefault();
+		
+		    $('#studioID').val('10002');
+		    $('#memberID').val('11');
+		    $('#studioName').val('貓棚 Felidae Studio');
+		    $('#studioAddress').val('新北市板橋區四川路一段10巷21號');
+		    $('#studioLong').val('121.45894');
+		    $('#studioLat').val('25.007317');
+		    $('#studioPhone').val('090975730');
+		    $('#studioEmail').val('felidae.ph@gmail.com');
+		    $('#studioTime').val('900~2130');
+		    $('#studioLink').val('官網：httpfelidaestudio.com, Facebook：www.facebook.comfelidae.ph');
+		    $('#studioIntro').val('Felidae studio 是一個鄰近捷運府中商圈的實景攝影棚，我們提供人像創作／紀念寫真／攝影場租等服務，在簡約而富有趣味的空間裡，希望讓每一位來到這裡的創作者，都能盡情發揮想像，享受每次拍攝的樂趣。');
+		    $('#studioPicID').val('11');
+		  });
+		});;
+		
 
-    $('#studioID').val('10002');
-    $('#memberID').val('11');
-    $('#studioName').val('貓棚 Felidae Studio');
-    $('#studioAddress').val('新北市板橋區四川路一段10巷21號');
-    $('#studioLong').val('121.45894');
-    $('#studioLat').val('25.007317');
-    $('#studioPhone').val('090975730');
-    $('#studioEmail').val('felidae.ph@gmail.com');
-    $('#studioTime').val('900~2130');
-    $('#studioLink').val('官網：httpfelidaestudio.com, Facebook：www.facebook.comfelidae.ph');
-    $('#studioIntro').val('Felidae studio 是一個鄰近捷運府中商圈的實景攝影棚，我們提供人像創作／紀念寫真／攝影場租等服務，在簡約而富有趣味的空間裡，希望讓每一位來到這裡的創作者，都能盡情發揮想像，享受每次拍攝的樂趣。');
-    $('#studioPicID').val('11');
-  });
-});;
 
         </script>
     </body>

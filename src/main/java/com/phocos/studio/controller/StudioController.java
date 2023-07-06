@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.phocos.studio.util.Shed;
+import com.phocos.studio.util.ShedService;
 import com.phocos.studio.util.Studio;
+import com.phocos.studio.util.StudioPic;
+import com.phocos.studio.util.StudioPicService;
 import com.phocos.studio.util.StudioService;
 
 
@@ -21,6 +25,12 @@ import com.phocos.studio.util.StudioService;
 public class StudioController {
 	@Autowired
 	private StudioService sServ;
+	
+	@Autowired
+	private ShedService shServ;
+	
+	@Autowired
+	private StudioPicService spServ;
 
 	//取得所有資料
 	@GetMapping("/studios")
@@ -44,7 +54,14 @@ public class StudioController {
 	@GetMapping("/browsestudio")
 	public String getStudioByID(@RequestParam("studioID") Integer studioID, Model model) {
 		Studio studio = sServ.getById(studioID);
+		List<Shed> sheds = shServ.findShedByStudioId(studioID);
+		List<StudioPic> sPicsList = spServ.getStudioPicsByStudioID(studioID);
 		model.addAttribute("studio", studio);
+		model.addAttribute("sheds", sheds);
+		model.addAttribute("sPicsList", sPicsList);
+	    for (StudioPic studioPic : sPicsList) {
+	        System.out.println("找到的 studioPicID: " + studioPic.getStudioPicID());
+	    }
 		return "forestage/studio/studioForePage";
 	}
 

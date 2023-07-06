@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.phocos.studio.util.Shed;
 import com.phocos.studio.util.ShedService;
 import com.phocos.studio.util.Studio;
+import com.phocos.studio.util.StudioPic;
+import com.phocos.studio.util.StudioPicService;
 
 
 
@@ -23,6 +25,8 @@ import com.phocos.studio.util.Studio;
 public class ShedController {
 	@Autowired
 	private ShedService sServ;
+	@Autowired
+	private StudioPicService spServ;
 
 	
 	
@@ -79,12 +83,20 @@ public class ShedController {
 //		return shed;
 //	}
 	
-	//修改資料
 	@GetMapping("/shed/edit")
 	public String editPage(@RequestParam("shedID") Integer shedID, Model model) {
-	    System.out.println(shedID); 
-	    Shed shed = sServ.getById(shedID);
+		Shed shed = sServ.getById(shedID);
+		System.out.println("測試有拿到shedID+ "+shedID); 
+	    List<StudioPic> sPicsList = spServ.getStudioPicsByShedID(shedID);
+	    
 	    model.addAttribute("shed", shed);
+	    model.addAttribute("sPicsList", sPicsList);
+	    System.out.println(sPicsList);
+	    
+	    for (StudioPic studioPic : sPicsList) {
+	        System.out.println("找到的 studioPicID: " + studioPic.getStudioPicID());
+	    }
+	    
 	    return "backstage/studio/UpdateShed";
 	}
 

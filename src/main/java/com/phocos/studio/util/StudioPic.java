@@ -1,5 +1,7 @@
 package com.phocos.studio.util;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,10 +39,9 @@ public class StudioPic {
 	@JoinColumn(name = "studioID")
 	private Studio studio;
 	
-	@Nullable
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "shedID")
-	private Shed shed;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shedID")
+    private Shed shed;
 	
 	public StudioPic() {
 		
@@ -82,7 +83,7 @@ public class StudioPic {
 		return shed;
 	}
 
-	public void setShed(Shed shed) {
+	public void setShedID(Shed shed) {
 		this.shed = shed;
 	}
 	

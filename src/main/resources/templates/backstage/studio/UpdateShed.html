@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,7 +26,6 @@
             #del{
                 border: 0.5px solid rgb(195, 195, 195);
                 font-size: 14px;
-                background-color: #ffadadd4;
             }
             #editStudio{
                 border: 0.5px solid rgb(195, 195, 195);
@@ -88,50 +87,93 @@
 
                                         </tr>
                                     </thead>
- <tbody>
-    <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}">
-    <tr>
-        <td>攝影棚ID</td>
-        <td><input type="text" id="shedID" name="shedID" th:value="${shed.shedID}" /></td>
-    </tr>
-    <tr>
-        <td>名稱</td>
-        <td><input type="text" id="shedName" name="shedName" th:value="${shed.shedName}" /></td>
-    </tr>
-    <tr>
-        <td>尺寸</td>
-        <td><input type="text" id="shedSize" name="shedSize" th:value="${shed.shedSize}" /></td>
-    </tr>
-    <tr>
-        <td>費用</td>
-        <td><input type="text" id="shedFee" name="shedFee" th:value="${shed.shedFee}" /></td>
-    </tr>
-    <tr>
-        <td>特色</td>
-        <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="40" th:text="${shed.shedFeature}"></textarea></td>
-    </tr>
-    <tr>
-        <td>設備</td>
-        <td><textarea id="shedEquip" name="shedEquip" rows="3" cols="40" th:text="${shed.shedEquip}"></textarea></td>
-    </tr>
-    <tr>
-        <td>風格</td>
-        <td><textarea id="shedType" name="shedType" rows="3" cols="40" th:text="${shed.shedType}"></textarea></td>
-    </tr>
-    <tr>
-        <td>介紹</td>
-        <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="40" th:text="${shed.shedIntro}"></textarea></td>
-    </tr>
-    <tr>
-        <td>照片</td>
-        <td><input id="studioPicID" type="text" name="studioPicID" th:value="${shed.studioPicID}" /></td>
-    </tr>
-</tbody>
-</table>
+									 <tbody>
+									    <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}">
+									    <tr>
+									        <td>攝影棚ID</td>
+									        <td><input type="text" id="shedID" name="shedID" th:value="${shed.shedID}" /></td>
+									    </tr>
+									    <tr>
+									        <td>名稱</td>
+									        <td><input type="text" id="shedName" name="shedName" th:value="${shed.shedName}" /></td>
+									    </tr>
+									    <tr>
+									        <td>尺寸</td>
+									        <td><input type="text" id="shedSize" name="shedSize" th:value="${shed.shedSize}" /></td>
+									    </tr>
+									    <tr>
+									        <td>費用</td>
+									        <td><input type="text" id="shedFee" name="shedFee" th:value="${shed.shedFee}" /></td>
+									    </tr>
+									    <tr>
+									        <td>特色</td>
+									        <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="80" th:text="${shed.shedFeature}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>設備</td>
+									        <td><textarea id="shedEquip" name="shedEquip" rows="3" cols="80" th:text="${shed.shedEquip}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>風格</td>
+									        <td><textarea id="shedType" name="shedType" rows="3" cols="80" th:text="${shed.shedType}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>介紹</td>
+									        <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="80" th:text="${shed.shedIntro}"></textarea></td>
+									    </tr>
+									</tbody>
+									</table>
                                 <br>
                                 <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存</button>
+                                <br>
                             </form>
-                            </div>
+                            <br>
+						<div id="studioPicsContainer" data-shed-id="${shed.shedID}">
+							<table>
+							    <tbody>
+							        <th:block th:each="studioPic : ${sPicsList}">
+							            <tr>
+							                <td th:text="${studioPic.studioPicName}"></td>
+							                <td>
+							                    <img width="200px" th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" />
+							                </td>
+						                <td>
+	                                        <form id="Form" th:action="@{/studioPic/delete}" method="post">
+                                                <input name="_method" value="delete" type="hidden" />
+                                               <input name="studioPicID" th:value="${studioPic.studioPicID}" type="hidden" />
+                                               <input name="shedID" th:value="${shed.shedID}" type="hidden" />
+                                                <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
+                                              </form>
+											</td>
+
+							            </tr>
+							        </th:block>
+							    </tbody>
+							</table>
+				        </div>
+                        <br>
+                            
+                            
+						<form id="Form"  th:action="@{/studioPic/upload}" method="post" enctype="multipart/form-data">
+						    <div class="card-body">
+						        <table>
+						            <tbody>
+						                <tr>
+						                    <td>圖片名稱</td>
+						                    <td><input type="text" id="studioPicName" name="studioPicName"></td>
+						                </tr>
+						                <tr>
+						                    <td>檔案</td>
+						                    <td><input type="file" id="studioPicFile" name="studioPicFile"></td>
+						                </tr>
+						                <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}" />
+						                <input type="hidden" id="shedID" name="shedID" th:value="${shed.shedID}" />
+						            </tbody>
+						        </table>
+	                        <br>
+						    <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存圖片</button>
+						    </div>
+						</form>
                         </div>
                     </div>
                 </main>
@@ -147,7 +189,13 @@
             <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
             <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
             <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
-        <script>
-        </script>
+<script th:inline="javascript">
+$(document).ready(function() {
+    $("form#Form").submit(function() {
+        // 表单提交后刷新整个页面
+        location.reload();
+    });
+});
+</script>
     </body>
 </html>

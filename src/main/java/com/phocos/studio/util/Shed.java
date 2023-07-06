@@ -1,8 +1,12 @@
 package com.phocos.studio.util;
 
+import java.util.List;
+
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -32,6 +36,18 @@ public class Shed {
 	@Column(name = "studioPicID")
 	private Integer studioPicID;
 	
+	@Nullable
+	@OneToMany(mappedBy = "shed")
+	private List<StudioPic> studioPics;
+	
+	public List<StudioPic> getStudioPics() {
+		return studioPics;
+	}
+
+	public void setStudioPics(List<StudioPic> studioPics) {
+		this.studioPics = studioPics;
+	}
+
 	public Shed() {
 		
 	}

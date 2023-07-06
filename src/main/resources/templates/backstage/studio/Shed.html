@@ -57,14 +57,14 @@
                             <div class="card-body">
                                 管理攝影棚資料
                                 <br>
-							<th:block th:each="shed, stat : ${sheds}">
-							    <th:block th:if="${stat.last}">
-							        <form method="get" th:action="@{/shed/insert}">
-							            <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}" />
-							            <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
-							        </form>
-							    </th:block>
-							</th:block>
+<form th:if="${sheds.size() > 0}" method="get" th:action="@{/shed/insert}">
+    <input type="hidden" id="studioID" name="studioID" th:value="${sheds[0].studioID}" />
+    <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
+</form>
+<form th:unless="${sheds.size() > 0}" method="get" th:action="@{/shed/insert}">
+    <input type="hidden" id="studioID" name="studioID" th:value="${param.studioID}" />
+    <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
+</form>
 							<form method="get" th:action="@{/studios}">
 							            <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
 							</form>
@@ -106,10 +106,10 @@
 								            <td th:text="${shed.shedType}"></td>
 								                                        
 								            <td>                                
-<form method="get" th:action="@{/shed/edit}">
-    <input id="shedID" name="shedID" th:value="${shed.shedID}" type="hidden" />
-    <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
-</form>
+											<form method="get" th:action="@{/shed/edit}">
+											    <input id="shedID" name="shedID" th:value="${shed.shedID}" type="hidden" />
+											    <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
+											</form>
 								            </td>
 								
 								            <td>
