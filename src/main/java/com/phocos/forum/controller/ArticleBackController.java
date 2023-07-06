@@ -19,13 +19,13 @@ public class ArticleBackController {
 	@Autowired
 	private ArticleService articleService;
 
-//	========== 測試用 ==========
+//	---------------------------------------- 測試用 ----------------------------------------
 	/*
 	 * @GetMapping("/test") public String test() { return
 	 * "taptacback/forum/forumBackPage"; }
 	 */
 
-//	========== 查全部 ==========
+//	---------------------------------------- 查全部 ----------------------------------------
 
 	@GetMapping("/forum/backPage")
 	public String forumAdmin(Model model) {
@@ -34,7 +34,7 @@ public class ArticleBackController {
 		return "backstage/forum/forumBackPage";
 	}
 
-//	========== 編輯 ==========
+//	---------------------------------------- 編輯 ----------------------------------------
 	@GetMapping("/forum/edit")
 	public String searchForEdit(@RequestParam("articleId") Integer articleId, Model model) {
 		Article article = articleService.findById(articleId);
@@ -52,7 +52,7 @@ public class ArticleBackController {
 		return "redirect:/forum/backPage";
 	}
 
-//	========== 刪除 ==========
+//	---------------------------------------- 刪除 ----------------------------------------
 	@DeleteMapping("/forum/delete")
 	public String realDeleteForum(@RequestParam("articleId") Integer articleId) {
 		articleService.realDelete(articleId);
