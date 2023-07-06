@@ -105,7 +105,7 @@ public class Camera {
 	
 	@Nullable
 	@Column(name = "cameraStocks")
-	private int cameraStocks;
+	private Integer  cameraStocks;
 
 
 }

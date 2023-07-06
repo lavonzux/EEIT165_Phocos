@@ -91,9 +91,9 @@ public class Lens{
 	@Lob
 	@Column(name = "lensPhoto")
 	private byte[] lensPhoto;
-	
+
 	@Nullable
 	@Column(name = "lensStocks")
-	private int lensStocks;
+	private Integer lensStocks;
 
 }
