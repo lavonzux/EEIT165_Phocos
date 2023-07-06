@@ -17,7 +17,9 @@
         <header>
             <h1 class="site-heading text-center text-faded d-none d-lg-block">
                 <span class="site-heading-upper text-primary mb-3">Take A Photo Take A Chance</span>
-                <span class="site-heading-lower">Phocos</span>
+                <div class="site-heading-lower" style="height: 70px;">
+					 <img th:src="@{/forestage/shared_layout/assets/img/logo.png}" alt="Phocos">
+				</div>
             </h1>
         </header>
         <!-- Navigation-->
@@ -27,10 +29,13 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="index.html">Home</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="about.html">About</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="products.html">Products</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="store.html">Store</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="index.html">首頁</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="about.html">會員中心</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">活動資訊</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="products.html">攝影媒合</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">場地一覽</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">線上商城</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="http://localhost:8080/phocos/forum/article/mainPage">討論區</a></li>
                     </ul>
                 </div>
             </div>
