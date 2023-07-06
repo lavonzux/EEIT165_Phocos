@@ -16,19 +16,23 @@ public class ArticleService {
 
 	@Autowired
 	private ArticleRepository articleRepo;
-
+//	---------------------------------------- 新增文章 ----------------------------------------
 	public Article insert(Article article) {
 		return articleRepo.save(article);
 	}
-
+//	---------------------------------------- 查全部文章(無排序) ----------------------------------------
 	public List<Article> findAll() {
 		return articleRepo.findAll();
 	}
-
+//	---------------------------------------- 用日期查全部文章 ----------------------------------------
+	public List<Article> findAllByOrderByArticlePostTimeDesc() {
+        return articleRepo.findAllByOrderByArticlePostTimeDesc();
+    }
+//	---------------------------------------- 真刪除 ----------------------------------------
 	public void realDelete(Integer articleId) {
 		articleRepo.deleteById(articleId);
 	}
-
+//	---------------------------------------- 假刪除 ----------------------------------------
 	@Transactional
 	public void fakeDelete(Integer articleId) {
 		Optional<Article> optional = articleRepo.findById(articleId);
@@ -38,7 +42,7 @@ public class ArticleService {
 			articleRepo.save(article);
 		}
 	}
-
+//	---------------------------------------- 單筆查詢並更新 ----------------------------------------
 	public Article findById(Integer articleId) {
 		Optional<Article> optional = articleRepo.findById(articleId);
 		if (optional.isPresent()) {

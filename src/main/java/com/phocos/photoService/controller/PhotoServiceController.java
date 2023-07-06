@@ -1,22 +1,24 @@
 package com.phocos.photoService.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.PhotoServiceDto;
+import com.phocos.photoService.model.ReferencePicture;
 import com.phocos.photoService.service.PhotoServiceService;
 
 @Controller
@@ -36,6 +38,7 @@ public class PhotoServiceController {
 			model.addAttribute("createPhotoService", createPhotoServiceBean);
 			return "backstage/photoService/CreatePhotoService";
 	}
+	
 	
 	@PostMapping(path = "/photoService/CreatePhotoService.controller")
 	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result, Model model) throws IOException {
@@ -62,7 +65,31 @@ public class PhotoServiceController {
 		model.addAttribute("resultList",resultList);
 		return "backstage/photoService/ReadAllPhotoService";
 	}
+	
+	
+	
+//	@GetMapping(path = "/photoService/ReadAll")
+	/*
+	public String gotoReadAllPhotoService(Model model) {
+		List<PhotoService> resultList = psService.readAllEntries();
+		model.addAttribute("resultList",resultList);
+		
+		Page<PhotoService> resultPage = psService.readAllByPage();
+		model.addAttribute("resultPage", resultPage);
+		return "forestage/photoService/ReadAllPhotoService";
+	}
+	*/
 
+	
+	@GetMapping(path = "/photoService/ReadAll")
+	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, Model model) {
+		if (page == null) { page = 1; }
+		Page<PhotoService> resultPage = psService.readAllByPage(page-1, 5);
+		model.addAttribute("resultPage", resultPage);
+		return "forestage/photoService/ReadAllPhotoService";
+	}
+	
+	
 
 	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
 	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
@@ -73,6 +100,21 @@ public class PhotoServiceController {
 	}
 
 
+	@GetMapping(path = "/photoService/ReadOne")
+	public String gotoReadOnePhotoService(@RequestParam("serviceID") int serviceID, Model model) {
+		PhotoService resultBean = psService.readEntry(serviceID);
+		model.addAttribute("resultBean", resultBean);
+		
+		Field[] fields = resultBean.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			System.out.println(field.getName());
+		}
+		
+		String typeName = resultBean.getServiceType().getTypeName();
+		System.out.println(typeName);
+		
+		return "forestage/photoService/ReadOnePhotoService";
+	}
 	
 	
 	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
@@ -112,12 +154,13 @@ public class PhotoServiceController {
 
 
 
+//	@GetMapping("/photoService/DeletePhotoService.controller")
 	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
 	public String processDeletePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
 		System.out.println("==================== Incoming deletion request... ====================");
 
 		if (!confirmed || !queryPhotoServiceBean.dataIsValid() || result.hasErrors()) {
-			System.out.println("========== Reading data for updating... ==========");
+			System.out.println("========== Reading data for deleting... ==========");
 			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
 			queryPhotoServiceBean = psService.readEntry(serviceID);
 			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);

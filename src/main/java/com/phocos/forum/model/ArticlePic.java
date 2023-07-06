@@ -26,3 +26,4 @@ public class ArticlePic {
 	@JoinColumn(name = "articleId")
 	private Article article;
 }
+	

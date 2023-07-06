@@ -1,55 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-		<meta name="description" content="" />
-		<meta name="author" content="" />
-		<title>管理攝影服務</title>
-	</head>
-	<head th:replace="~{backstage/shared_layout/scriptSource}"></head>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>管理攝影服務</title>
+</head>
 
-    <body class="sb-nav-fixed">
-        <nav th:replace="~{backstage/shared_layout/layout-static :: navbar}"> </nav>
+<head th:replace="~{backstage/shared_layout/scriptSource}"></head>
 
-        <div id="layoutSidenav">
-            <div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"> </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">攝影服務管理</h1>
-                        <ol th:replace="~{backstage/photoService/shared_templates/breadcrumbs::ps-breadcrumb-ReadAll}"> </ol>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5>攝影服務管理頁面</h5>
-                            </div>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{backstage/shared_layout/layout-static :: navbar}"> </nav>
+
+    <div id="layoutSidenav">
+        <div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"> </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">攝影服務管理</h1>
+                    <ol th:replace="~{backstage/photoService/shared_templates/breadcrumbs::ps-breadcrumb-ReadAll}"> </ol>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5>攝影服務管理頁面</h5>
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                以下為所有攝影師帳戶創建的的攝影服務
-								<form method="get" action="CreatePhotoService.controller">
-									<input style="float: right" type="submit" value="手動新增攝影服務">
-								</form>
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>攝影服務編號</th>
-                                        	<th>攝影服務名稱</th>
-											<th>攝影服務類型</th>
-											<th>攝影服務價格</th>
-                                    	    <th>攝影服務時長</th>
-                                        	<th>攝影服務地點</th>
-	                                        <th>攝影服務創建人</th>
-    	                                    <th>編輯 / 刪除</th>
-                                   		</tr>
-                                	</thead>
-                                	<tfoot>
-                                    	<tr>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            以下為所有攝影師帳戶創建的的攝影服務
+                            <form method="get" action="CreatePhotoService.controller">
+                                <input style="float: right" type="submit" value="手動新增攝影服務">
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>攝影服務編號</th>
+                                        <th>攝影服務名稱</th>
+                                        <th>攝影服務類型</th>
+                                        <th>攝影服務價格</th>
+                                        <th>攝影服務時長</th>
+                                        <th>攝影服務地點</th>
+                                        <th>攝影服務創建人</th>
+                                        <th>編輯 / 刪除</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
                                         <th>攝影服務編號</th>
                                         <th>攝影服務名稱</th>
                                         <th>攝影服務類型</th>
@@ -58,37 +59,37 @@
                                         <th>服務地點</th>
                                         <th>創建人</th>
                                         <th>編輯 / 刪除</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <th:block th:each="resultBean : ${resultList}">
+                                        <tr>
+                                            <td th:text="${resultBean.serviceID}">serviceID</td>
+                                            <td>
+                                                <a th:href="@{ReadOnePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="${resultBean.serviceName}">serviceName</a>
+                                            </td>
+                                            <td th:text="${resultBean.serviceType.typeName}"></td>
+                                            <td th:text="${resultBean.servicePrice}"></td>
+                                            <td th:text="${resultBean.serviceDuration}"></td>
+                                            <td th:text="${resultBean.serviceLocation}"></td>
+                                            <td th:text="${resultBean.serviceCreator}"></td>
+                                            <td>
+                                                <a th:href="@{UpdatePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="修改"></a>
+                                                <a th:href="@{DeletePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="刪除"></a>
+                                            </td>
                                         </tr>
-                                    </tfoot>
-                                    <tbody>
-										<th:block th:each="resultBean : ${resultList}" >											
-	                                        <tr>
-	                                            <td th:text="${resultBean.serviceID}">serviceID</td>
-												<td>
-													<a th:href="@{ReadOnePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="${resultBean.serviceName}">serviceName</a>
-												</td>
-												<td th:text="${resultBean.serviceType}"></td>
-												<td th:text="${resultBean.servicePrice}"></td>
-												<td th:text="${resultBean.serviceDuration}"></td>
-												<td th:text="${resultBean.serviceLocation}"></td>
-												<td th:text="${resultBean.serviceCreator}"></td>
-												<td>
-						                            <a th:href="@{UpdatePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="修改"></a>
-						                            <a th:href="@{DeletePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="刪除"></a>
-												</td>
-	                                        </tr>
-										</th:block>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </th:block>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </main>
-                <footer th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"> </footer>
-            </div>
+                </div>
+            </main>
+            <footer th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"> </footer>
         </div>
+    </div>
 
-    </body>
+</body>
 
 
 </html>
