@@ -39,13 +39,39 @@
 					</li>
 					<li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="store.html">Store</a></li>
 				</ul>
+				<!-- 會員功能 -->
 				<th:block th:if="${session.isLoggedIn != null}">
 					<a class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-							data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i><span
-								th:text="${session.memberName}"></span></a>
+							data-bs-toggle="dropdown" aria-expanded="false">
+							<th:block>
+								<img th:if="${session.memberAvatar != null}" th:src="${session.memberAvatar}"
+									style=" width:35px; height: 35px; border-radius: 50%;" />
+								<th:block th:unless="${session.memberAvatar != null}">
+									<img th:if="${session.avatarExist != null}" class="squareAvatar"
+										th:src="@{'/avatar/' + ${session.memberID} }"
+										style="width: 35px; height: 35px; border-radius: 50%;">
+
+									<img th:unless="${session.avatarExist != null}" class="squareAvatar"
+										th:src="@{/forestage/member/assets/memberDefaultAvatar.png}"
+										style="width: 35px; height: 35px; border-radius: 50%;">
+
+								</th:block>
+
+							</th:block>
+							<span th:text="${session.memberName}"></span>
+						</a>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a></li>
+							<li>
+								<th:block>
+									<a th:if="${session.gmail !=null}" class="dropdown-item"
+										href="#">個人頁面</a>
+									<a th:unless="${session.gmail !=null}" class="dropdown-item"
+										th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a>
+
+								</th:block>
+
+							</li>
 							<li><a class="dropdown-item" th:href="@{'/profile/edit/' + ${session.memberID}}">設定</a></li>
 							<li>
 								<hr class="dropdown-divider" />
