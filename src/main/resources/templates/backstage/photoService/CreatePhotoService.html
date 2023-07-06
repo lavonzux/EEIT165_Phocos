@@ -42,12 +42,8 @@
                             </div>
                             <div class="card-body">
 
-							    <form method="post" action="CreatePhotoService.controller" >
+							    <form method="post" action="CreatePhotoService.controller" enctype="multipart/form-data">
 							    	<table>
-										<tr>
-											<td>攝影服務ID : </td>
-											<td><input readonly id="serviceID" name="serviceID" /></td>
-										</tr>
 							        	<tr>
 							        		<td>請輸入攝影服務名稱 : </td>
 							        		<td><input id="serviceName" name="serviceName" ></input></td>
@@ -74,7 +70,7 @@
 							        	</tr>
 							        	<tr>
 											<td>上傳風格範例圖片 : </td>
-											<td><input type="file" id="referencePictures" name="referencePictures"/></td>
+											<td><input type="file" id="inputRefPics" name="inputRefPics" multiple="true"/></td>
 										</tr>
 							    	</table>
 							        <input type="Submit" value="新增資料" />

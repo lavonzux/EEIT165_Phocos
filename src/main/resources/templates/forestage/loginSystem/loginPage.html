@@ -1,81 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>Login - SB Admin</title>
-<link th:href="@{backstage/shared_layout/css/styles.css}" rel="stylesheet" />
-<script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}"
-	crossorigin="anonymous"></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Login - SB Admin</title>
+	<link
+		href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+	<!-- Google Login API-->
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
 </head>
-<body class="bg-primary">
-	<div id="layoutAuthentication">
-		<div id="layoutAuthentication_content">
-			<main>
-				<div class="container">
-					<div class="row justify-content-center">
-						<div class="col-lg-5">
-							<div class="card shadow-lg border-0 rounded-lg mt-5">
-								<div class="card-header">
-									<h3 class="text-center font-weight-light my-4">登入</h3>
-								</div>
-								<div class="card-body">
-									<form method="post"
-										th:action="@{/adminLogin}">
-										<div class="form-floating mb-3">
-											<input class="form-control" id="memberAccount" name="memberAccount" type="text"
-												placeholder="name@example.com" /> <label for="inputEmail">帳號</label>
-										</div>
-										<div class="form-floating mb-3">
-											<input class="form-control" id="memberPassword" name="memberPassword"
-												type="password" placeholder="Password" /> <label
-												for="inputPassword">密碼</label>
-										</div>
-										<div class="form-check mb-3">
-											<input class="form-check-input" id="inputRememberPassword"
-												type="checkbox" value="" /> <label class="form-check-label"
-												for="inputRememberPassword">Remember Password</label>
-										</div>
-										<div
-											class="d-flex align-items-center justify-content-between mt-4 mb-0">
-											<a class="small" href="password.html">忘記密碼?</a> <input
-												class="btn btn-primary" type="submit" value="確認登入"/>
-										</div>
-									</form>
-								</div>
-								<div class="card-footer text-center py-3">
-									<div class="small">
-										<a href="register.html">註冊帳號</a>
+
+<body>
+	<div th:replace="~{forestage/shared/foreTopNav}"></div>
+	<div class="container py-5 h-100">
+		<div id="layoutAuthentication">
+			<div id="layoutAuthentication_content">
+				<main>
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-lg-5">
+								<div class="card shadow-lg border-0 rounded-lg mt-5">
+									<div class="card-header">
+										<h3 class="text-center font-weight-light my-4">登入</h3>
 									</div>
+									<div class="card-body">
+										<form>
+											<div class="form-floating mb-3">
+												<input class="form-control" id="memberAccount" name="memberAccount"
+													type="text" placeholder="name@example.com" /> <label
+													for="inputAccount">帳號</label>
+
+											</div>
+											<div class="form-floating mb-3">
+												<input class="form-control" id="memberPassword" name="memberPassword"
+													type="password" placeholder="Password" />
+												<label for="inputPassword">密碼</label>
+											</div>
+											<div class="form-check mb-3">
+												<input class="form-check-input" id="show_hide_password" type="checkbox"
+													value="" />
+												<label class="form-check-label" for="show_hide_password">顯示密碼</label>
+
+											</div>
+											<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+												<button id="adminLoginButton" class="btn btn-primary ">管理員一鍵登入</button>
+												<button id="memberLoginButton" class="btn btn-primary ">會員一鍵登入</button>
+											</div>
+											<br>
+
+
+											<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+												<a class="small" href="password.html">忘記密碼?</a>
+
+												<button id="loginButton" class="btn btn-primary ">確定登入</button>
+											</div>
+										</form>
+
+										<div id="g_id_onload"
+											data-client_id="800888077028-2hkg3osupabv81a04n5oq80i5phujml1.apps.googleusercontent.com"
+											data-context="signin" data-ux_mode="popup" data-callback="onSignIn2"
+											data-auto_prompt="false"></div>
+										<div class="g_id_signin" data-type="standard" data-shape="pill"
+											data-theme="filled_blue" data-text="signin" data-size="large"
+											data-logo_alignment="left"></div>
+
+										<span id="GOOGLE_STATUS_2"></span>
+
+									</div>
+									<div class="card-footer text-center py-3">
+										<div class="small">
+											<a th:href="@{/register}">註冊帳號</a>
+										</div>
+									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</main>
-		</div>
-		<div id="layoutAuthentication_footer">
-			<footer class="py-4 bg-light mt-auto">
-				<div class="container-fluid px-4">
-					<div
-						class="d-flex align-items-center justify-content-between small">
-						<div class="text-muted">Copyright &copy; Your Website 2023</div>
-						<div>
-							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
-								&amp; Conditions</a>
-						</div>
-					</div>
-				</div>
-			</footer>
+				</main>
+			</div>
+
 		</div>
 	</div>
-	<script
-		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+	<div th:replace="~{forestage/shared/foreFooter}"></div>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
 		crossorigin="anonymous"></script>
-	<script th:src="@{backstage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script>
+		// Google登入之後
+		function onSignIn2(response) {
+			var credential = response.credential,
+				profile = JSON.parse(decodeURIComponent(escape(window.atob(credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))))),
+				target = document.getElementById("GOOGLE_STATUS_2");
+			console.log(response);
+			console.log(credential);
+			console.log(profile);
+			var gmailPicture = profile.picture;
+			var gmail = profile.email;
+			var gmailName = profile.name;
+			googleLoginCheck(gmailPicture, gmail, gmailName);
+
+		}
+
+
+		function googleLoginCheck(gmailPicture, gmail, gmailName) {
+
+			$.ajax({
+				url: 'http://localhost:8080/phocos/googleLoginCheck',
+				method: 'POST',
+				data: {
+					gmailPicture: gmailPicture,
+					gmail: gmail,
+					gmailName: gmailName
+
+				},
+				success: function (response) {
+					console.log("Google登入成功");
+					Swal.fire({
+						title: 'Google登入成功',
+						text: '成功登入，將跳轉到首頁',
+						icon: 'success',
+						confirmButtonText: '確定'
+
+					}).then(result => {
+						if (result.isConfirmed) {
+							location.href = 'http://localhost:8080/phocos/';
+
+						}
+					})
+				}
+
+			})
+		}
+	</script>
+	<script>
+
+		// 顯示or關閉密碼
+		$(document).ready(function () {
+			$('#show_hide_password').change(function () {
+				var passwordField = $('#memberPassword');
+
+				if ($(this).is(':checked')) {
+					passwordField.attr('type', 'text');
+				} else {
+					passwordField.attr('type', 'password');
+				}
+			});
+		});
+
+		// 管理員一鍵登入
+		$(document).ready(function () {
+			$('#adminLoginButton').click(function (event) {
+				event.preventDefault();
+
+				$('#memberAccount').val('admin');
+				$('#memberPassword').val('1234');
+
+
+
+			});
+		});
+
+		$(document).ready(function () {
+			$('#memberLoginButton').click(function (event) {
+				event.preventDefault();
+
+				$('#memberAccount').val('phocosMember001');
+				$('#memberPassword').val('phocos');
+
+
+			});
+		});
+
+		$(document).ready(function () {
+			$('#loginButton').click(function () {
+				event.preventDefault();
+
+				Swal.fire({
+					title: '確認登入',
+					text: '您确定要登入嗎？',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: '確認',
+					cancelButtonText: '取消'
+				}).then(result => {
+					if (result.isConfirmed) {
+						var memberAccount = $('#memberAccount').val();
+						var memberPassword = $('#memberPassword').val();
+
+						$.ajax({
+							url: 'http://localhost:8080/phocos/login',
+							method: 'POST',
+							data: {
+								memberAccount: memberAccount,
+								memberPassword: memberPassword
+							},
+							success: function (response) {
+								// Send the member data to the server for database insertion
+								console.log(response);
+								if (response == "adminLoginSuccess") {
+									Swal.fire({
+										title: '管理員帳號',
+										text: '成功登入管理員帳號，將跳轉到dashboard頁面',
+										icon: 'success',
+										confirmButtonText: '確定'
+
+									}).then(result => {
+										if (result.isConfirmed) {
+											location.href = 'http://localhost:8080/phocos/dashboard';
+
+										}
+									})
+								}
+								if (response == "nonverifyLogin") {
+
+									Swal.fire({
+										title: '未驗證帳號',
+										text: '帳號為未驗證狀態，無法登入。已將驗證碼發到信箱。',
+										icon: 'error',
+										confirmButtonText: '確定'
+
+									})
+								}
+								if (response == "loginSuccess") {
+									Swal.fire({
+										title: '帳號登入成功',
+										text: '成功登入，將跳轉到首頁',
+										icon: 'success',
+										confirmButtonText: '確定'
+
+									}).then(result => {
+										if (result.isConfirmed) {
+											location.href = 'http://localhost:8080/phocos/';
+
+										}
+									})
+
+								}
+								if (response == "banned") {
+									Swal.fire({
+										title: '帳號遭封禁',
+										text: '帳號被封禁，無法登入。請聯絡管理員。',
+										icon: 'error',
+										confirmButtonText: '確定'
+
+									})
+								}
+
+
+							},
+							error: function (error) {
+								Swal.fire({
+									title: '登入失敗',
+									text: '登入會員發生錯誤，請重新再試一次',
+									icon: 'error',
+									confirmButtonText: '確定'
+								});
+							}
+						});
+					}
+				})
+			});
+		});
+
+	</script>
 </body>
+
 </html>

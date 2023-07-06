@@ -30,6 +30,7 @@
 			font-size: 14px;
 			background-color: #c2f0ec;
 		}
+
 	</style>
 </head>
 
@@ -63,7 +64,9 @@
 								<thead>
 									<tr>
 										<th>會員編號</th>
+										<th>會員頭像</th>
 										<th>會員名稱</th>
+										<th>會員狀態</th>
 										<th>會員帳號</th>
 										<th>會員密碼</th>
 										<th>會員信箱</th>
@@ -75,7 +78,9 @@
 								<tfoot>
 									<tr>
 										<th>會員編號</th>
+										<th>會員頭像</th>
 										<th>會員名稱</th>
+										<th>會員狀態</th>
 										<th>會員帳號</th>
 										<th>會員密碼</th>
 										<th>會員信箱</th>
@@ -89,7 +94,14 @@
 										<tr>
 
 											<td id="memberID" th:text="${member.memberID}"></td>
+											<td id="avatar">
+												<img th:if="${member.memberAvatar != null}" style="width: 50px; height: 50px;"
+													th:src="@{'/avatar/' + ${member.memberID}}" alt="Member Avatar">
+												<img th:unless="${member.memberAvatar != null}" style="width: 50px; height: 50px;"
+													th:src="@{/forestage/member/assets/memberDefaultAvatar.png}" alt="Default Image">
+											</td>
 											<td th:text="${member.memberName}"></td>
+											<td class="accountStatusId" th:text="${member.accountStatusId}"></td>
 											<td th:text="${member.memberAccount}"></td>
 											<td th:text="${member.memberPassword}"></td>
 											<td th:text="${member.memberEmail}"></td>
@@ -137,6 +149,27 @@
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
 	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
 	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var statusElements = document.getElementsByClassName("accountStatusId");
+
+			for (var i = 0; i < statusElements.length; i++) {
+				var statusElement = statusElements[i];
+				var statusId = parseInt(statusElement.innerText); // 取得狀態ID並轉換為整數
+
+				// 根據狀態ID設定對應的狀態文本
+				var statusText = "";
+				if (statusId === 0) {
+					statusText = "未驗證";
+				} else if (statusId === 1) {
+					statusText = "已驗證";
+				} else if (statusId === 2) {
+					statusText = "已完成";
+				}
+
+				// 將狀態文本更新到元素上
+				statusElement.innerText = statusText;
+			}
+		});
 		$(function () {
 			$('tbody').on('click', '#del', function (event) {
 				event.preventDefault();

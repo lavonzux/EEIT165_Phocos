@@ -60,28 +60,5 @@ public class RegisterService {
 		return inputCode.equals(sentCode);
 	}
 
-	// 實際註冊成功帳號會做的事情
-	public void registerMember(RegisterFormDTO formDTO) {
-
-		Member newMember = new Member();
-		newMember.setMemberAccount(formDTO.getMemberAccount());
-		newMember.setMemberPassword(formDTO.getMemberPassword());
-		newMember.setMemberEmail(formDTO.getMemberEmail());
-		newMember.setMemberName(formDTO.getMemberName());
-		newMember.setMemberGender(formDTO.getMemberGender());
-		newMember.setMemberAvatar(formDTO.getMemberAvatar());
-
-		registerRepository.save(newMember);
-
-		// 創建VerificationCode實體
-		VerificationCode verificationCode = new VerificationCode();
-		verificationCode.setMember(newMember);
-		verificationCode.setEmail(newMember.getMemberEmail());
-		verificationCode.setVerificationCode(generateVerification());
-
-		// 保存VerificationCode實體到資料庫
-		verificationCodeRepository.save(verificationCode);
-
-	}
 	
 }

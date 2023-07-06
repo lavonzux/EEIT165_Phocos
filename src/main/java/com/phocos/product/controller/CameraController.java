@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,7 +33,7 @@ public class CameraController {
 		m.addAttribute("cameras", cameras);
 		return "backstage/towakawaii/CameraHome";
 	}
-
+	
 	@GetMapping("/product/insertcamerapage")
 	public String insertPage() {
 		return "backstage/towakawaii/CameraAdd";
@@ -56,7 +57,7 @@ public class CameraController {
 			@RequestParam("cameraShutter") String shutter, @RequestParam("cameraBurst") String burst,
 			@RequestParam("cameraMemCard") String memcard, @RequestParam("cameraBattery") String battery,
 			@RequestParam("cameraDims") String dims, @RequestParam("cameraWeight") Integer weight,
-			@RequestParam("cameraPhoto") MultipartFile cameraphoto,@RequestParam("cameraStocks") int stocks) {
+			@RequestParam("cameraPhoto") MultipartFile cameraphoto, @RequestParam("cameraStocks") int stocks) {
 		try {
 			Camera camera = new Camera();
 			camera.setCameraModel(model);
@@ -125,16 +126,40 @@ public class CameraController {
 			@RequestParam("cameraBurst") String burst, @RequestParam("cameraMemCard") String memcard,
 			@RequestParam("cameraBattery") String battery, @RequestParam("cameraDims") String dims,
 			@RequestParam("cameraWeight") Integer weight, @RequestParam("cameraPhoto") MultipartFile cameraPhoto,
-			@RequestParam("cameraStocks") int stocks,
-			Model model1) throws IOException {
+			@RequestParam("cameraStocks") int stocks, Model model1) throws IOException {
 		byte[] camerabyte = null;
 		camerabyte = cameraPhoto.getBytes();
 		Camera updateCamera = cameraService.updateCameraById(productID, model, brand, price, sensor, px, recpx, mount,
 				ibis, evf, lcd, focussys, photometry, isomin, isomax, shutter, burst, memcard, battery, dims, weight,
-				camerabyte,stocks);
+				camerabyte, stocks);
 		ResponseEntity<byte[]> imagEntity = downloadImage(productID);
 		byte[] cameraphoto = imagEntity.getBody();
 		model1.addAttribute("cameraphoto", cameraphoto);
 		return "redirect:/cameras";
 	}
+
+	////////////////// 前台////////////////////
+	
+	@GetMapping("/products/camerashop")
+	public String getcameraPage(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+
+		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
+		model.addAttribute("page", page);
+		return "forestage/towakawaii/CameraShop"; // 返回對應的視圖模板
+	}
+	@GetMapping("/products/camerashop2")
+	public String getcamera2Page(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+
+		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
+		model.addAttribute("page", page);
+		return "forestage/towakawaii/CameraShop2"; // 返回對應的視圖模板
+	}
+	@GetMapping("/products/shoppingcar")
+	public String changepagetoshoppingcar() {
+
+		return "forestage/towakawaii/ShoppingCar"; // 返回對應的視圖模板
+
+	}
+	
+	
 }

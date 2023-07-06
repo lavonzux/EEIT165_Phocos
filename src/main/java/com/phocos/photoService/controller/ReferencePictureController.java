@@ -1,8 +1,13 @@
 package com.phocos.photoService.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +29,7 @@ import com.phocos.photoService.service.ReferencePictureService;
 @Controller
 public class ReferencePictureController {
 
+	private static final String NOT_FOUND_IMAGE_PATH = "static/backstage/photoService/Notfound.jpg";
 	
 	@Autowired
 	private PhotoServiceService psService;
@@ -38,7 +45,7 @@ public class ReferencePictureController {
 	
 	
 	
-	@PostMapping("/referencePicture/upload")
+//	@PostMapping("/referencePicture/upload")
 	@ResponseBody
 	public String uploadReferencePicture(
 			@RequestParam(name = "serviceID") Integer serviceID,
@@ -69,15 +76,69 @@ public class ReferencePictureController {
 	}
 	
 	
-	@GetMapping("/referencePicture/getRefPic")
-	public ResponseEntity<byte[]> getPSRefPic(@RequestParam(name = "serviceID") int serviceID) {
+	@GetMapping("/referencePicture/getRefPic/{serviceID}")
+	public ResponseEntity<byte[]> getPSRefPic(@PathVariable(name = "serviceID") int serviceID) throws IOException {
 		
-		ReferencePicture result = rpService.readByPhotoServiceID(serviceID);
-		byte[] pictureFile = result.getPictureFile();
+		FileInputStream defaultPic = new FileInputStream("/Users/lavonzux/Documents/examplePicture/DSCF4967.jpg");
 		
+		ReferencePicture result = rpService.readFirstByPhotoServiceID(serviceID);
+		byte[] pictureFile;
+		
+		if (result != null) {
+			pictureFile = result.getPictureFile();
+		}else {
+			pictureFile = defaultPic.readAllBytes();
+		}
+		defaultPic.close();
+
 		HttpHeaders photoHeader = new HttpHeaders();
 		photoHeader.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<byte[]>(pictureFile, photoHeader, HttpStatus.OK);
 	}
 	
+	
+//	@GetMapping("/referencePicture/api/getPicById")
+	@ResponseBody
+	public ResponseEntity<byte[]> getRefPicById(@RequestParam(name = "pictureID") int pictureID) {
+		
+		ReferencePicture result = rpService.readOneEntry(pictureID);
+		byte[] pictureFile=null;
+		
+		if (result != null) pictureFile=result.getPictureFile();
+		
+		try {
+			File notFoundImg=new ClassPathResource(NOT_FOUND_IMAGE_PATH).getFile();
+			FileInputStream notFoundImgFis=new FileInputStream(notFoundImg);
+			pictureFile=notFoundImgFis.readAllBytes();
+			notFoundImgFis.close();
+		} catch (IOException e) {
+			System.out.println("========== !!! Exception thorwn in getRefPicAPI !!! ==========");
+			e.printStackTrace();
+		}
+		
+		HttpHeaders photoHeader=new HttpHeaders();
+		photoHeader.setContentType(MediaType.IMAGE_JPEG);
+		return new ResponseEntity<byte[]>(pictureFile, photoHeader, HttpStatus.OK);
+	}
+	
+	
+//	@GetMapping("/referencePicture/api/getPicIds")
+	@ResponseBody
+	public ArrayList<Integer> getRefPicIDs(@RequestParam(name = "serviceID") int serviceID) {
+		
+		List<ReferencePicture> readAllByPhotoServiceID = rpService.readAllPicturesByServiceID(serviceID);
+		if (readAllByPhotoServiceID.size()>0) { System.out.println("Ref Pics Found!"); }
+		
+		ArrayList<Integer> refPicIds = new ArrayList<>();
+		for (ReferencePicture referencePicture : readAllByPhotoServiceID) { refPicIds.add(referencePicture.getPictureID()); }
+		
+		return refPicIds;
+	}
+	
+	
+	@PostMapping
+	public void deleteReferencePicture(@RequestParam("pictureID") int pictureID) {
+		rpService.deleteReferencePicture(pictureID);
+	}
+
 }
