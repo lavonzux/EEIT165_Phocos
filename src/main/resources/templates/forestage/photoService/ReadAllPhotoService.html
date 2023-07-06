@@ -93,8 +93,11 @@
                         <div class="card-body">
                             <div class="small text-muted" th:text="${oneBean.formattedCreatedOn}+'  由  '+${oneBean.serviceCreator}+'  建立'"></div>
                             <h2 class="card-title" th:text="${oneBean.serviceName}"></h2>
-                            <p class="card-text" th:text="${oneBean.serviceType} + ' ' + ${oneBean.serviceLocation}"></p>
-                            <a class="btn btn-primary" th:href="@{'/photoService/ReadOne/'+${oneBean.serviceID}}">詳細資訊 →</a>
+                            <div>
+                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
+                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
+                            </div>
+                            <a class="btn btn-primary" th:href="@{/photoService/ReadOne?(serviceID=${oneBean.serviceID})}">詳細資訊 →</a>
                         </div>
                     </div>
 

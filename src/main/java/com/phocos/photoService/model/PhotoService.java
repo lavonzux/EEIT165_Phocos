@@ -9,14 +9,20 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.sym.Name;
+import com.phocos.member.Member;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -32,7 +38,11 @@ public class PhotoService implements java.io.Serializable{
 
 	private String serviceName;
 
-	private String serviceType;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "serviceType")
+	@JsonManagedReference
+	private ServiceType serviceType;
 
 	private String servicePrice;
 
@@ -40,7 +50,12 @@ public class PhotoService implements java.io.Serializable{
 	
 	private String serviceLocation;
 
-	private String serviceCreator;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "serviceCreator")
+//	@JsonManagedReference
+	private Member serviceCreator;
+	
 
 	private String serviceDesc;
 
@@ -170,11 +185,11 @@ public class PhotoService implements java.io.Serializable{
 	public boolean dataIsValid() {
 
 		boolean serviceNameValid = (serviceName!=null && serviceName.length()>0 ? true : false );
-		boolean serviceTypeValid = (serviceType!=null && serviceType.length()>0 ? true : false );
+		boolean serviceTypeValid = (serviceType!=null ? true : false );
 		boolean servicePriceValid = (servicePrice!=null && servicePrice.length()>0 ? true : false );
 		boolean serviceDurationValid = (serviceDuration!=null && serviceDuration.length()>0 ? true : false );
 		boolean serviceLocationValid = (serviceLocation!=null && serviceLocation.length()>0 ? true : false );
-		boolean serviceCreatorValid = (serviceCreator!=null && serviceCreator.length()>0 ? true : false );
+		boolean serviceCreatorValid = (serviceCreator!=null ? true : false );
 
 		if (serviceNameValid && serviceTypeValid && servicePriceValid && serviceDurationValid && serviceLocationValid && serviceCreatorValid) {
 			return true;

@@ -1,6 +1,7 @@
 package com.phocos.photoService.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,15 @@ public class PhotoServiceController {
 	public String gotoReadOnePhotoService(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
 		model.addAttribute("resultBean", resultBean);
+		
+		Field[] fields = resultBean.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			System.out.println(field.getName());
+		}
+		
+		String typeName = resultBean.getServiceType().getTypeName();
+		System.out.println(typeName);
+		
 		return "forestage/photoService/ReadOnePhotoService";
 	}
 	
