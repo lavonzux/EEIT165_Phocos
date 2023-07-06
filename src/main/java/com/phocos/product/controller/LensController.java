@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.phocos.product.model.Camera;
 import com.phocos.product.model.Lens;
 import com.phocos.product.service.LensService;
 
@@ -133,5 +135,15 @@ public class LensController {
 		byte[] lensphoto = imagEntity.getBody();
 		model1.addAttribute("lensphoto", lensphoto);
 		return "redirect:/lenss";
+	}
+	
+	////////////////// 前台////////////////////
+	
+	@GetMapping("/products/lensshop")
+	public String getlensPage(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+
+		Page<Lens> page = lensService.findBylensPage(pageNumber);
+		model.addAttribute("page", page);
+		return "forestage/towakawaii/LensShop"; // 返回對應的視圖模板
 	}
 }

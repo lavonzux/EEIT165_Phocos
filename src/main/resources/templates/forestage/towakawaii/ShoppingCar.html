@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>我的購物車</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{/forestage/product/js/shoppingcar.js}"></script>
+<script th:src="@{/forestage/product/js/productlist.js}"></script>
+</head>
+
+<body>
+	<h1>我的購物車</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>型號</th>
+				<th>品牌</th>
+				<th>價格</th>
+			</tr>
+		</thead>
+		<tbody id="cartItems"></tbody>
+	</table>
+
+	<div id="totalPrice"></div>
+	<button onclick="saveCart()">結帳</button>
+	<button onclick="clearCart()">清空購物車</button>
+
+</body>
+<script>
+
+
+</script>
+</html>

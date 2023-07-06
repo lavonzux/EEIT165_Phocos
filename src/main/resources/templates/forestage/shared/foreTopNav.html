@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>bar</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- Bootstrap icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link th:href="@{/forestage/sharedForBar/css/styles.css}" rel="stylesheet" />
+	<main class="flex-shrink-0">
+		<!-- Navigation-->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container px-5">
+				<a class="navbar-brand" href="http://localhost:8080/phocos/">
+					<img th:src="@{/forestage/sharedForBar/assets/logoForPage.png}" alt="Logo" height="30"
+						style="margin-right:10px;"> <!-- logo 圖片 -->
+					<span
+						style="font-family: 'Ysabeau SC', sans-serif; font-size: 22px; text-shadow: 0.5px 0.5px 0.5px #FEFAE0;">
+						Phocos 影遇
+					</span>
+				</a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation"><span
+						class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link" href="http://localhost:8080/phocos/">首頁</a></li>
+						<li class="nav-item"><a class="nav-link" href="about.html">會員中心</a></li>
+						<li class="nav-item"><a class="nav-link" href="contact.html">活動資訊</a></li>
+						<li class="nav-item"><a class="nav-link" href="pricing.html">攝影媒合</a></li>
+						<li class="nav-item"><a class="nav-link" href="faq.html">場地一覽</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">線上商城</a></li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">論壇中心</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+								<li><a class="dropdown-item" href="blog-home.html">論壇首頁</a></li>
+								<li><a class="dropdown-item" href="blog-post.html">我要發文</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>

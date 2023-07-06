@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -106,5 +110,14 @@ public class LensService {
 		return null;
 	}
 	
+//////////前台//////////
+public Page<Lens> findBylensPage(Integer pageNumber) {
+	Pageable pgb = PageRequest.of(pageNumber - 1, 12, Sort.Direction.DESC, "lensBrand");
+
+	Page<Lens> page = lensRepo.findAll(pgb);
+	return page;
+}
+
+
 
 }
