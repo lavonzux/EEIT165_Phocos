@@ -7,7 +7,8 @@ function addToCart(productId) {
 	var model = document.getElementById('model_' + productId).innerText;
 	var brand = document.getElementById('brand_' + productId).innerText;
 	var price = document.getElementById('price_' + productId).innerText;
-
+	var quantitySelect = document.getElementById('quantitySelect');
+	var selectedQuantity = parseInt(quantitySelect.value);
 	// 创建一个对象来存储相机数据
 	var itemData = {
 		productId: productId,
@@ -17,7 +18,9 @@ function addToCart(productId) {
 	};
 
 	// 将相机数据添加到购物车数组中
-	shoppingCart.push(itemData);
+	for (var i = 0; i < selectedQuantity; i++) {
+		shoppingCart.push(itemData);
+	}
 
 	// 在控制台打印购物车数据（仅用于调试）
 	console.log(shoppingCart);
@@ -25,7 +28,9 @@ function addToCart(productId) {
 
 	// 将数据存储到 cookie
 	var cartData = JSON.parse(getCookie('shoppingCart')) || [];
-	cartData.push(itemData);
+	for (var i = 0; i < selectedQuantity; i++) {
+		cartData.push(itemData);
+	}
 	setCookie('shoppingCart', JSON.stringify(cartData), 1); // 這裡的1代表cookie的過期天數
 }
 
