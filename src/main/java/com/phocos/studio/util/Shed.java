@@ -9,9 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity 
-@Data
 @Table(name = "StudioDetail")
 public class Shed {
 	@Id
@@ -33,10 +33,11 @@ public class Shed {
 	private String shedType;
 	@Column(name = "shedIntro")
 	private String shedIntro;
-	@Column(name = "studioPicID")
-	private Integer studioPicID;
+	
+	
 	
 	@Nullable
+	@ToString.Exclude
 	@OneToMany(mappedBy = "shed")
 	private List<StudioPic> studioPics;
 	
@@ -124,12 +125,5 @@ public class Shed {
 		this.shedIntro = shedIntro;
 	}
 
-	public Integer getStudioPicID() {
-		return studioPicID;
-	}
-
-	public void setStudioPicID(Integer studioPicID) {
-		this.studioPicID = studioPicID;
-	}
 	
 }

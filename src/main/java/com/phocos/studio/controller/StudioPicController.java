@@ -159,24 +159,21 @@ public class StudioPicController {
 	//取得第一張照片
 	@GetMapping("/studioPic/indexPic/{studioID}")
 	public ResponseEntity<byte[]> getPSStudioPic(@PathVariable(name = "studioID") int studioID) throws IOException {
-		
-		
-		
-		StudioPic result = spService.readFirstByStudioID(studioID);
-		byte[] studioPicFile=null;
-		
-		if (result != null) {
-			studioPicFile = result.getStudioPicFile();
-		}else {
-			
-		}
-		
+	    StudioPic result = spService.readFirstByStudioID(studioID);
+	    byte[] studioPicFile = null;
 
-		HttpHeaders photoHeader = new HttpHeaders();
-		photoHeader.setContentType(MediaType.IMAGE_JPEG);
-		return new ResponseEntity<byte[]>(studioPicFile, photoHeader, HttpStatus.OK);
+	    if (result != null) {
+	        studioPicFile = result.getStudioPicFile();
+	    } else {
+	        // Handle the case when StudioPic is not found
+	        // For example, return an appropriate error response
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    HttpHeaders photoHeader = new HttpHeaders();
+	    photoHeader.setContentType(MediaType.IMAGE_JPEG);
+	    return new ResponseEntity<>(studioPicFile, photoHeader, HttpStatus.OK);
 	}
-	
 	//刪除照片
 	@DeleteMapping("/studioPic/delete")
 	public String deleteStudioPic(@RequestParam("studioPicID") Integer studioPicID,

@@ -14,10 +14,10 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "StudioPic")
-@Data
 public class StudioPic {
 	
 	@Id
@@ -35,16 +35,27 @@ public class StudioPic {
 	private byte[] studioPicFile;
 	
 	@Nullable
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "studioID")
 	private Studio studio;
 	
+	@ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shedID")
     private Shed shed;
 	
 	public StudioPic() {
 		
+	}
+	
+	@Override
+	public String toString() {
+	    return "StudioPic{" +
+	            "studioPicID=" + studioPicID +
+	            ", studioPicName='" + studioPicName + '\'' +
+	            // Include other relevant fields
+	            '}';
 	}
 
 	public int getStudioPicID() {
