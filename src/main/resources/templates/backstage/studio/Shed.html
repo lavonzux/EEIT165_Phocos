@@ -8,12 +8,19 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>場地管理</title>
+        <title>首頁</title>
         <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
         <style>
             #add{
-
                 float:right;
                 font-size: 14px;
+                margin: 5px;
+            }
+            
+                        #back{
+                float:right;
+                font-size: 14px;
+                margin: 5px;
             }
 
             #editStudio{
@@ -44,70 +51,75 @@
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">攝影場地管理</li>
                         </ol>
+
+					<br>
                         <div class="card mb-4">
                             <div class="card-body">
-                                管理攝影棚工作室資料
+                                管理攝影棚資料
                                 <br>
-                                <form method="get" th:action="@{/studio/insert}">
-                                    <button id="add" class="btn btn-outline-success btn-sm">新增工作室</button>
-                                </form>
+<form th:if="${sheds.size() > 0}" method="get" th:action="@{/shed/insert}">
+    <input type="hidden" id="studioID" name="studioID" th:value="${sheds[0].studioID}" />
+    <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
+</form>
+<form th:unless="${sheds.size() > 0}" method="get" th:action="@{/shed/insert}">
+    <input type="hidden" id="studioID" name="studioID" th:value="${param.studioID}" />
+    <button id="add" class="btn btn-outline-success btn-sm">新增攝影棚</button>
+</form>
+							<form method="get" th:action="@{/studios}">
+							            <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
+							</form>
                             </div>
                             </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                攝影場地管理
+                                攝影棚管理
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
-                                        <tr>
-                                            <th>工作室編號</th>
-                                            <th>攝影棚工作室名稱</th>
-                                            <th>管理人</th>
-                                            <th>編輯工作室</th>
-                                            <th>進入攝影棚編輯</th>
+                                         <tr>
+                                            <th>攝影棚編號</th>
+                                            <th>攝影棚名稱</th>
+                                            <th>攝影棚費用</th>
+                                            <th>攝影棚特徵</th>
+                                            <th>編輯攝影棚</th>
                                             <th>刪除</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>工作室編號</th>
-                                            <th>攝影棚工作室名稱</th>
-                                            <th>管理人</th>
-                                            <th>編輯工作室</th>
-                                            <th>進入攝影棚編輯</th>
+                                            <th>攝影棚編號</th>
+                                            <th>攝影棚名稱</th>
+                                            <th>攝影棚費用</th>
+                                            <th>攝影棚特徵</th>
+                                            <th>編輯攝影棚</th>
                                             <th>刪除</th>
                                         </tr>
                                     </tfoot>
 								  <tbody>
-                                    <th:block th:each="studio : ${studios}">
-								      <tr>
-								        <td id="studioID" th:text="${studio.studioID}"></td>                                        
-								        <td th:text="${studio.studioName}"></td>
-								        <td th:text="${studio.memberID}"></td>
-                                        <td>                                
-                                            <form method="get" th:action="@{/studio/edit}">
-                                            <input id="studioID" name="studioID" th:value="${studio.studioID}" type="hidden" />
-                                            <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
-                                            </form>
-                                        </td>
-										<td>
-                                           <form method="get" th:action="@{/shed}">
-                                            <input id="studioID" name="studioID" th:value="${studio.studioID}" type="hidden" />
-                                            <input type="submit" value="進入" class="btn btn-outline-secondary btn-sm">
-                                            </form>
-										</td>
-
-                                        <td>
-                                            <form th:action="@{/studio/delete}" method="post">
-                                                <input name="_method" value="delete" type="hidden" />
-                                                <input name="studioID" th:value="${studio.studioID}" type="hidden" />
-                                                <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
-                                              </form>
-                                        </td>	
-										<!--  <td><button id="del" class="delete-btn" data-studio-id="/DeleteStudio?studioID=${studio.studioID}">刪除</button></td>-->
-								      </tr>
+								    <th:block th:each="shed : ${sheds}">
+								        <tr>
+								            <td id="shedID" th:text="${shed.shedID}"></td>                                        
+								            <td th:text="${shed.shedName}"></td>
+								            <td th:text="${shed.shedFee}"></td>
+								            <td th:text="${shed.shedType}"></td>
+								                                        
+								            <td>                                
+											<form method="get" th:action="@{/shed/edit}">
+											    <input id="shedID" name="shedID" th:value="${shed.shedID}" type="hidden" />
+											    <input type="submit" value="編輯" class="btn btn-outline-info btn-sm">
+											</form>
+								            </td>
+								
+								            <td>
+											<form th:action="@{/shed/delete}" method="post">
+											    <input name="_method" value="DELETE" type="hidden" />
+											    <input name="shedID" th:value="${shed.shedID}" type="hidden" />
+											    <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
+											</form>
+								            </td>	
+								        </tr>
 								    </th:block>
 								  </tbody>
 
@@ -132,10 +144,10 @@
         <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
 	<script>
 		$(function () {
-			$('tbody').on('click', '#del', function (studio) {
+			$('tbody').on('click', '#del', function (shed) {
 				event.preventDefault();
-				let studioID = $(this).closest('tr').find('#studioID').val();
-				console.log(studioID);
+				let shedID = $(this).closest('tr').find('#shedID').val();
+				console.log(shedID);
 
 				Swal.fire({
 					title: '確認删除？',
@@ -150,9 +162,9 @@
 					if (result.isConfirmed) {
 						// 使用Ajax向後端傳送刪除請求
 						$.ajax({
-							url: 'http://localhost:8080/phocos/studio/delete', 
+							url: 'http://localhost:8080/phocos/shed/delete', 
 							method: 'delete',
-							data: {studioID: studioID},
+							data: {shedID: shedID},
 							complete: function () {
 								// 刪除完成後強制重新載入頁面
 								location.reload();

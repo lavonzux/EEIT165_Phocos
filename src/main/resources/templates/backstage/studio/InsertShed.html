@@ -14,10 +14,12 @@
 
                 float:right;
                 font-size: 14px;
+
             }
             #back{
                 float:right;
                 font-size: 14px;
+
             }
             #fillFormButton{
                 border: 0.5px solid rgb(195, 195, 195);
@@ -67,11 +69,12 @@
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                新增攝影棚資料
+                                新增攝影棚工作室資料
                                 <br>
-                                <form method="get" th:action="@{/studios}">
-                                    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
-                                </form>
+							<form method="get" th:action="@{/shed} ">
+							    <input type="hidden" name="studioID" th:value="${shed.studioID}" />
+							    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
+							</form>
                             </div>
                             </div>
                         <div class="card mb-4">
@@ -83,7 +86,7 @@
 							<button id="fillFormButton">一鍵輸入</button>
 							<br>
 							<br>
-                                <form th:action="@{/studio/insertData}" method="post">
+                                <form th:object="${shed}" th:action="@{/shed/insertData}" method="post">
                               
                                  
                                 <table >
@@ -96,54 +99,41 @@
                                     </thead>
                                     <tbody>
 
+									<input type="hidden"  id="studioID" name="studioID" th:value="${shed.studioID}">	
+
                                         <tr>
-                                            <td>攝影棚工作室ID</td>
-                                            <td><input type="text" id="studioID" name="studioID"/></td>
+                                            <td>攝影棚ID</td>
+                                            <td><input type="text" id="shedID" name="shedID"/></td>
                                         </tr>
-                                        <tr>
-                                            <td>管理者</td>
-                                            <td><input type="text" id="memberID" name="memberID" /></td>
-                                        </tr>
+
                                         <tr>
                                             <td>名稱</td>
-                                            <td><input type="text" id="studioName" name="studioName" /></td>
+                                            <td><input type="text" id="shedName" name="shedName" /></td>
                                         </tr>
                                         <tr>
-                                            <td>地址</td>
-                                            <td><input type="text" id="studioAddress" name="studioAddress" /></td>
+                                            <td>尺寸</td>
+                                            <td><input type="text" id="shedSize" name="shedSize" /></td>
                                         </tr>
                                         <tr>
-                                            <td>緯度</td>
-                                            <td><input type="text" id="studioLong" name="studioLong" /></td>
+                                            <td>費用</td>
+                                            <td><input type="text" id="shedFee" name="shedFee" /></td>
                                         </tr>
-                                        <tr>
-                                            <td>經度</td>
-                                            <td><input type="text" id="studioLat" name="studioLat" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>聯絡電話</td>
-                                            <td><input type="text" id="studioPhone" name="studioPhone" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>信箱</td>
-                                            <td><input type="text" id="studioEmail" name="studioEmail" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>營業時間</td>
-                                            <td><textarea id="studioTime" name="studioTime" rows="3" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>相關連結</td>
-                                            <td><textarea id="studioLink" name="studioLink" rows="3" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>介紹</td>
-                                            <td><textarea id="studioIntro" name="studioIntro" rows="7" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>照片</td>
-                                            <td><input id="studioPicID" type="text" name="studioPicID" /></td>
-                                        </tr>
+										<tr>
+										    <td>特色</td>
+										    <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="40"></textarea></td>
+										</tr>
+										<tr>
+										    <td>設備</td>
+										    <td><textarea id="shedEquip" name="shedEquip" rows="3" cols="40"></textarea></td>
+										</tr>
+										<tr>
+										    <td>風格</td>
+										    <td><textarea id="shedType" name="shedType" rows="3" cols="40"></textarea></td>
+										</tr>
+										<tr>
+										    <td>介紹</td>
+										    <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="40"></textarea></td>
+										</tr>
                                     </tbody>
                                 </table>
                                 
@@ -169,24 +159,26 @@
         <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
         <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
         <script>
-$(document).ready(function () {
-  $('#fillFormButton').click(function (event) {
-    event.preventDefault();
+		$(document).ready(function () {
+		  $('#fillFormButton').click(function (event) {
+		    event.preventDefault();
+		
+		    $('#studioID').val('10002');
+		    $('#memberID').val('11');
+		    $('#studioName').val('貓棚 Felidae Studio');
+		    $('#studioAddress').val('新北市板橋區四川路一段10巷21號');
+		    $('#studioLong').val('121.45894');
+		    $('#studioLat').val('25.007317');
+		    $('#studioPhone').val('090975730');
+		    $('#studioEmail').val('felidae.ph@gmail.com');
+		    $('#studioTime').val('900~2130');
+		    $('#studioLink').val('官網：httpfelidaestudio.com, Facebook：www.facebook.comfelidae.ph');
+		    $('#studioIntro').val('Felidae studio 是一個鄰近捷運府中商圈的實景攝影棚，我們提供人像創作／紀念寫真／攝影場租等服務，在簡約而富有趣味的空間裡，希望讓每一位來到這裡的創作者，都能盡情發揮想像，享受每次拍攝的樂趣。');
+		    $('#studioPicID').val('11');
+		  });
+		});;
+		
 
-    $('#studioID').val('10002');
-    $('#memberID').val('11');
-    $('#studioName').val('貓棚 Felidae Studio');
-    $('#studioAddress').val('新北市板橋區四川路一段10巷21號');
-    $('#studioLong').val('121.45894');
-    $('#studioLat').val('25.007317');
-    $('#studioPhone').val('090975730');
-    $('#studioEmail').val('felidae.ph@gmail.com');
-    $('#studioTime').val('900~2130');
-    $('#studioLink').val('官網：httpfelidaestudio.com, Facebook：www.facebook.comfelidae.ph');
-    $('#studioIntro').val('Felidae studio 是一個鄰近捷運府中商圈的實景攝影棚，我們提供人像創作／紀念寫真／攝影場租等服務，在簡約而富有趣味的空間裡，希望讓每一位來到這裡的創作者，都能盡情發揮想像，享受每次拍攝的樂趣。');
-    $('#studioPicID').val('11');
-  });
-});;
 
         </script>
     </body>

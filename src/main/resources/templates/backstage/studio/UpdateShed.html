@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>場地管理</title>
+        <title>編輯攝影棚</title>
+        <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+        <style>
+            #add{
+
+                float:right;
+                font-size: 14px;
+
+            }
+            #back{
+  
+                float:right;
+                font-size: 14px;
+
+            }
+            #del{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+            }
+            #editStudio{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #d1f0c2;
+            }
+            #enter {
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #c2f0ec;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            
+            th, td {
+                border: 0.5px solid rgb(195, 195, 195);
+                padding: 8px;
+                text-align: left;
+                border-radius: 5%;
+            }
+        </style>
+    </head>
+    <body class="sb-nav-fixed">
+        <ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
+        <div id="layoutSidenav">
+            <div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"></div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">攝影場地管理</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">攝影場地管理</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                編輯攝影棚資料
+                                <br>
+							<form method="get" th:action="@{/shed} ">
+							    <input type="hidden" name="studioID" th:value="${shed.studioID}" />
+							    <button id="back" class="btn btn-outline-secondary btn-sm">回到上一頁</button>
+							</form>
+                            </div>
+                            </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                場地管理
+                            </div>
+                            <div class="card-body">
+                                <form th:method="put" th:action="@{/shed/editData}"  th:object="${shed}">
+                                <table >
+                                    <thead>
+                                        <tr>
+                                            <th>項目</th>
+                                            <th>輸入</th>
+
+                                        </tr>
+                                    </thead>
+									 <tbody>
+									    <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}">
+									    <tr>
+									        <td>攝影棚ID</td>
+									        <td><input type="text" id="shedID" name="shedID" th:value="${shed.shedID}" /></td>
+									    </tr>
+									    <tr>
+									        <td>名稱</td>
+									        <td><input type="text" id="shedName" name="shedName" th:value="${shed.shedName}" /></td>
+									    </tr>
+									    <tr>
+									        <td>尺寸</td>
+									        <td><input type="text" id="shedSize" name="shedSize" th:value="${shed.shedSize}" /></td>
+									    </tr>
+									    <tr>
+									        <td>費用</td>
+									        <td><input type="text" id="shedFee" name="shedFee" th:value="${shed.shedFee}" /></td>
+									    </tr>
+									    <tr>
+									        <td>特色</td>
+									        <td><textarea id="shedFeature" name="shedFeature" rows="3" cols="80" th:text="${shed.shedFeature}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>設備</td>
+									        <td><textarea id="shedEquip" name="shedEquip" rows="3" cols="80" th:text="${shed.shedEquip}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>風格</td>
+									        <td><textarea id="shedType" name="shedType" rows="3" cols="80" th:text="${shed.shedType}"></textarea></td>
+									    </tr>
+									    <tr>
+									        <td>介紹</td>
+									        <td><textarea id="shedIntro" name="shedIntro" rows="3" cols="80" th:text="${shed.shedIntro}"></textarea></td>
+									    </tr>
+									</tbody>
+									</table>
+                                <br>
+                                <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存</button>
+                                <br>
+                            </form>
+                            <br>
+						<div id="studioPicsContainer" data-shed-id="${shed.shedID}">
+							<table>
+							    <tbody>
+							        <th:block th:each="studioPic : ${sPicsList}">
+							            <tr>
+							                <td th:text="${studioPic.studioPicName}"></td>
+							                <td>
+							                    <img width="200px" th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" />
+							                </td>
+						                <td>
+	                                        <form id="Form" th:action="@{/studioPic/delete}" method="post">
+                                                <input name="_method" value="delete" type="hidden" />
+                                               <input name="studioPicID" th:value="${studioPic.studioPicID}" type="hidden" />
+                                               <input name="shedID" th:value="${shed.shedID}" type="hidden" />
+                                                <input id="del" type="submit" value="刪除" class="btn btn-outline-danger btn-sm">
+                                              </form>
+											</td>
+
+							            </tr>
+							        </th:block>
+							    </tbody>
+							</table>
+				        </div>
+                        <br>
+                            
+                            
+						<form id="Form"  th:action="@{/studioPic/upload}" method="post" enctype="multipart/form-data">
+						    <div class="card-body">
+						        <table>
+						            <tbody>
+						                <tr>
+						                    <td>圖片名稱</td>
+						                    <td><input type="text" id="studioPicName" name="studioPicName"></td>
+						                </tr>
+						                <tr>
+						                    <td>檔案</td>
+						                    <td><input type="file" id="studioPicFile" name="studioPicFile"></td>
+						                </tr>
+						                <input type="hidden" id="studioID" name="studioID" th:value="${shed.studioID}" />
+						                <input type="hidden" id="shedID" name="shedID" th:value="${shed.shedID}" />
+						            </tbody>
+						        </table>
+	                        <br>
+						    <button id="add" type="submit" class="btn btn-outline-success btn-sm">儲存圖片</button>
+						    </div>
+						</form>
+                        </div>
+                    </div>
+                </main>
+                <div th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"></div>
+            </div>
+        </div>
+            <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+            <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+            <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+<script th:inline="javascript">
+$(document).ready(function() {
+    $("form#Form").submit(function() {
+        // 表单提交后刷新整个页面
+        location.reload();
+    });
+});
+</script>
+    </body>
+</html>

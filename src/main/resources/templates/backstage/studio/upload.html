@@ -15,25 +15,21 @@
 <body>
 <div th:replace="~{backstage/shared_layout/layout-static :: navbar}"></div>
 <div class="container">
-	<h1>Test upload studioPicture</h1>
+	<h1>Test upload referencePicture</h1>
 	<form method="post" action="#" id="myForm">
 		
 		<table>
 			<tr>
-				<td> <label for="studioID">StudioID：</label> </td>
-				<td> <input name="studioID" id="studioID" /> </td>
+				<td> <label for="serviceID">PhotoServiceID：</label> </td>
+				<td> <input name="serviceID" id="serviceID" /> </td>
 			</tr>
 			<tr>
-				<td> <label for="shedID">ShedID：</label> </td>
-				<td> <input name="shedID" id="shedID" /> </td>
+				<td> <label for="photoName">圖片名稱：</label> </td>
+				<td> <input name="photoName" id="photoName"/></td>
 			</tr>
 			<tr>
-				<td> <label for="studioPicName">圖片名稱：</label> </td>
-				<td> <input name="studioPicName" id="studioPicName"/></td>
-			</tr>
-			<tr>
-				<td> <label for="studioPicFile">檔案：</label> </td>
-				<td> <input type="file" name="studioPicFile" id="studioPicFile"/><br> </td>
+				<td> <label for="photoFile">檔案：</label> </td>
+				<td> <input type="file" name="photoFile" id="photoFile"/><br> </td>
 			</tr>				
 		</table>
 		<hr>
@@ -62,7 +58,7 @@
 	function sendPhoto(formData) {
 		axios({
 			method: 'post',
-			url:'http://localhost:8080/phocos/studio/upload',
+			url:'http://localhost:8080/phocos/referencePicture/upload',
 			data:formData,
 			//headers:{"Content-Type":"multipart/form-data"} // axios, jQuery 會自動做這件事，但fetch(), XMLHttpRequest不會
 		})
@@ -75,7 +71,7 @@
 		.catch(err=>{
 			console.log('upload failed!');
 			let resultBlock = document.getElementById('upload_results')
-			resultBlock.innerHTML = '上傳失敗，請重新再試一次'
+			resultBlock.innerHTML = '上船失敗，請重新再試一次'
 		})
 		.finally(function(){
 			document.getElementById('myForm').reset()
