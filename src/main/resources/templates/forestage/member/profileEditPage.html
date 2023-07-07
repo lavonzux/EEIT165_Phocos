@@ -34,7 +34,7 @@
 </head>
 
 <body class="bg-primary">
-	<div th:replace="~{/forestage/shared_layout/layout :: navbar}"></div>
+<div th:replace="~{forestage/shared/foreTopNav}"></div>
 	<div id="layoutAuthentication">
 		<div id="layoutAuthentication_content">
 			<main>
@@ -100,7 +100,7 @@
 				</div>
 			</main>
 		</div>
-		<div th:replace="~{/forestage/shared_layout/layout :: footer}"></div>
+		<div th:replace="~{forestage/shared/foreFooter}"></div>
 	</div>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
 		crossorigin="anonymous"></script>
