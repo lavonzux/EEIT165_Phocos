@@ -160,6 +160,11 @@ public class CameraController {
 		return "forestage/towakawaii/ShoppingCar"; // 返回對應的視圖模板
 
 	}
-	
+	@GetMapping("/products/cameradetail")
+	public String detailforestage(@RequestParam("productID") Integer productID, Model model) {
+		Camera camera = cameraService.getById(productID);
+		model.addAttribute("camera", camera);
+		return "forestage/towakawaii/Cameradetails";
+	}
 	
 }

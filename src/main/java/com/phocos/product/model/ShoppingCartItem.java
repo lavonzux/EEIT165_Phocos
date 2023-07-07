@@ -1,5 +1,7 @@
 package com.phocos.product.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +32,8 @@ public class ShoppingCartItem {
 	@Column(name = "price")
     private double price;
     
-
+	@Column(name = "timestamp")
+	private Date timestamp;
     // 构造函数、getter和setter方法
 
     @Override
@@ -39,7 +42,7 @@ public class ShoppingCartItem {
                 "productId=" + productId +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
-                ", price=" + price +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }
