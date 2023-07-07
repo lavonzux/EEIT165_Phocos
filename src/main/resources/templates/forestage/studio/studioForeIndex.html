@@ -11,7 +11,9 @@
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/main.css" rel="stylesheet" />
         <style>
 		    .card-img-top:hover {
 		        opacity: 0.5;
@@ -39,6 +41,29 @@
     </div>
 </header>
         <!-- Section-->
+    <div class="s131">
+      <form>
+        <div class="inner-form">
+          <div class="input-field first-wrap">
+            <input id="search" type="text" placeholder="What are you looking for?" />
+          </div>
+          <div class="input-field second-wrap">
+            <div class="input-select">
+              <select data-trigger="" name="choices-single-defaul">
+                <option placeholder="">CATEGORY</option>
+                <option>Subject A</option>
+                <option>Subject B</option>
+                <option>Subject C</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-field third-wrap">
+            <button class="btn-search" type="button">SEARCH</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
 <section>
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
@@ -100,28 +125,32 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script src="js/extention/choices.js"></script>
         <script>
-			
-					var parsedStudioID = parseInt(studioID);
+      const choices = new Choices('[data-trigger]',
+      {
+        searchEnabled: false
+      });		
+        var parsedStudioID = parseInt(studioID);
 			if (isNaN(parsedStudioID)) {
 			    console.log("Invalid studioID: " + studioID);
 			    return;
 			}
-function submitForm(studioID) {
-    var form = document.createElement('form');
-    form.method = 'get';
-    form.action = '/phocos/browsestudio';
+            function submitForm(studioID) {
+                var form = document.createElement('form');
+                form.method = 'get';
+                form.action = '/phocos/browsestudio';
 
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'studioID';
-    input.value = parseInt(studioID);
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'studioID';
+                input.value = parseInt(studioID);
 
-    form.appendChild(input);
-    form.id = 'browseStudioForm';
-    document.body.appendChild(form);
-    document.getElementById('browseStudioForm').submit();
-}
+                form.appendChild(input);
+                form.id = 'browseStudioForm';
+                document.body.appendChild(form);
+                document.getElementById('browseStudioForm').submit();
+            }
 		</script>
     </body>
 </html>
