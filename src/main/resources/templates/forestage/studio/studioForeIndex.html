@@ -17,6 +17,16 @@
 		        opacity: 0.5;
 		         cursor: pointer;
 		    }
+		    .pagination {
+			    display: flex;
+			    justify-content: center;
+			}
+			
+			.page-item.active .page-link {
+			    background-color: #6B705C;
+			    color: #fff;
+			    border: 1px solid #6B705C;
+			}
 		</style>
     </head>
     <body>
@@ -32,7 +42,7 @@
 <section>
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
-            <th:block th:each="studio : ${studios}">
+            <th:block th:each="studio : ${page.content}">
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Product image-->
@@ -52,6 +62,38 @@
         </div>
     </div>
 </section>
+<ul class="pagination">
+<th:block th:switch="${page.number != 0}">
+    <li th:case="${false}" class="page-item">
+        <a class="page-link">第一頁</a> <!-- 添加一个空格 -->
+    </li>
+    <li th:case="${true}" class="page-item">
+        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number})}">上一頁</a>
+    </li>
+</th:block>
+
+
+<th:block th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
+  <th:block th:switch="${page.number != pageNumber - 1 }">
+	  <li th:case=${true} class="page-item">
+	     <a class="page-link" th:href="@{/browsestudios/page?(p=${pageNumber})}">[[${pageNumber}]]</a>
+	  </li>
+	  <li th:case=${false} class="page-item active">
+	    <span class="page-link" th:text="${pageNumber}"></span>
+	  </li>
+  </th:block>
+</th:block>
+
+<th:block th:switch="${page.number == page.totalPages}">
+    <li th:case="${true}" class="page-item">
+        <span class="page-link">尾頁</span>
+    </li>
+    <li th:case="${false}" class="page-item">
+        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number + 2})}">下一頁</a>
+    </li>
+</th:block>
+</ul>
+
         <!-- Footer-->
  <div th:replace="~{forestage/shared/foreFooter}"></div>
         <!-- Bootstrap core JS-->

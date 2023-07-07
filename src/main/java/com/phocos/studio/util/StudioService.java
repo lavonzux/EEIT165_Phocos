@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +34,12 @@ public class StudioService {
 			return optional.get();
 		}
 		return null;
+	}
+	//前台換頁
+	public Page<Studio> findByPage(Integer pageNumber){
+		Pageable pgb = PageRequest.of(pageNumber-1, 12, Sort.Direction.ASC, "studioID");
+		Page<Studio> page = sRepo.findAll(pgb);
+		return page;
 	}
 
 	//新增資料
