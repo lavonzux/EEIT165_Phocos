@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.phocos.photoService.model.PhotoService;
 
 import jakarta.transaction.Transactional;
 
@@ -20,6 +26,20 @@ public class StudioService {
 	//取得所有資料
 	public List<Studio> findAll(){
 		return sRepo.findAll();
+	}
+	//取得單筆資料
+	public Studio readEntry(int studioID) {
+		Optional<Studio> optional = sRepo.findById(studioID);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
+	}
+	//前台換頁
+	public Page<Studio> findByPage(Integer pageNumber){
+		Pageable pgb = PageRequest.of(pageNumber-1, 12, Sort.Direction.ASC, "studioID");
+		Page<Studio> page = sRepo.findAll(pgb);
+		return page;
 	}
 
 	//新增資料
@@ -76,4 +96,5 @@ public class StudioService {
 		return null;
 		
 	}
+
 }

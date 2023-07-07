@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>攝影場地</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/main.css" rel="stylesheet" />
+        <style>
+		    .card-img-top:hover {
+		        opacity: 0.5;
+		         cursor: pointer;
+		    }
+		    .pagination {
+			    display: flex;
+			    justify-content: center;
+			}
+			
+			.page-item.active .page-link {
+			    background-color: #6B705C;
+			    color: #fff;
+			    border: 1px solid #6B705C;
+			}
+		</style>
+    </head>
+    <body>
+        <div th:replace="~{forestage/shared/foreTopNav}"></div>
+        <!-- Header-->
+<header class=" py-5" style="background-color: #DDBEA9;">
+    <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder">探索風格攝影棚</h1>
+        <p class="lead fw-normal " style="color: #6B705C;">包括全台各式各樣各種風格的攝影棚</p>
+    </div>
+</header>
+        <!-- Section-->
+    <div class="s131">
+      <form>
+        <div class="inner-form">
+          <div class="input-field first-wrap">
+            <input id="search" type="text" placeholder="What are you looking for?" />
+          </div>
+          <div class="input-field second-wrap">
+            <div class="input-select">
+              <select data-trigger="" name="choices-single-defaul">
+                <option placeholder="">CATEGORY</option>
+                <option>Subject A</option>
+                <option>Subject B</option>
+                <option>Subject C</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-field third-wrap">
+            <button class="btn-search" type="button">SEARCH</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+<section>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+            <th:block th:each="studio : ${page.content}">
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <a th:href="@{/browsestudio(studioID=${studio.studioID})}">
+                        <img class="card-img-top" th:src="@{'/studioPic/indexPic/' + ${studio.studioID}}" />
+                        </a>
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder" th:text="${studio.studioName}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</section>
+<ul class="pagination">
+<th:block th:switch="${page.number != 0}">
+    <li th:case="${false}" class="page-item">
+        <a class="page-link">第一頁</a> <!-- 添加一个空格 -->
+    </li>
+    <li th:case="${true}" class="page-item">
+        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number})}">上一頁</a>
+    </li>
+</th:block>
+
+
+<th:block th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
+  <th:block th:switch="${page.number != pageNumber - 1 }">
+	  <li th:case=${true} class="page-item">
+	     <a class="page-link" th:href="@{/browsestudios/page?(p=${pageNumber})}">[[${pageNumber}]]</a>
+	  </li>
+	  <li th:case=${false} class="page-item active">
+	    <span class="page-link" th:text="${pageNumber}"></span>
+	  </li>
+  </th:block>
+</th:block>
+
+<th:block th:switch="${page.number == page.totalPages}">
+    <li th:case="${true}" class="page-item">
+        <span class="page-link">尾頁</span>
+    </li>
+    <li th:case="${false}" class="page-item">
+        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number + 2})}">下一頁</a>
+    </li>
+</th:block>
+</ul>
+
+        <!-- Footer-->
+ <div th:replace="~{forestage/shared/foreFooter}"></div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script src="js/extention/choices.js"></script>
+        <script>
+      const choices = new Choices('[data-trigger]',
+      {
+        searchEnabled: false
+      });		
+        var parsedStudioID = parseInt(studioID);
+			if (isNaN(parsedStudioID)) {
+			    console.log("Invalid studioID: " + studioID);
+			    return;
+			}
+            function submitForm(studioID) {
+                var form = document.createElement('form');
+                form.method = 'get';
+                form.action = '/phocos/browsestudio';
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'studioID';
+                input.value = parseInt(studioID);
+
+                form.appendChild(input);
+                form.id = 'browseStudioForm';
+                document.body.appendChild(form);
+                document.getElementById('browseStudioForm').submit();
+            }
+		</script>
+    </body>
+</html>
