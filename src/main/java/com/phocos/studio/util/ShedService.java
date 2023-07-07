@@ -75,7 +75,7 @@ public class ShedService {
 	@Transactional
 	public Shed updateShedById(@RequestParam int shedID, @RequestParam Integer studioID, @RequestParam String shedName, @RequestParam Integer shedSize, @RequestParam Integer shedFee,
 	                            @RequestParam String shedFeature, @RequestParam String shedEquip, @RequestParam String shedType,
-	                            @RequestParam String shedIntro, @RequestParam Integer studioPicID) {
+	                            @RequestParam String shedIntro) {
 	    Optional<Shed> optional = sRepo.findById(shedID);
 	    
 	    if (optional.isPresent()) {
@@ -89,7 +89,6 @@ public class ShedService {
 	        shed.setShedEquip(shedEquip);
 	        shed.setShedType(shedType);
 	        shed.setShedIntro(shedIntro);
-	        shed.setStudioPicID(studioPicID);
 	        
 	        return shed;
 	    }

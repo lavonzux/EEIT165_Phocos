@@ -112,8 +112,9 @@ public class ShedController {
         shed.getShedFeature(),
         shed.getShedEquip(),
         shed.getShedType(),
-        shed.getShedIntro(),
-        shed.getStudioPicID());
+        shed.getShedIntro()
+	 );
+
 	    Integer studioID = shed.getStudioID();
 	    String redirectUrl = "redirect:/shed?studioID=" + studioID;
 	    return redirectUrl;
