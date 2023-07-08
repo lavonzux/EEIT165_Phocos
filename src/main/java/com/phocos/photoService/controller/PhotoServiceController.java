@@ -2,6 +2,7 @@ package com.phocos.photoService.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.phocos.member.MemberService;
+import com.phocos.photoService.Dto.PhotoServiceDto;
 import com.phocos.photoService.model.PhotoService;
-import com.phocos.photoService.model.PhotoServiceDto;
 import com.phocos.photoService.model.ReferencePicture;
 import com.phocos.photoService.service.PhotoServiceService;
+import com.phocos.photoService.service.ServiceTypeService;
 
 @Controller
 public class PhotoServiceController {
@@ -27,6 +31,13 @@ public class PhotoServiceController {
 
 	@Autowired
 	private PhotoServiceService psService;
+	
+	@Autowired
+	private ServiceTypeService stService;
+	
+	
+	@Autowired
+	private MemberService mService;
 
 
 	
@@ -34,28 +45,52 @@ public class PhotoServiceController {
 	public String gotoCreatePage(Model model) {
 			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
 
-			PhotoServiceDto createPhotoServiceBean = new PhotoServiceDto();
+			PhotoService createPhotoServiceBean = new PhotoService();
 			model.addAttribute("createPhotoService", createPhotoServiceBean);
 			return "backstage/photoService/CreatePhotoService";
 	}
 	
 	
 	@PostMapping(path = "/photoService/CreatePhotoService.controller")
-	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result, Model model) throws IOException {
+	public String processCreatePhotoServiceAction(
+			@RequestParam("serviceName") String serviceName,
+			@RequestParam("serviceType") String serviceType,
+			@RequestParam("servicePrice") String servicePrice,
+			@RequestParam("serviceDuration") String serviceDuration,
+			@RequestParam("serviceLocation") String serviceLocation,
+			@RequestParam("serviceCreator") int serviceCreator,
+			@RequestParam("inputRefPics") MultipartFile[] inputReferencePictures,
+			Model model) throws IOException {
 		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
+	
+		PhotoService createPSBean = new PhotoService();
 		
-		if (result.hasErrors()) { System.out.println(result.toString()); }
-		if (createPhotoServiceBean.toPhotoService().dataIsValid() ) {
-			
-			PhotoService resultBean = psService.createEntry(createPhotoServiceBean.toPhotoService());
-
-			model.addAttribute("resultBean", resultBean);
-			System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
-			return "backstage/photoService/ConfirmCreatedPhotoService";
+		createPSBean.setServiceName(serviceName);
+		createPSBean.setServiceType(stService.readEntry(serviceType));
+		createPSBean.setServicePrice(servicePrice);
+		createPSBean.setServiceDuration(serviceDuration);
+		createPSBean.setServiceLocation(serviceLocation);
+		createPSBean.setServiceCreator(mService.findById(serviceCreator));
+		
+		if (inputReferencePictures != null && inputReferencePictures.length > 0) {
+			ArrayList<ReferencePicture> referencePictures = new ArrayList<ReferencePicture>();
+			for(MultipartFile oneInputPic : inputReferencePictures) {
+				ReferencePicture oneRefPic = new ReferencePicture();
+				oneRefPic.setPhotoService(createPSBean);
+				oneRefPic.setPictureFile(oneInputPic.getBytes());
+				oneRefPic.setPictureName(oneInputPic.getOriginalFilename());
+				referencePictures.add(oneRefPic);
+			}
+			createPSBean.setReferencePictures(referencePictures);
 		}
+		
+		
+		PhotoService resultBean = psService.createEntry(createPSBean);
 
-		model.addAttribute("errorMsg", "Something went wrong when inserting entry! Please check your data again!");
-		return "backstage/photoService/CreatePhotoService";
+		model.addAttribute("resultBean", resultBean);
+		System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
+		return "backstage/photoService/ConfirmCreatedPhotoService";
+
 	}
 
 
@@ -81,7 +116,7 @@ public class PhotoServiceController {
 	*/
 
 	
-	@GetMapping(path = "/photoService/ReadAll")
+	@GetMapping(path = {"/photoService", "/photoService/ReadAll"})
 	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, Model model) {
 		if (page == null) { page = 1; }
 		Page<PhotoService> resultPage = psService.readAllByPage(page-1, 5);
@@ -118,14 +153,19 @@ public class PhotoServiceController {
 	
 	
 	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
-	public String processUpdatePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
+	public String processUpdatePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam(value = "serviceID", required = false) int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoServiceDto queryPhotoServiceBean,BindingResult result , Model model) {
 
 		// If there's no confirmed parameter, QPSB is null, or binding have error, means the first time requesting data for updating
 		// Then get the desired entry defined in get method's query string, and store it to attribute.
-		if (!confirmed || queryPhotoServiceBean==null || result.hasErrors()) {
+
+		if (result.hasErrors()) {
+			System.out.println(result.toString());
+		}
+		
+		if (!confirmed) {
 			System.out.println("========== Reading data for updating... ==========");
 			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
-			queryPhotoServiceBean = psService.readEntry(serviceID);
+			queryPhotoServiceBean = psService.readEntry(serviceID).toDto();
 			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
 			model.addAttribute("oldPhotoServiceBean", queryPhotoServiceBean);
 			return "backstage/photoService/UpdatePhotoService";
@@ -133,7 +173,7 @@ public class PhotoServiceController {
 
 		// If confirmed parameter is valid, qPSB filled with updated data, binding have no error,
 		// Then store the old data, and go update the data in DB.
-		if (confirmed && queryPhotoServiceBean!=null && !result.hasErrors()) {
+		if (queryPhotoServiceBean!=null) {
 
 		System.out.println("========== Confirmed to update... ==========");
 		System.out.printf("========== Updating PhotoServiceID: %d ==========%n",serviceID);
@@ -149,41 +189,37 @@ public class PhotoServiceController {
 		}
 
 		// There should only be two situation defined above, other situation go to error page.
+		System.out.println("uncatched condition in processUpdatePSAction!!!!!");
 		return "ErrorPage";
 	}
 
 
 
-//	@GetMapping("/photoService/DeletePhotoService.controller")
-	@RequestMapping(path = "/photoService/DeletePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
-	public String processDeletePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
+	@GetMapping("/photoService/DeletePhotoService.controller")
+	public String goToDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		System.out.println("==================== Incoming deletion request... ====================");
 
-		if (!confirmed || !queryPhotoServiceBean.dataIsValid() || result.hasErrors()) {
 			System.out.println("========== Reading data for deleting... ==========");
 			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
-			queryPhotoServiceBean = psService.readEntry(serviceID);
+			PhotoService queryPhotoServiceBean = psService.readEntry(serviceID);
 			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
 			return "backstage/photoService/DeletePhotoService";
-		}
+		
+	}
+	
+	
+	@PostMapping("/photoService/DeletePhotoService.controller")
+	public String processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 
-		// If confirmed parameter is valid, qPSB filled with updated data, binding have no error,
-		// Then store the old data, and go delete the data in DB.
-		if (confirmed && queryPhotoServiceBean!=null && !result.hasErrors()) {
-
+		// Store the old data, and go delete the data in DB.
 		System.out.println("========== Confirmed to delete... ==========");
 		System.out.printf("========== Deleting PhotoServiceID: %d ==========%n",serviceID);
 
 		PhotoService deletedPhotoServiceBean = psService.readEntry(serviceID);
 		model.addAttribute("deletedPhotoServiceBean", deletedPhotoServiceBean);
-		psService.deleteEntry(queryPhotoServiceBean.getServiceID());
-
+		psService.deleteEntry(serviceID);
 
 		return "backstage/photoService/ConfirmDeletedPhotoService";
-		}
-
-		// There should only be two situation defined above, other situation go to error page.
-		return "ErrorPage";
 	}
 
 }

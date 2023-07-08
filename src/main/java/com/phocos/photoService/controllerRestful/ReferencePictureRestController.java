@@ -91,7 +91,11 @@ public class ReferencePictureRestController {
 	public List<Integer> getRefPicIDs(@RequestParam(name = "serviceID") int serviceID) {
 		
 		List<ReferencePicture> readAllByPhotoServiceID = rpService.readAllPicturesByServiceID(serviceID);
-		if (readAllByPhotoServiceID.size()>0) { System.out.println("Ref Pics Found!"); }
+		if (readAllByPhotoServiceID == null) {
+				System.out.println("No Ref Pic found for "+serviceID+"......"); 
+				return null;
+			}
+		if (readAllByPhotoServiceID.size()>0) System.out.println("Ref Pics Found!"); 
 		
 		ArrayList<Integer> refPicIds = new ArrayList<>();
 		for (ReferencePicture referencePicture : readAllByPhotoServiceID) { refPicIds.add(referencePicture.getPictureID()); }

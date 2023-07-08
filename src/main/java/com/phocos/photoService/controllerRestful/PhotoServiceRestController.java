@@ -13,14 +13,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.phocos.member.Member;
+import com.phocos.member.MemberService;
+import com.phocos.photoService.Dto.PhotoServiceDto;
 import com.phocos.photoService.model.PhotoService;
-import com.phocos.photoService.model.PhotoServiceDto;
+import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.service.PhotoServiceService;
+import com.phocos.photoService.service.ServiceTypeService;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 public class PhotoServiceRestController {
@@ -29,6 +36,11 @@ public class PhotoServiceRestController {
 	@Autowired
 	private PhotoServiceService psService;
 
+	@Autowired
+	private MemberService mService;
+	
+	@Autowired
+	private ServiceTypeService stService;
 
 	
 //	@PostMapping(path = "/photoService/CreatePhotoService.controller")
@@ -71,39 +83,30 @@ public class PhotoServiceRestController {
 
 	
 	
-//	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
-	public String processUpdatePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result , Model model) {
+	@Transactional
+	@PutMapping("/photoService/api/Update")
+	public List<PhotoServiceDto> processUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) {
 
-		// If there's no confirmed parameter, QPSB is null, or binding have error, means the first time requesting data for updating
-		// Then get the desired entry defined in get method's query string, and store it to attribute.
-		if (!confirmed || queryPhotoServiceBean==null || result.hasErrors()) {
-			System.out.println("========== Reading data for updating... ==========");
-			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
-			queryPhotoServiceBean = psService.readEntry(serviceID);
-			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
-			model.addAttribute("oldPhotoServiceBean", queryPhotoServiceBean);
-			return "backstage/photoService/UpdatePhotoService";
-		}
-
-		// If confirmed parameter is valid, qPSB filled with updated data, binding have no error,
-		// Then store the old data, and go update the data in DB.
-		if (confirmed && queryPhotoServiceBean!=null && !result.hasErrors()) {
-
-		System.out.println("========== Confirmed to update... ==========");
-		System.out.printf("========== Updating PhotoServiceID: %d ==========%n",serviceID);
-
-		PhotoService oldPhotoServiceBean = psService.readEntry(queryPhotoServiceBean.getServiceID());
-		PhotoServiceDto oldPSBDto = oldPhotoServiceBean.toDto();
-		model.addAttribute("oldPhotoServiceBean", oldPSBDto);
 		
-		PhotoService newPhotoServiceBean = psService.updateEntry(queryPhotoServiceBean.getServiceID(), queryPhotoServiceBean);
-		model.addAttribute("newPhotoServiceBean", newPhotoServiceBean);
-		
-		return "backstage/photoService/ConfirmUpdatedPhotoService";
+		if (result.hasErrors()) { 
+			System.out.println(result.toString()); 
+			return null;
 		}
+		if (updatedDTO != null) {
+			System.out.printf("========== Updating PhotoServiceID: %d ==========%n",updatedDTO.getServiceID());
 
-		// There should only be two situation defined above, other situation go to error page.
-		return "ErrorPage";
+			PhotoService oldPhotoServiceBean = psService.readEntry(updatedDTO.getServiceID());
+			PhotoServiceDto oldPSBDto = oldPhotoServiceBean.toDto();
+			
+			PhotoService newPhotoServiceBean = psService.updateEntry(updatedDTO.getServiceID(), updatedDTO);
+			
+			ArrayList<PhotoServiceDto> returnList = new ArrayList<>();
+			returnList.add(oldPSBDto);
+			returnList.add(newPhotoServiceBean.toDto());
+			
+			return returnList;
+		}
+		return null;
 	}
 
 
