@@ -1,19 +1,28 @@
-package com.phocos.photoService.model;
+package com.phocos.photoService.Dto;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.phocos.member.Member;
+import com.phocos.member.MemberService;
+import com.phocos.photoService.model.PhotoService;
+import com.phocos.photoService.model.ReferencePicture;
+import com.phocos.photoService.model.ServiceType;
+import com.phocos.photoService.service.ServiceTypeService;
 
 import lombok.Data;
 
 @Data
-public class PhotoServiceDto {
-
-	private int serviceID;
+public class PhotoServiceDto_Create {
+	
+	@Autowired
+	private MemberService mService;
+	
+	@Autowired
+	private ServiceTypeService sService;
+	
 
 	private String serviceName;
 
@@ -25,34 +34,39 @@ public class PhotoServiceDto {
 	
 	private String serviceLocation;
 
-	private String serviceCreator;
+//	private Member serviceCreator;
 
-	private LocalDateTime createdOn;
+//	private LocalDateTime createdOn;
 	
-	private LocalDateTime updatedOn;
-	
-	
-	private List<ReferencePicture> referencePictures;
+//	private LocalDateTime updatedOn;
 	
 	
-    private MultipartFile[] inputRefPics;
+	// Match the List<ReferencePicture> referencePictures; in DAO;
+	private MultipartFile[] inputRefPics;
+	
+	// Match the Member serviceCreator; in DAO 
+	private int serviceCreator;
+	
 	
 	private final String datetimeFormatPattern = "yyyy-MM-dd hh:mm:ss E";
-	private String formatedCreatedOn = formatDatetime2Str(createdOn);
-	private String formatedUpdatedOn = formatDatetime2Str(updatedOn);
+//	private String formatedCreatedOn = formatDatetime2Str(createdOn);
+//	private String formatedUpdatedOn = formatDatetime2Str(updatedOn);
+	
+	
+	// ==================== FORMATTED DATETIME GETTER ====================
+	
+	
 	
 	
 	
 	// ==================== CONSTRUCTOR ====================
-	public PhotoServiceDto() {
+	public PhotoServiceDto_Create() {
 	}
 	
-	public PhotoServiceDto(PhotoService photoService) {
-		parsePhotoService(photoService);
-	}
 	
 	
 	// ==================== Utilities ====================
+	/*
 	public void parsePhotoService(PhotoService photoService) {
 		this.setServiceID(photoService.getServiceID());
 		this.setServiceName(photoService.getServiceName());
@@ -64,19 +78,26 @@ public class PhotoServiceDto {
 		this.setCreatedOn(photoService.getCreatedOn());
 		this.setUpdatedOn(photoService.getUpdatedOn());
 	}
+	*/
 	
 	
     public PhotoService toPhotoService () {
         PhotoService returnPS = new PhotoService();
-        returnPS.setServiceID(serviceID);
         returnPS.setServiceName(serviceName);
-        returnPS.setServiceType(new ServiceType(serviceType));
+        
+		returnPS.setServiceType(new ServiceType(serviceType));
+        
         returnPS.setServicePrice(servicePrice);
         returnPS.setServiceDuration(serviceDuration);
         returnPS.setServiceLocation(serviceLocation);
-        returnPS.setServiceCreator(serviceCreator);
+        
+        
+        Member creatorMember = mService.findById(serviceCreator);
+        if (creatorMember != null) {
+        	returnPS.setServiceCreator(creatorMember);
+		}
 
-        if (inputRefPics.length>0) {
+        if (inputRefPics != null && inputRefPics.length>0) {
         	ArrayList<ReferencePicture> refPics = new ArrayList<>();
         	for (MultipartFile oneRefPic : inputRefPics) {
         		ReferencePicture refPic = new ReferencePicture();
@@ -94,6 +115,7 @@ public class PhotoServiceDto {
         return returnPS;
     }
 	
+    /*
     public void setReferencePicsFromInput() {
 		if (inputRefPics.length>0) { System.out.println("No Input reference Pics!"); }
 		
@@ -108,7 +130,9 @@ public class PhotoServiceDto {
 			referencePictures.add(refPic);
 		}
 	}
+	*/
 	
+    /*
 	private String formatDatetime2Str(LocalDateTime originDT) {
 		if (originDT==null) {
 			return "origin datetime is null";
@@ -116,4 +140,5 @@ public class PhotoServiceDto {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datetimeFormatPattern);
 		return originDT.format(formatter);
 	}
+	*/
 }

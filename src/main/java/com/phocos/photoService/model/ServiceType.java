@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -22,13 +24,15 @@ public class ServiceType implements java.io.Serializable{
 
 	@Id 
 	private String typeName;
+	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int typeIndex;
 
 	
 	@ToString.Exclude
 	@OneToMany(mappedBy = "serviceType", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonBackReference
 	private List<PhotoService> photoService;
-
 
 	// ==================== CONSTRUCTOR ====================
 
