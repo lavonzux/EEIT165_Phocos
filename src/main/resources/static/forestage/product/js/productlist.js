@@ -1,7 +1,7 @@
 // 创建一个空数组来存储购物车中的相机数据
 var shoppingCart = [];
 
-// 点击事件处理程序
+
 function addToCart(productId) {
 	// 通过productId获取相机数据
 	var model = document.getElementById('model_' + productId).innerText;
@@ -32,6 +32,14 @@ function addToCart(productId) {
 		cartData.push(itemData);
 	}
 	setCookie('shoppingCart', JSON.stringify(cartData), 1); // 這裡的1代表cookie的過期天數
+	
+	Swal.fire({
+		title: '新增成功',
+		text: '商品已成功添加到购物车',
+		icon: 'success',
+		confirmButtonColor: '#3085d6',
+		confirmButtonText: '確認'
+		});
 }
 
 // 获取指定名称的 cookie 值

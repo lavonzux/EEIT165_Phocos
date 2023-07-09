@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Shop Homepage - Start Bootstrap Template</title>
+<link th:href="@{/backstage/shared_layout/css/styles.css}"
+	rel="stylesheet" />
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+	rel="stylesheet" />
+<link th:href="@{/forestage/shared_layout/css/styles.css}"
+	rel="stylesheet" />
+<link th:href="@{/forestage/product/css/styles.css}" rel="stylesheet" />
+<style>
+.fixed-button {
+	position: fixed;
+	top: 50%;
+	right: 20px; /* 调整按钮与右边界的距离 */
+	transform: translateY(-50%) scale(1.5);
+	z-index: 9999;
+}
+
+.cen {
+	justify-content: center;
+}
+
+.price {
+	text-emphasis-color: rgb(241, 90, 90);
+}
+
+body {
+	background-image:
+		url(https://memeprod.ap-south-1.linodeobjects.com/user-template/64b3e0854cb3e2ce030e9189d32c3fd7.png);
+}
+</style>
+</head>
+
+<body class="bg-primary">
+	<div th:replace="~{forestage/shared/foreTopNav}"></div>
+	<!-- Header-->
+	<header class="bg-dark py-5">
+		<div class="container px-4 px-lg-5 my-5">
+			<div class="text-center text-white">
+				<h1 class="display-4 fw-bolder">Shop in style</h1>
+				<p class="lead fw-normal text-white-50 mb-0">With this shop
+					hompeage template</p>
+			</div>
+		</div>
+	</header>
+	<form class="d-flex fixed-button">
+		<form class="d-flex fixed-button"  th:action="@{/products/shoppingcar}">
+        <button id="cartButton" class="btn btn-outline-dark" type="submit">
+            <i class="bi-cart-fill me-1"></i><br>
+        </button>
+    </form>
+	</form>
+	<!-- Section-->
+	<section class="py-5">
+		<div class="container px-4 px-lg-5 mt-5">
+			<div
+				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+				<div th:block th:each="camera, cameraIndex : ${page.content}">
+					<!-- 商品项循环 -->
+					<div class="col mb-5">
+						<div class="card h-100">
+							<!-- Product image -->
+							<img class="card-img-top"
+								th:src="@{'/downloadcameraImage/' + ${camera.productID}}" />
+							<!-- Product details -->
+							<div class="card-body p-4">
+								<div class="text-center">
+									<!-- Product name -->
+									<span class="fw-bolder" th:id="'brand_'+${camera.productID}"
+										th:text="${camera.cameraBrand}"></span> <span
+										class="fw-bolder" th:id="'model_'+${camera.productID}"
+										th:text="${camera.cameraModel}"></span><br>
+									<!-- Product price -->
+									$ <span class="fw-bolder" th:id="'price_'+${camera.productID}"
+										th:text="${camera.cameraPrice}"></span>
+								</div>
+							</div>
+							<!-- Product actions -->
+							<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+								<form method="get" class="text-center"
+									th:action="@{/products/cameradetail}">
+									<input type="hidden" name="productID"
+										th:value="${camera.productID}"><input type="submit"
+										value="詳細資料" class="btn btn-outline-dark mt-auto ">
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- 商品项循环结束 -->
+				</div>
+			</div>
+			<ul class="pagination cen">
+
+				<th:block th:switch="${page.number != 0}">
+
+					<li th:case=${true} class="page-item"><a class="page-link"
+						th:href="@{/products/camerashop?(p=${page.number})}">上一頁</a></li>
+
+					<li th:case=${false} class="page-item disable"><span
+						class="page-link">上一頁</span></li>
+				</th:block>
+
+				<th:block
+					th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
+					<th:block th:switch="${page.number != pageNumber - 1 }">
+						<li th:case=${true} class="page-item"><a class="page-link"
+							th:href="@{/products/camerashop?(p=${pageNumber})}">[[${pageNumber}]]</a>
+						</li>
+						<li th:case=${false} class="page-item active"><span
+							class="page-link" th:text="${pageNumber}"></span></li>
+					</th:block>
+				</th:block>
+
+				<th:block th:switch="${page.number == page.totalPages -1}">
+					<li th:case="${true}" class="page-item"><span
+						class="page-link">最後一頁了兄弟</span></li>
+
+					<li th:case="${false}" class="page-item"><a class="page-link"
+						th:href="@{/products/camerashop?(p=${page.number + 2})}">下一頁</a></li>
+				</th:block>
+
+			</ul>
+		</div>
+	</section>
+	<!-- Footer-->
+	<div th:replace="~{forestage/shared/foreFooter}"></div>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{backstage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:src="@{/forestage/product/js/productlist.js}"></script>
+</body>
+
+</html>
