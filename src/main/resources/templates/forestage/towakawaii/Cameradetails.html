@@ -2,59 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>Shop Homepage - Start Bootstrap Template</title>
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-	rel="stylesheet" />
-<link th:href="@{/forestage/shared_layout/css/styles.css}"
-	rel="stylesheet" />
-<style>
-.fixed-button {
-	position: fixed;
-	top: 50%;
-	right: 20px; /* 调整按钮与右边界的距离 */
-	transform: translateY(-50%) scale(1.5);
-	z-index: 9999;
-}
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Shop Homepage - Start Bootstrap Template</title>
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<link th:href="@{/forestage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<style>
+		.fixed-button {
+			position: fixed;
+			top: 50%;
+			right: 20px;
+			/* 调整按钮与右边界的距离 */
+			transform: translateY(-50%) scale(1.5);
+			z-index: 9999;
+		}
 
-.butt {
-	background-color: #A5A58D;
-	border: none;
-	border-radius: 10px;
-	padding: 5px 10px;
-	color: white;
-	font-size: 20px;
-}
+		.butt {
+			background-color: #A5A58D;
+			border: none;
+			border-radius: 10px;
+			padding: 5px 10px;
+			color: white;
+			font-size: 20px;
+		}
 
-.price {
-	text-emphasis-color: rgb(241, 90, 90);
-}
+		.price {
+			text-emphasis-color: rgb(241, 90, 90);
+		}
 
-.green {
-	background-color: #ccd5ae;
-	border-radius: 20px;
-	padding: 10px;
-}
+		.green {
+			background-color: #ccd5ae;
+			border-radius: 20px;
+			padding: 10px;
+		}
 
-body {
-	background-image:
-		url(https://memeprod.ap-south-1.linodeobjects.com/user-template/64b3e0854cb3e2ce030e9189d32c3fd7.png);
-}
-</style>
+		body {
+			background-image:
+				url(https://memeprod.ap-south-1.linodeobjects.com/user-template/64b3e0854cb3e2ce030e9189d32c3fd7.png);
+		}
+	</style>
 </head>
 
 <body class="bg-primary">
 	<div th:replace="~{forestage/shared/foreTopNav}"></div>
-	<form class="d-flex fixed-button">
-		<button class="btn btn-outline-dark" type="submit">
+	<form class="d-flex fixed-button" th:action="@{/products/shoppingcar}">
+		<button id="cartButton" class="btn btn-outline-dark" type="submit">
 			<i class="bi-cart-fill me-1"></i><br>
-			<span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
 		</button>
 	</form>
 	</form>
@@ -72,106 +68,89 @@ body {
 					<!-- Post content-->
 					<section class="green mb-5">
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">相機接環:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraMount}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">相機接環:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraMount}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">感光元件類型:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraSensor}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">感光元件類型:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraSensor}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">像素數量::</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraPx}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">像素數量::</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraPx}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最高解析度:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraRecPx}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">最高解析度:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraRecPx}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">防震功能:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraIBIS}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">防震功能:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraIBIS}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">觀景窗:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraEVF}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">觀景窗:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraEVF}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">屏幕類型:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraLCD}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">屏幕類型:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraLCD}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">對焦系統:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraFocusSys}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">對焦系統:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraFocusSys}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">測光方式:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraPhotometry}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">測光方式:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraPhotometry}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最低ISO:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraISOMin}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">最低ISO:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraISOMin}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最高ISO:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraISOMax}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">最高ISO:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraISOMax}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">快門類型:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraShutter}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">快門類型:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraShutter}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">連拍速度:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraSensor}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">連拍速度:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraSensor}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">存儲卡類型:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraMemCard}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">存儲卡類型:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraMemCard}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">電池類型:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraBattery}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">電池類型:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraBattery}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">尺寸:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraDims}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">尺寸:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraDims}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">重量:</font> <font
-								size="5" class="fw-bolder fs-5 mb-4"
-								th:text="${camera.cameraWeight}"></font> <font size="5"
-								class="fw-bolder fs-5 mb-4">&nbsp</font><br>
+							<font size="5" class="fw-bolder fs-5 mb-4">重量:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraWeight}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 					</section>
 				</article>
@@ -182,19 +161,16 @@ body {
 			<div class="col-lg-4">
 				<div>
 					<div class="text-center mb-4">
-						<font size="7" class="text-center fw-bolder"
-							th:id="'brand_'+${camera.productID}"
-							th:text="${camera.cameraBrand}"></font><br> <font size="7"
-							class="text-center fw-bolder"
-							th:id="'model_'+${camera.productID}"
+						<font size="7" class="text-center fw-bolder" th:id="'brand_'+${camera.productID}"
+							th:text="${camera.cameraBrand}"></font><br>
+						<font size="7" class="text-center fw-bolder" th:id="'model_'+${camera.productID}"
 							th:text="${camera.cameraModel}"></font>
 					</div>
 					<div class="text-center mb-4">
-						<font size="6" class="fw-bolder mb-4">價格:</font> <font size="7"
-							style="color: #dd2626;" class="fw-bolder mb-4">$</font> <font
-							size="7" style="color: #dd2626;" class="fw-bolder mb-4 "
-							th:id="'price_'+${camera.productID}"
-							th:text="${camera.cameraPrice}"> </font><br>
+						<font size="6" class="fw-bolder mb-4">價格:</font>
+						<font size="7" style="color: #dd2626;" class="fw-bolder mb-4">$</font>
+						<font size="7" style="color: #dd2626;" class="fw-bolder mb-4 "
+							th:id="'price_'+${camera.productID}" th:text="${camera.cameraPrice}"> </font><br>
 					</div>
 				</div>
 				<div class="card mb-4 text-center">
@@ -202,17 +178,18 @@ body {
 						<font size="5" class="fw-bolder fs-5 mb-4">購買商品</font>
 					</div>
 					<div style="height: 150px;">
-						<span id="numberSelect"> <font for="quantitySelect"
-							size="5" class="fw-bolder mb-4">購買數量:</font> <select
-							name="goods_number" id="quantitySelect" stlyle="font-size: 18px;">
-								<option
-									th:each="i : ${#numbers.sequence(1, camera.cameraStocks)}"
-									th:value="${i}" th:text="${i}"></option>
-						</select></span><br>
+						<span id="numberSelect">
+							<font for="quantitySelect" size="5" class="fw-bolder mb-4">購買數量:</font> <select
+								name="goods_number" id="quantitySelect" stlyle="font-size: 18px;">
+								<option th:each="i : ${#numbers.sequence(1, camera.cameraStocks)}" th:value="${i}"
+									th:text="${i}"></option>
+							</select>
+						</span><br>
 						<button id="addToCartBtn" class="butt"
 							th:onclick="addToCart([[${camera.productID}]])">加入購物車</button>
-						<br> <font size="5" class="fw-bolder mb-4">庫存數量:</font> <font
-							size="5" class="fw-bolder mb-4" th:text="${camera.cameraStocks}"></font>
+						<br>
+						<font size="5" class="fw-bolder mb-4">庫存數量:</font>
+						<font size="5" class="fw-bolder mb-4" th:text="${camera.cameraStocks}"></font>
 					</div>
 				</div>
 			</div>
@@ -222,11 +199,11 @@ body {
 	<script th:src="@{backstage/shared_layout/js/scripts.js}"></script>
 	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
-	<script
-		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+	<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
 		crossorigin="anonymous"></script>
 	<script th:src="@{/forestage/product/js/scripts.js}"></script>
 	<script th:src="@{/forestage/product/js/productlist.js}"></script>
+
 </body>
 
 </html>

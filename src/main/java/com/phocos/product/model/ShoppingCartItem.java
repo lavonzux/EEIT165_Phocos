@@ -20,6 +20,9 @@ public class ShoppingCartItem {
 	@Column(name = "cartid")
 	private int cartid;
 	
+	@Column(name = "memberID")
+    private int memberID;
+	
 	@Column(name = "productId")
     private int productId;
     

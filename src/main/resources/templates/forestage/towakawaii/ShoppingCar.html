@@ -5,6 +5,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{/forestage/product/js/shoppingcar.js}"></script>
 <script th:src="@{/forestage/product/js/productlist.js}"></script>
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
 <style>
 .container {
 	margin: 0 auto;
@@ -71,8 +72,8 @@ tr:hover {
 	<div class="container">
 		<h1 class="fw-bolder fs-1 mb-4">我的購物車</h1>
 		<div>
-		<div class="buttons">
-			<button class="butt1 fw-bolder" onclick="clearCart()">清空購物車</button>
+		<div class="buttons" id="clear">
+			<button class="butt1 fw-bolder" id="clear">清空購物車</button>
 		</div>
 			<table class="fw-bolder fs-5 mb-4">
 				<thead>
@@ -86,7 +87,7 @@ tr:hover {
 			</table>
 
 			<div id="totalPrice" class="fw-bolder fs-5 mb-4"></div>
-			<div class="buttons">
+			<div class="buttons" id="buy">
 			<button class="butt2 fw-bolder" onclick="saveCart()">結帳</button>
 			</div>
 		</div>

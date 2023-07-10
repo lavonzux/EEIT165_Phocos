@@ -146,4 +146,11 @@ public class LensController {
 		model.addAttribute("page", page);
 		return "forestage/towakawaii/LensShop"; // 返回對應的視圖模板
 	}
+//	@GetMapping("/products/lenshop2")
+//	public String getcamera2Page(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+//
+//		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
+//		model.addAttribute("page", page);
+//		return "forestage/towakawaii/lenshop2"; // 返回對應的視圖模板
+//	}
 }
