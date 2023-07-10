@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <th:block th:switch="${ (session.memberID==null || session.memberID!=resultBean.serviceCreator.memberID)}">
+                    <th:block th:switch=" ${session.memberID!=null} AND ${session.memberID==resultBean.serviceCreator} OR ${session.memberID==34} ">
                         <!-- Button trigger modal -->
                         <div th:case="true" class="btn-group" role="group" aria-label="basic example">
                             <button id="edit-ps-service" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">

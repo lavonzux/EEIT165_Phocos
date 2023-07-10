@@ -107,9 +107,9 @@ public class ReferencePictureRestController {
 	
 	
 	@DeleteMapping("/referencePicture/api/delete")
-	public ReferencePicture deleteReferencePicture(@RequestParam("pictureID") int pictureID) {
-		ReferencePicture deletedPic = rpService.deleteReferencePicture(pictureID);
-		return deletedPic;
+	public int deleteReferencePicture(@RequestParam("pictureID") int pictureID) {
+		rpService.deleteReferencePicture(pictureID);
+		return pictureID;
 	}
 	
 	

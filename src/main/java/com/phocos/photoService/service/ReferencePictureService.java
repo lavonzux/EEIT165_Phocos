@@ -102,23 +102,19 @@ public class ReferencePictureService {
 	}
 	
 	
-	public ReferencePicture deleteReferencePicture(int pictureID) {
+	public void deleteReferencePicture(int pictureID) {
 		Optional<ReferencePicture> optional = rpRepo.findById(pictureID);
 		
-		if (optional.isEmpty()) { return null; }
-		
-		rpRepo.deleteById(optional.get().getPictureID());
-		return optional.get();
+		if (optional.isPresent()) {
+			rpRepo.deleteById(optional.get().getPictureID());			
+		}
 	}
 	
 	
-	public List<ReferencePicture> deleteReferencePictures(Set<Integer> deleteID) {
-		ArrayList<ReferencePicture> deletedReferencePictures = new ArrayList<>();
+	public void deleteReferencePictures(Set<Integer> deleteID) {
 		for (Integer onePicID : deleteID) {
-			ReferencePicture deleteReferencePicture = deleteReferencePicture(onePicID);
-			deletedReferencePictures.add(deleteReferencePicture);
+			deleteReferencePicture(onePicID);
 		}
-		return deletedReferencePictures;
 	}
 	
 	

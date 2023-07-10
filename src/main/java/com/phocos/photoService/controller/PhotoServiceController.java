@@ -98,18 +98,6 @@ public class PhotoServiceController {
 	
 	
 	
-//	@GetMapping(path = "/photoService/ReadAll")
-	/*
-	public String gotoReadAllPhotoService(Model model) {
-		List<PhotoService> resultList = psService.readAllEntries();
-		model.addAttribute("resultList",resultList);
-		
-		Page<PhotoService> resultPage = psService.readAllByPage();
-		model.addAttribute("resultPage", resultPage);
-		return "forestage/photoService/ReadAllPhotoService";
-	}
-	*/
-
 	
 	@GetMapping(path = {"/photoService", "/photoService/ReadAll"})
 	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, Model model) {

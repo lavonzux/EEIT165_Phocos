@@ -28,6 +28,7 @@ import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.service.PhotoServiceService;
 import com.phocos.photoService.service.ServiceTypeService;
+import com.phocos.utils.FieldsHelper;
 
 import jakarta.transaction.Transactional;
 
@@ -91,24 +92,6 @@ public class PhotoServiceRestController {
 			return null;
 		}
 		if (updatedDTO != null) {
-			
-			MultipartFile[] inputRefPics = updatedDTO.getInputRefPics();
-			int length = inputRefPics.length;
-			System.out.println("==================== The lenght of inputrefpics ====================");
-			System.out.println(length);
-			System.out.println("==================== The lenght of inputrefpics ====================");
-			
-			
-			Field[] declaredFields = updatedDTO.getClass().getDeclaredFields();
-			System.out.println("================================================");
-			for (Field field : declaredFields) {
-				field.setAccessible(true);
-				System.out.print(field.getName()+" : ");
-				System.out.println(field.get(updatedDTO).toString());
-			}
-			
-			System.out.println("================================================");
-			
 			
 			System.out.printf("========== Updating PhotoServiceID: %d ==========%n",updatedDTO.getServiceID());
 

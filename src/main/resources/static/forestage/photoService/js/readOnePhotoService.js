@@ -25,40 +25,48 @@ window.onload = function () {
 }
 
 
-function fetchServiceTypes(event) {
+function fetchServiceTypes() {
     // event.preventDefault
     const serviceTypeOptions = document.getElementById('serviceTypeOptions')
+    const currentServiceType = serviceTypeOptions.dataset.servicetype
 
     axios.get(ContextPathname + '/serviceType/api/ReadAll')
         .then(res => {
             const serviceTypesList = res.data
-            serviceTypesList.forEach(oneType => {
+            serviceTypesList.forEach((oneType, index) => {
                 const option = document.createElement('option')
                 option.setAttribute('value', oneType.typeName)
+                if (oneType.typeName == currentServiceType) {
+                    option.setAttribute('selected', 'true')
+                }
                 option.innerHTML = oneType.typeName
                 serviceTypeOptions.appendChild(option)
                 document.getElementById('serviceName').focus()
             });
         })
         .catch(err => {
-            console.log();
+            console.log(err);
         })
 }
 
 
 
 
-var picturesToDelete = new Set()
+let picturesToDelete = new Array()
 function addDeletePicID2Set(deleteBtn) {
     let pictureID = deleteBtn.dataset.existpictureid
-    picturesToDelete.add(pictureID)
+    picturesToDelete.push(pictureID)
     console.log(pictureID + ' was added to delete pending set!');
+    console.log(picturesToDelete + ' are pending for delete');
 
     const toBeDltImg = document.querySelector('#carousel-in-modal-' + pictureID)
-    console.log(toBeDltImg);
     toBeDltImg.classList.add('pendingForDelete')
 }
 
+function cancelDeletePicSet() {
+    picturesToDelete.length = 0
+    document.querySelectorAll('.pendingForDelete').forEach(oneNode => { oneNode.classList.remove('pendingForDelete') })
+}
 
 
 
@@ -67,27 +75,29 @@ function pressedUpdateService() {
 
     let form = document.getElementById('update-ps-service-form')
     let formDataObj = new FormData(form)
+    formDataObj.append('picIDsToDelete', picturesToDelete)
     console.log(formDataObj);
 
-    let stringifyIDs = JSON.stringify([...picturesToDelete])
 
     sendUpdateService(formDataObj)
-    goDeletePictures(picturesToDelete)
+    // goDeletePictures(picturesToDelete)
 }
 
 
 function goDeletePictures(pictureIDs) {
-    axios({
-        method: 'delete',
-        url: ContextPathname + '/referencePicture/api/deleteMultiple',
-        data: JSON.stringify([...pictureIDs])
-    })
-        .then(res => {
-            console.log(res.data);
+    if (pictureIDs.length > 0) {
+        axios({
+            method: 'delete',
+            url: ContextPathname + '/referencePicture/api/deleteMultiple',
+            data: pictureIDs
         })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 }
 
 function sendUpdateService(form) {
@@ -98,35 +108,10 @@ function sendUpdateService(form) {
         data: form
     })
         .then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             // location.reload()
         })
         .catch(err => {
             console.log(err);
         })
 }
-
-
-
-
-
-
-
-
-function toggleEditable(block) {
-    if (block.contentEditable != true) {
-        block.contentEditable = true
-    } else {
-        block.contentEditable = false
-    }
-}
-
-function toggleBtnDisply(button) {
-    console.log(button.style.display);
-    if (button.style.display != 'none') {
-        button.style.display = 'none'
-    } else {
-        button.style.display = 'block'
-    }
-}
-

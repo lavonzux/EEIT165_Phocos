@@ -72,6 +72,7 @@
 
         .pendingForDelete {
             opacity: 0.5;
+            filter: grayscale(50%);
         }
     </style>
 </head>
@@ -161,6 +162,7 @@
 
                                     <div style="display: none;">
                                         <input type="text" hidden="true" id="serviceID" name="serviceID" th:value="${resultBean.serviceID}">
+                                        <input type="text" hidden="true" id="serviceCreatorID" name="serviceCreatorID" th:value="${resultBean.serviceCreatorID}">
                                     </div>
 
                                     <div class="mb-3">
@@ -187,8 +189,8 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="serviceType" class="form-label">選擇服務類型</label>
-                                        <select class="form-select" id="serviceTypeOptions" name="serviceType">
-                                            <option selected>===== 請選擇 =====</option>
+                                        <select class="form-select" id="serviceTypeOptions" name="serviceType" th:data-servicetype="${resultBean.serviceType}">
+                                            <!-- <option selected>===== 請選擇 =====</option> -->
                                         </select>
                                     </div>
 
@@ -230,7 +232,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="reset" form="update-ps-service-form" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                            <button type="reset" form="update-ps-service-form" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-update-ps" onclick="cancelDeletePicSet()">取消</button>
                             <button type="button" form="update-ps-service-form" class="btn btn-primary" id="go-update-ps">更新資料</button>
                         </div>
                     </div>
