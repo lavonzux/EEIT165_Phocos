@@ -1,8 +1,8 @@
 package com.phocos.photoService.Dto;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -102,6 +102,8 @@ public class PhotoServiceDto {
 	
 	
 	
+	// Deprecated method for transferring inputMultiPartFile to referencePicture list
+	/*
     public void setReferencePicsFromInput() {
 		if (inputRefPics.length>0) { System.out.println("No Input reference Pics!"); }
 		
@@ -116,11 +118,25 @@ public class PhotoServiceDto {
 			referencePictures.add(refPic);
 		}
 	}
+    */
+    
+    
+    
+	public void encodeRefPicFile() {
+		if (referencePictures.size()>0) {			
+			for (ReferencePicture oneRefPic : referencePictures) {
+				byte[] pictureFile = oneRefPic.getPictureFile();
+				oneRefPic.setPictureFile(Base64.getEncoder().encode(pictureFile));
+			}
+		}
+	}
+
+    
+    
+    
 	
 	private String formatDatetime2Str(LocalDateTime originDT) {
-		if (originDT==null) {
-			return "origin datetime is null";
-		}
+		if (originDT==null) return "origin datetime is null";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datetimeFormatPattern);
 		return originDT.format(formatter);
 	}

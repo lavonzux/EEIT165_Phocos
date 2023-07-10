@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,11 +40,8 @@ public class PhotoServiceController {
 
 	
 	@GetMapping(path = "/photoService/CreatePhotoService.controller")
-	public String gotoCreatePage(Model model) {
+	public String goToCreatePage() {
 			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
-
-			PhotoService createPhotoServiceBean = new PhotoService();
-			model.addAttribute("createPhotoService", createPhotoServiceBean);
 			return "backstage/photoService/CreatePhotoService";
 	}
 	
@@ -137,46 +132,32 @@ public class PhotoServiceController {
 
 	@GetMapping(path = "/photoService/ReadOne")
 	public String gotoReadOnePhotoService(@RequestParam("serviceID") int serviceID, Model model) {
-		PhotoService resultBean = psService.readEntry(serviceID);
+		PhotoServiceDto resultBean = psService.readEntry(serviceID).toDto();
 		model.addAttribute("resultBean", resultBean);
-		
-		Field[] fields = resultBean.getClass().getDeclaredFields();
-		for (Field field : fields) {
-			System.out.println(field.getName());
-		}
-		
-		String typeName = resultBean.getServiceType().getTypeName();
-		System.out.println(typeName);
-		
 		return "forestage/photoService/ReadOnePhotoService";
 	}
 	
 	
-	@RequestMapping(path = "/photoService/UpdatePhotoService.controller", method = {RequestMethod.GET, RequestMethod.POST})
-	public String processUpdatePhotoServiceAction(@RequestParam(value="confirmed", required=false) boolean confirmed, @RequestParam(value = "serviceID", required = false) int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoServiceDto queryPhotoServiceBean,BindingResult result , Model model) {
+	@GetMapping("/photoService/UpdatePhotoService.controller")
+	public String goToUpdatePhotoService(@RequestParam("serviceID") int serviceID, Model model) {
+		System.out.printf("========== Querying PhotoServiceID: %d for updating ==========%n",serviceID);
+		PhotoServiceDto queryPhotoServiceBean = psService.readEntry(serviceID).toDto();
+		model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
+		return "backstage/photoService/UpdatePhotoService";
+	}
+	
+	
+	@PostMapping("/photoService/UpdatePhotoService.controller")
+	public String processUpdatePhotoServiceAction(@ModelAttribute("queryPhotoServiceBean") PhotoServiceDto queryPhotoServiceBean,BindingResult result , Model model) {
 
-		// If there's no confirmed parameter, QPSB is null, or binding have error, means the first time requesting data for updating
-		// Then get the desired entry defined in get method's query string, and store it to attribute.
-
-		if (result.hasErrors()) {
-			System.out.println(result.toString());
-		}
-		
-		if (!confirmed) {
-			System.out.println("========== Reading data for updating... ==========");
-			System.out.printf("========== Querying PhotoServiceID: %d ==========%n",serviceID);
-			queryPhotoServiceBean = psService.readEntry(serviceID).toDto();
-			model.addAttribute("queryPhotoServiceBean", queryPhotoServiceBean);
-			model.addAttribute("oldPhotoServiceBean", queryPhotoServiceBean);
-			return "backstage/photoService/UpdatePhotoService";
-		}
+		if (result.hasErrors()) { System.out.println(result.toString()); }
 
 		// If confirmed parameter is valid, qPSB filled with updated data, binding have no error,
 		// Then store the old data, and go update the data in DB.
 		if (queryPhotoServiceBean!=null) {
 
 		System.out.println("========== Confirmed to update... ==========");
-		System.out.printf("========== Updating PhotoServiceID: %d ==========%n",serviceID);
+		System.out.printf("========== Updating PhotoServiceID: %d ==========%n",queryPhotoServiceBean.getServiceID());
 
 		PhotoService oldPhotoServiceBean = psService.readEntry(queryPhotoServiceBean.getServiceID());
 		PhotoServiceDto oldPSBDto = oldPhotoServiceBean.toDto();
@@ -187,10 +168,7 @@ public class PhotoServiceController {
 		
 		return "backstage/photoService/ConfirmUpdatedPhotoService";
 		}
-
-		// There should only be two situation defined above, other situation go to error page.
-		System.out.println("uncatched condition in processUpdatePSAction!!!!!");
-		return "ErrorPage";
+		return null;
 	}
 
 

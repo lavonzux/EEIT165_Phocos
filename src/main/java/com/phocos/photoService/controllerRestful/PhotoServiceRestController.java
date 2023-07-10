@@ -1,6 +1,7 @@
 package com.phocos.photoService.controllerRestful;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.phocos.member.Member;
 import com.phocos.member.MemberService;
@@ -43,29 +45,25 @@ public class PhotoServiceRestController {
 	private ServiceTypeService stService;
 
 	
-//	@PostMapping(path = "/photoService/CreatePhotoService.controller")
-	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result, Model model) throws IOException {
+	@PostMapping(path = "/photoService/api/Create")
+	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result) throws IOException {
 		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
 		
-		if (result.hasErrors()) { System.out.println(result.toString()); }
-		if (createPhotoServiceBean.toPhotoService().dataIsValid() ) {
-			
-			PhotoService resultBean = psService.createEntry(createPhotoServiceBean.toPhotoService());
-
-			model.addAttribute("resultBean", resultBean);
-			System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
-			return "backstage/photoService/ConfirmCreatedPhotoService";
+		if (!result.hasErrors()) {
+			System.out.println(result.toString()); 
+			return "create failed";
 		}
-
-		model.addAttribute("errorMsg", "Something went wrong when inserting entry! Please check your data again!");
-		return "backstage/photoService/CreatePhotoService";
+			
+		PhotoService resultBean = psService.createEntry(createPhotoServiceBean);
+		
+		System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
+		return "PhotoService ID: "+resultBean.getServiceID()+"has been add to DB successfully";
 	}
 
 
 	@GetMapping(path = "/photoService/api/ReadAll")
 	public List<PhotoService> processReadAllPhotoServiceAction(Model model) {
-		List<PhotoService> resultList = psService.readAllEntries();
-		return resultList;
+		return psService.readAllEntries();
 	}
 
 	@GetMapping(path = "/photoService/api/ReadAllPage")
@@ -85,7 +83,7 @@ public class PhotoServiceRestController {
 	
 	@Transactional
 	@PutMapping("/photoService/api/Update")
-	public List<PhotoServiceDto> processUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) {
+	public List<PhotoServiceDto> processUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
 		
 		if (result.hasErrors()) { 
@@ -93,6 +91,25 @@ public class PhotoServiceRestController {
 			return null;
 		}
 		if (updatedDTO != null) {
+			
+			MultipartFile[] inputRefPics = updatedDTO.getInputRefPics();
+			int length = inputRefPics.length;
+			System.out.println("==================== The lenght of inputrefpics ====================");
+			System.out.println(length);
+			System.out.println("==================== The lenght of inputrefpics ====================");
+			
+			
+			Field[] declaredFields = updatedDTO.getClass().getDeclaredFields();
+			System.out.println("================================================");
+			for (Field field : declaredFields) {
+				field.setAccessible(true);
+				System.out.print(field.getName()+" : ");
+				System.out.println(field.get(updatedDTO).toString());
+			}
+			
+			System.out.println("================================================");
+			
+			
 			System.out.printf("========== Updating PhotoServiceID: %d ==========%n",updatedDTO.getServiceID());
 
 			PhotoService oldPhotoServiceBean = psService.readEntry(updatedDTO.getServiceID());
@@ -124,7 +141,6 @@ public class PhotoServiceRestController {
 		System.out.printf("========== Deleting PhotoServiceID: %d ==========%n",serviceID);
 
 		PhotoService deletedPhotoServiceBean = psService.readEntry(serviceID);
-//		psService.deleteEntry(queryPhotoServiceBean.getServiceID());
 
 
 		return deletedPhotoServiceBean;

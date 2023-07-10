@@ -156,6 +156,7 @@ public class PhotoServiceService {
 				try {oneRefPic.setPictureFile(oneInput.getBytes());} catch (IOException e){e.printStackTrace();}
 				oneRefPic.setPictureName(oneInput.getOriginalFilename());
 				refPics.add(oneRefPic);
+				returnPSB.setReferencePictures(refPics);
 			}
 		}
 		if (dto.getServiceType()!=null && stRepo.findById(dto.getServiceType()).isPresent() ) {

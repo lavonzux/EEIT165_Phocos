@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.phocos.member.Member;
 import com.phocos.photoService.Dto.PhotoServiceDto;
-import com.phocos.photoService.Dto.PhotoServiceDto_Create;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
