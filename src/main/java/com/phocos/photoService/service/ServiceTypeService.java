@@ -25,8 +25,10 @@ public class ServiceTypeService {
 	public ServiceType readEntry(String typeName) {
 		Optional<ServiceType> optional = sTypeRepo.findById(typeName);
 		if (optional.isPresent()) {
+			System.out.println("===== "+typeName+" found in DB!");
 			return optional.get();
 		}
+		System.out.println("===== "+typeName+" cannot be found in DB!");
 		return null;
 	}
 
@@ -36,4 +38,10 @@ public class ServiceTypeService {
 	}
 
 	
+	public List<ServiceType> testRead() {
+		return sTypeRepo.findServiceTypeByOrderByTypeIndexAsc();
+	}
+	
+	
+	public boolean inDB(String typeName){return sTypeRepo.findById(typeName).isPresent();}
 }

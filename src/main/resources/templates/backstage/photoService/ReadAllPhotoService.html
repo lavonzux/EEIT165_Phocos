@@ -72,7 +72,7 @@
                                             <td th:text="${resultBean.servicePrice}"></td>
                                             <td th:text="${resultBean.serviceDuration}"></td>
                                             <td th:text="${resultBean.serviceLocation}"></td>
-                                            <td th:text="${resultBean.serviceCreator}"></td>
+                                            <td th:text="${resultBean.serviceCreator.memberName}"></td>
                                             <td>
                                                 <a th:href="@{UpdatePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="修改"></a>
                                                 <a th:href="@{DeletePhotoService.controller(serviceID=${resultBean.serviceID})}" th:text="刪除"></a>
