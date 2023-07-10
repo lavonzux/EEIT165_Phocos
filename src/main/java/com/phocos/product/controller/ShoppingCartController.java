@@ -3,6 +3,8 @@ package com.phocos.product.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,7 @@ import com.phocos.product.service.ShoppingCartService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/cart")
 public class ShoppingCartController   {
 	@Autowired
 	private ShoppingCartService shoppingCartService;
@@ -31,4 +33,22 @@ public class ShoppingCartController   {
         
         return "Data stored successfully.";
     }
+
+	@GetMapping("/products/shoppingcar")
+	public String gotoshoppingcar(Model model, HttpSession session) {
+	    Integer memberId = (Integer) session.getAttribute("memberID");
+
+	    if (memberId != null) {
+	        // 存在 memberId，执行跳转到 ShoppingCar
+	        return "forestage/towakawaii/ShoppingCar";
+	    } else {
+	        // 不存在 memberId，跳回 login
+	        return "redirect:/login";
+	    }
+	}
+
+	@GetMapping("/products/shoppingcar2")
+	public String gototheshoppingcar(Model m) {
+		return "forestage/towakawaii/ShoppingCar";
+	}
 }
