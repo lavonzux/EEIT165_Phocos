@@ -119,10 +119,21 @@
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-outline-danger" id="reserveBtn">預約</button>
-                        <button type="button" class="btn btn-outline-success" id="checkscheduleBtn">發信給攝影師</button>
-                    </div>
+                    <th:block th:switch="${ (session.memberID==null || session.memberID!=resultBean.serviceCreator.memberID)}">
+                        <!-- Button trigger modal -->
+                        <div th:case="true" class="btn-group" role="group" aria-label="basic example">
+                            <button id="edit-ps-service" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="fa-regular fa-pen-to-square">修改此服務</i>
+                            </button>
+                            <button id="update-ps-service" type="button" class="btn btn-dark" style="z-index: 2; display: none;">
+                                <i class="fa-solid fa-floppy-disk">儲存修改</i>
+                            </button>
+                        </div>
+                        <div th:case="false" class="btn-group" role="group" aria-label="basic example">
+                            <button type="button" class="btn btn-outline-danger" id="reservebtn">預約</button>
+                            <button type="button" class="btn btn-outline-success" id="checkschedulebtn">發信給攝影師</button>
+                        </div>
+                    </th:block>
                 </div>
             </div>
 
