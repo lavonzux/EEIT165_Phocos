@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>我的購物車</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{/forestage/product/js/shoppingcar.js}"></script>
+<script th:src="@{/forestage/product/js/productlist.js}"></script>
+<style>
+.container {
+	margin: 0 auto;
+	max-width: 800px;
+	padding: 20px;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: #f2f2f2;
+	font-weight: bold;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
+ .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 10px;
+    }
+.butt1 {
+	background-color: #A5A58D;
+	border: none;
+	border-radius: 10px;
+	padding: 5px 10px;
+	color: white;
+	font-size: 15px;
+	margin: 5px;
+}
+.butt2 {
+	background-color: #A5A58D;
+	border: none;
+	border-radius: 10px;
+	padding: 5px 10px;
+	color: white;
+	font-size: 30px;
+	margin: 5px;
+}
+  #totalPrice {
+        display: inline-block;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+	<div th:replace="~{forestage/shared/foreTopNav}"></div>
+	<div class="container">
+		<h1 class="fw-bolder fs-1 mb-4">我的購物車</h1>
+		<div>
+		<div class="buttons">
+			<button class="butt1 fw-bolder" onclick="clearCart()">清空購物車</button>
+		</div>
+			<table class="fw-bolder fs-5 mb-4">
+				<thead>
+					<tr>
+						<th>品牌</th>
+						<th>型號</th>
+						<th>價格</th>
+					</tr>
+				</thead>
+				<tbody id="cartItems"></tbody>
+			</table>
+
+			<div id="totalPrice" class="fw-bolder fs-5 mb-4"></div>
+			<div class="buttons">
+			<button class="butt2 fw-bolder" onclick="saveCart()">結帳</button>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{forestage/shared/foreFooter}"></div>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/forestage/product/js/productlist.js}"></script>
+</body>
+</html>

@@ -35,6 +35,22 @@ public class LoginController {
 		return "forestage/loginSystem/loginPage";
 	}
 	
+	@PostMapping("/googleLoginCheck")
+	public String googleLoginCheck(
+			@RequestParam("gmailPicture") String picture,
+			@RequestParam("gmail") String gmail,
+			@RequestParam("gmailName") String gmailName,
+			HttpSession session
+			) {
+		session.setAttribute("isLoggedIn", "true");
+		session.setAttribute("gmail", gmail);
+		session.setAttribute("memberName", gmailName);
+		session.setAttribute("memberAvatar", picture);
+		
+		return "redirect:/";
+		
+	}
+	
 	@ResponseBody
 	@PostMapping("/login")
 	public String loginCheck(
@@ -56,6 +72,7 @@ public class LoginController {
 			String memberEmail = member.getMemberEmail();
 			Integer memberID = member.getMemberID();
 			String memberName = member.getMemberName();
+			byte[] memberAvatar = member.getMemberAvatar();
 
 			switch (status) {
 			// 0為未驗證狀態
@@ -75,6 +92,9 @@ public class LoginController {
 				session.setAttribute("memberAccount", memberAccount);
 				session.setAttribute("memberID", memberID);				
 				session.setAttribute("memberName", memberName);
+				if (memberAvatar != null) {
+					session.setAttribute("avatarExist", "avatarExist");					
+				}
 				// 驗證成功，將資訊存到session
 				return "loginSuccess";
 
@@ -93,11 +113,10 @@ public class LoginController {
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("isLoggedIn");
-		session.removeAttribute("memberAccount");
-		session.removeAttribute("memberName");
+		session.invalidate();
 		return "redirect:/login";
 	}
+	
 	
 //	@PostMapping("/adminLogin")
 //	public String adminLogin(@RequestParam("memberAccount") String memberAccount,

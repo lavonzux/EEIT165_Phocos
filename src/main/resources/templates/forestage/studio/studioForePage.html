@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title th:text="${studio.studioName}"></title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            table th, table td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #DDBEA9;
+            }
+
+            table th {
+                background-color: #DDBEA9;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body class="d-flex flex-column">
+        <div th:replace="~{forestage/shared/foreTopNav}"></div>
+        <main class="flex-shrink-0">
+            <!-- About section one-->
+            <section class="py-5 bg-light" id="scroll-target">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+						<div id="carouselExampleControl1" class="carousel slide col-lg-6" data-bs-ride="carousel" style="width: 50%; height: 50%;">
+						    <div class="carousel-inner">
+						        <th:block th:each="studioPic, stat : ${sPicsList}">
+						            <div  class="carousel-item" th:classappend="${stat.index == 0} ? 'active'">
+						                <img th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" class="d-block w-100" alt="...">
+						            </div>
+						        </th:block>
+						    </div>
+						    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControl1" data-bs-slide="prev">
+						        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						        <span class="visually-hidden">Previous</span>
+						    </button>
+						    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControl1" data-bs-slide="next">
+						        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+						        <span class="visually-hidden">Next</span>
+						    </button>
+						</div>
+                        <div class="col-lg-6">
+                            <h2 class="fw-bolder" th:text="${studio.studioName}"></h2>
+                            <br>
+                            <table>
+							<tbody>
+							    <tr>
+							        <td style="width: 10%">地址</td>
+							        <td th:text="${studio.studioAddress}"></td>
+							    </tr>
+							    <tr>
+							        <td>緯度</td>
+							        <td th:text="${studio.studioLong}"></td>
+							    </tr>
+							    <tr>
+							        <td>經度</td>
+							        <td th:text="${studio.studioLat}"></td>
+							    </tr>
+							    <tr>
+							        <td>聯絡電話</td>
+							        <td th:text="${studio.studioPhone}"></td>
+							    </tr>
+							    <tr>
+							        <td>信箱</td>
+							        <td th:text="${studio.studioEmail}"></td>
+							    </tr>
+							    <tr>
+							        <td>營業時間</td>
+							        <td th:text="${studio.studioTime}"></td>
+							    </tr>
+							    <tr>
+							        <td>相關連結</td>
+							        <td th:text="${studio.studioLink}"></td>
+							    </tr>
+							    <tr>
+							        <td>介紹</td>
+							        <td th:text="${studio.studioIntro}"></td>
+							    </tr>
+							</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- About section two-->
+<th:block th:each="shed : ${sheds}">
+    <section class="py-5">
+        <div class="container px-5 my-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder" th:text="${shed.shedName}"></h2>
+                    <table>
+                        <tbody>
+							
+                            <tr>
+                                <td style="width: 10%">尺寸</td>
+                                <td th:text="${shed.shedSize}"></td>
+                            </tr>
+                            <tr>
+                                <td>費用</td>
+                                <td th:text="${shed.shedFee}"></td>
+                            </tr>
+                            <tr>
+                                <td>特色</td>
+                                <td th:text="${shed.shedFeature}"></td>
+                            </tr>
+                            <tr>
+                                <td>設備</td>
+                                <td th:text="${shed.shedEquip}"></td>
+                            </tr>
+                            <tr>
+                                <td>風格</td>
+                                <td th:text="${shed.shedType}"></td>
+                            </tr>
+                            <tr>
+                                <td>介紹</td>
+                                <td th:text="${shed.shedIntro}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+<div class="carousel slide col-lg-6" th:id="'carouselExampleControl2-' + ${shed.shedID}" data-bs-ride="carousel" style="width: 50%; height: 50%;">
+    <div class="carousel-inner">
+        <th:block th:each="studioPic, stat : ${sPicsList}" th:if="${studioPic.shed.shedID == shed.shedID}">
+            <div class="carousel-item" th:classappend="${studioPic.shed.shedID == shed.shedID} ? 'active'">
+                <img th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" class="d-block w-100" alt="..." th:attr="data-shedID=${studioPic.shed.shedID}">
+            </div>
+        </th:block>
+    </div>
+    <button class="carousel-control-prev" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'prev\')'">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'next\')'">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+            </div>
+        </div>
+    </section>
+</th:block>
+        </main>
+        <!-- Footer-->
+        <div th:replace="~{forestage/shared/foreFooter}"></div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script>
+    function preloadImages() {
+        var images = document.getElementsByClassName('carousel-item');
+        for (var i = 0; i < images.length; i++) {
+            var img = new Image();
+            img.src = images[i].getElementsByTagName('img')[0].src;
+        }
+    }
+    function slideCarousel(carouselId, direction) {
+        var carousel = document.getElementById(carouselId);
+        var carouselInstance = new bootstrap.Carousel(carousel);
+        
+        if (direction === 'prev') {
+            carouselInstance.prev();
+        } else if (direction === 'next') {
+            carouselInstance.next();
+        }
+    }
+			
+		</script>
+    </body>
+</html>

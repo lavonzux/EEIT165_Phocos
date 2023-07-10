@@ -37,11 +37,16 @@ public class Article {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date articleUpdateTime;
 	private Integer articleState = 1;
-	private Integer articleLikes;
-	private Integer articleCollect;
+	
+	private Integer articleLikesCount = 0;
+	
+	private Integer articleCollect = 0;
 
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ArticlePic> articlePics;
+	
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ArticleLikes> articleCounts;
 
 	@PrePersist // 當物件轉換成persist狀態以前，要做的事情放在方法裡面
 	public void onCreate() {
