@@ -48,7 +48,7 @@ public class PhotoServiceRestController {
 	
 	@PostMapping(path = "/photoService/api/Create")
 	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result) throws IOException {
-		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
+//		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
 		
 		if (!result.hasErrors()) {
 			System.out.println(result.toString()); 
@@ -112,23 +112,19 @@ public class PhotoServiceRestController {
 
 
 	@DeleteMapping("/photoService/api/Delete")
-	public PhotoService processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID, @ModelAttribute("queryPhotoServiceBean") PhotoService queryPhotoServiceBean,BindingResult result) {
-		System.out.println("==================== Incoming deletion request... ====================");
-
-
-		// qPSB can be found, binding have no error,
-		// Then store the old data, and go delete the data in DB.
-		if (queryPhotoServiceBean!=null && !result.hasErrors()) {
-
-		System.out.println("========== Confirmed to delete... ==========");
+	public PhotoService processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID) {
+//		System.out.println("==================== Incoming deletion request... ====================");
+		
 		System.out.printf("========== Deleting PhotoServiceID: %d ==========%n",serviceID);
+		
 
 		PhotoService deletedPhotoServiceBean = psService.readEntry(serviceID);
-
+		boolean deleteEntry = psService.deleteEntry(serviceID);
+		if (!deleteEntry) {
+			return null;
+		}
 
 		return deletedPhotoServiceBean;
-		}
-		return null;
 	}
 
 }

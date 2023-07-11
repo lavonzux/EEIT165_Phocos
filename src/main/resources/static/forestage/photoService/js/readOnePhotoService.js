@@ -12,6 +12,7 @@ const reserveBtn = document.getElementById('reserveBtn')
 const editButton = document.getElementById('edit-ps-service')
 const deletePicBtns = document.querySelectorAll('.pictureDeleteBtn')
 const updateBtn = document.getElementById('go-update-ps')
+const deletePSBtn = document.getElementById('delete-ps-service')
 
 window.onload = function () {
     fetchServiceTypes()
@@ -21,7 +22,7 @@ window.onload = function () {
     });
 
     updateBtn.addEventListener('click', (e) => pressedUpdateService())
-
+    deletePSBtn.addEventListener('click', (e) => pressedDeleteService())
 }
 
 
@@ -109,9 +110,19 @@ function sendUpdateService(form) {
     })
         .then(res => {
             // console.log(res.data);
-            // location.reload()
+            location.reload()
         })
         .catch(err => {
             console.log(err);
         })
+}
+
+
+function sendDeleteService(form) {
+    axios({
+        method: 'delete',
+        url: ContextPathname + '/photoService/api/Delete',
+        data: form
+    })
+
 }

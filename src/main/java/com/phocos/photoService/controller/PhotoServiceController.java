@@ -1,7 +1,6 @@
 package com.phocos.photoService.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +19,7 @@ import com.phocos.member.MemberService;
 import com.phocos.photoService.Dto.PhotoServiceDto;
 import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.ReferencePicture;
+import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.service.PhotoServiceService;
 import com.phocos.photoService.service.ServiceTypeService;
 
@@ -41,8 +41,15 @@ public class PhotoServiceController {
 	
 	@GetMapping(path = "/photoService/CreatePhotoService.controller")
 	public String goToCreatePage() {
-			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
+//			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
 			return "backstage/photoService/CreatePhotoService";
+	}
+	
+	
+	@GetMapping("/photoService/Create")
+	public String goToForeCreatePage() {
+//			System.out.println("==================== GETTING create request... goto CreatePhotoService page ====================");
+			return "forestage/photoService/CreatePhotoService";
 	}
 	
 	
@@ -87,6 +94,53 @@ public class PhotoServiceController {
 		return "backstage/photoService/ConfirmCreatedPhotoService";
 
 	}
+	
+	
+	
+	@PostMapping(path = "/photoService/Create")
+	public String processForestageCreatePhotoServiceAction(
+			@RequestParam("serviceName") String serviceName,
+			@RequestParam("serviceType") String serviceType,
+			@RequestParam("servicePrice") String servicePrice,
+			@RequestParam("serviceDuration") String serviceDuration,
+			@RequestParam("serviceLocation") String serviceLocation,
+			@RequestParam("serviceCreatorID") int serviceCreatorID,
+			@RequestParam("inputRefPics") MultipartFile[] inputReferencePictures,
+			Model model) throws IOException {
+		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
+	
+		PhotoService createPSBean = new PhotoService();
+		
+		createPSBean.setServiceName(serviceName);
+		createPSBean.setServiceType(stService.readEntry(serviceType));
+		createPSBean.setServicePrice(servicePrice);
+		createPSBean.setServiceDuration(serviceDuration);
+		createPSBean.setServiceLocation(serviceLocation);
+		createPSBean.setServiceCreator(mService.findById(serviceCreatorID));
+		
+		if (!inputReferencePictures[0].isEmpty()) {
+			ArrayList<ReferencePicture> referencePictures = new ArrayList<ReferencePicture>();
+			for(MultipartFile oneInputPic : inputReferencePictures) {
+				ReferencePicture oneRefPic = new ReferencePicture();
+				oneRefPic.setPhotoService(createPSBean);
+				oneRefPic.setPictureFile(oneInputPic.getBytes());
+				oneRefPic.setPictureName(oneInputPic.getOriginalFilename());
+				referencePictures.add(oneRefPic);
+			}
+			createPSBean.setReferencePictures(referencePictures);
+		}
+		
+		
+		PhotoService resultBean = psService.createEntry(createPSBean);
+
+		model.addAttribute("resultBean", resultBean);
+		model.addAttribute("message", "新增成功");
+		System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
+		return "redirect:forestage/photoService";
+	}
+	
+	
+	
 
 
 	@GetMapping(path = "/photoService/ReadAllPhotoService.controller")
@@ -108,6 +162,30 @@ public class PhotoServiceController {
 	}
 	
 	
+	@GetMapping("/photoService/SearchByName")
+	public String gotoSearchByName(@RequestParam("queryServiceName") String queryServiceName, @RequestParam(name = "page", required = false) Integer page, Model model) {
+		if (page == null) {page = 1;}
+		Page<PhotoService> resultPage = psService.readByName(queryServiceName);
+		model.addAttribute("resultPage", resultPage);
+		return "forestage/photoService/ReadAllPhotoService";
+	}
+	
+	
+	@GetMapping("/photoService/ReadByType")
+	public String gotoReadAllPSByType(@RequestParam("serviceType") String serviceType, @RequestParam(name = "page", required = false) Integer page, Model model) {
+		if (page == null) {page = 1;}
+		if (stService.inDB(serviceType)) {
+			return "forestage/photoServiceReadAllPhotoService";
+		}
+		ServiceType queryType = stService.readEntry(serviceType);
+		Page<PhotoService> resultPage = psService.readAllByPageByType(queryType);
+		model.addAttribute("resultBean", resultPage);
+		return "forestage/photoService/ReadAllPhotoService";
+	}
+	
+	
+	
+	
 
 	@GetMapping(path = "/photoService/ReadOnePhotoService.controller")
 	public String processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
@@ -116,6 +194,9 @@ public class PhotoServiceController {
 
 		return "backstage/photoService/ReadOnePhotoService";
 	}
+	
+	
+	
 
 
 	@GetMapping(path = "/photoService/ReadOne")
@@ -152,7 +233,8 @@ public class PhotoServiceController {
 		model.addAttribute("oldPhotoServiceBean", oldPSBDto);
 		
 		PhotoService newPhotoServiceBean = psService.updateEntry(queryPhotoServiceBean.getServiceID(), queryPhotoServiceBean);
-		model.addAttribute("newPhotoServiceBean", newPhotoServiceBean);
+		PhotoServiceDto newPSBDto = newPhotoServiceBean.toDto();
+		model.addAttribute("newPhotoServiceBean", newPSBDto);
 		
 		return "backstage/photoService/ConfirmUpdatedPhotoService";
 		}

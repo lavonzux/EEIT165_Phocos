@@ -20,6 +20,7 @@ import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.PhotoServiceRepository;
 import com.phocos.photoService.model.ReferencePicture;
 import com.phocos.photoService.model.ReferencePictureRepository;
+import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.model.ServiceTypeRepository;
 
 @Service
@@ -91,6 +92,18 @@ public class PhotoServiceService {
 	}
 	
 
+	public Page<PhotoService> readAllByPageByType(ServiceType queryType) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findByServiceType(queryType, page);
+	}
+	
+
+	public Page<PhotoService> readByName(String queryServiceName) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findByServiceNameContainsIgnoreCase(queryServiceName, page);
+	}
+	
+
 	/**
 	 * Find a entry by given {@code photoServiceID} first, 
 	 * then update the entry with .save() method if entry was found. 
@@ -123,19 +136,20 @@ public class PhotoServiceService {
 	
 	/**
 	 * Find a entry by given {@code photoServiceID} first, 
-	 * then delete the entry with .delete() method if entry was found. 
+	 * then set the entry's serviceDeleted to 1 (stand for deleted), 
+	 * then use .save() method to update the entry in db. 
 	 * 
-	 * !!! THIS FUNCTION WILL BECOME SETTING STATUS FIELD IN FUTURE !!!
-	 * 
-	 * @param photoServiceID
-	 * @return boolean value for whether the deletion is successful 
+	 * @param photoServiceID : choose the target entry
+	 * @return true if deletion (update) is successful 
 	 */
 	public boolean deleteEntry(int photoServiceID) {
 		Optional<PhotoService> optional = psRepo.findById(photoServiceID);
 		if (optional.isEmpty()) {
 			return false;
 		}else {			
-			psRepo.delete(optional.get());
+			PhotoService toDeleteBean = optional.get();
+			toDeleteBean.setServiceDeleted(1);
+			psRepo.save(toDeleteBean);
 			return true;
 		}
 	}
@@ -162,6 +176,8 @@ public class PhotoServiceService {
 			if (creatorMember.isPresent()) returnPSB.setServiceCreator(creatorMember.get());
 		}
 		
+		if (dto.getServiceDesc()!=null) returnPSB.setServiceDesc(dto.getServiceDesc());
+		
 		
 		/*
 		try {
@@ -181,7 +197,7 @@ public class PhotoServiceService {
 		
 		
 		
-		if (!dto.getInputRefPics()[0].isEmpty()) {
+		if (dto.getInputRefPics()!=null && !dto.getInputRefPics()[0].isEmpty()) {
 			List<ReferencePicture> refPics = rpRepo.findAllByPhotoServiceServiceID(dto.getServiceID());
 			
 			// removing the pictures client want to delete

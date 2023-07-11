@@ -65,17 +65,17 @@ public class ReferencePictureService {
 		
 		Optional<PhotoService> optional = psRepo.findById(serviceID);
 		if (optional.isEmpty()) {
-			System.out.println("Cannot find the PhotoService!");
+//			System.out.println("Cannot find the PhotoService!");
 			return null;
 		}
 		
 		List<ReferencePicture> refPic = rpRepo.findAllByPhotoServiceServiceID(optional.get().getServiceID());
 		if (refPic.size()==0) {
-			System.out.println("Cannot find related ref Pics!");
+//			System.out.println("Cannot find related ref Pics!");
 			return null;
 		}
 		
-		System.out.println("Returning the first ref pic!");
+//		System.out.println("Returning the first ref pic!");
 		return refPic.get(0);
 		
 	}
@@ -84,17 +84,17 @@ public class ReferencePictureService {
 	
 	public List<ReferencePicture> readAllPicturesByServiceID(int serviceID) {
 		
-		System.out.println("checking if "+serviceID+" exist......");
+//		System.out.println("checking if "+serviceID+" exist......");
 		Optional<PhotoService> optional = psRepo.findById(serviceID);
 		if (optional.isEmpty()) {
-			System.out.println("Cannot find the PhotoService!");
+//			System.out.println("Cannot find the PhotoService!");
 			return null;
 		}
 		
-		System.out.println("looking for Ref Pic IDs for: "+optional.get().getServiceID());
+//		System.out.println("looking for Ref Pic IDs for: "+optional.get().getServiceID());
 		List<ReferencePicture> refPicsList = rpRepo.findAllByPhotoServiceServiceID(optional.get().getServiceID());
 		if (refPicsList.size()==0) {
-			System.out.println("Cannot find related ref Pics!");
+//			System.out.println("Cannot find related ref Pics!");
 			return null;
 		}
 		

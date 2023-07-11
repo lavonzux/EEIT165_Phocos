@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>新增攝影服務</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" th:href="@{assets/favicon.ico}" />
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<!-- the css line is already included in th:replace for Nav -->
+	<!-- <link th:href="@{/forestage/photoService/css/styles.css}" rel="stylesheet" /> -->
+	<script src="https://kit.fontawesome.com/d7f5a7fb92.js" crossorigin="anonymous"></script>
+	<style>
+		.sticky-side-tool {
+			position: sticky;
+			top: 5%;
+		}
+
+		.carousel-item {
+			background-color: rgb(167, 249, 207);
+			overflow: hidden;
+			/* padding: 5px; */
+			border-radius: 5px;
+		}
+
+		.sclDwn {
+			width: 850px;
+			height: 350px;
+			object-fit: scale-down;
+		}
+
+
+		.btn-group {
+			width: 100%;
+		}
+
+		.service-desc {
+			font-style: italic;
+			border-radius: 5px;
+			background-color: lightgreen;
+		}
+
+		.pictureDeleteBtn {
+			cursor: pointer;
+			background-color: white;
+			border-radius: 25px;
+			display: inline;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			z-index: 10;
+			width: 50px;
+			height: 50px;
+			transition-duration: 500ms;
+		}
+
+		.pictureDeleteBtn:hover {
+			background-color: #F33;
+		}
+
+		i.fa-trash {
+			color: #f33;
+			transition-duration: 500ms;
+		}
+
+		.pictureDeleteBtn:hover i.fa-trash {
+			color: #fff;
+		}
+
+		.pendingForDelete {
+			opacity: 0.5;
+			filter: grayscale(50%);
+		}
+
+		fieldset {
+			border: 2px, solid, #333;
+			border-radius: 5%;
+		}
+
+		legend {
+			padding: 0, 25px;
+		}
+	</style>
+</head>
+
+
+<body>
+	<!-- Responsive navbar-->
+	<div th:replace="~{forestage/shared/foreTopNav}"></div>
+	<!-- Page content-->
+	<div class="container mt-5">
+		<main>
+			<div class="container-fluid px-4">
+
+				<form method="post" th:action="@{/photoService/Create}" id="create-ps-service-form" enctype="multipart/form-data">
+
+					<fieldset>
+						<legend class="row g-5">
+							<!-- <i class="fas fa-table me-1"></i> -->
+							請填入以下欄位以新增攝影服務
+						</legend>
+
+						<div class="row g-5">
+
+							<div class="col" id="left-inputs">
+
+								<div style="display: none;">
+									<input type="text" hidden="true" id="serviceCreatorID" name="serviceCreatorID" th:value="${session.memberID}">
+								</div>
+
+								<div class="mb-3">
+									<label for="serviceType" class="form-label">選擇服務類型</label>
+									<select required class="form-select" id="serviceTypeOptions" name="serviceType">
+										<option selected id="defaultOption">===== 請選擇 =====</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="serviceName" class="form-label">服務名稱</label>
+									<input type="text" required class="form-control" id="serviceName" name="serviceName" aria-describedby="serviceNameHelp" autocomplete="false">
+								</div>
+								<div class="mb-3">
+									<label for="servicePrice" class="form-label">服務價格</label>
+									<input type="number" required class="form-control" id="servicePrice" name="servicePrice" aria-describedby="serviceNameHelp">
+								</div>
+								<div class="mb-3">
+									<label for="serviceDuration" class="form-label">預估時長</label> <span id="serviceNameHelp" class="form-text ms-5">請輸入預估需要的時間</span>
+									<input type="text" class="form-control" id="serviceDuration" name="serviceDuration" aria-describedby="serviceNameHelp">
+								</div>
+								<div class="mb-3">
+									<label for="serviceLocation" class="form-label">服務地區</label>
+									<input type="text" required class="form-control" id="serviceLocation" name="serviceLocation" aria-describedby="serviceLocationHelp">
+								</div>
+							</div>
+
+							<div class="col position-relative" id="right-inputs">
+								<div class="mb-3">
+									<label for="serviceLocation" class="form-label">服務描述</label> <span id="serviceLocationHelp" class="form-text ms-5">請輸入您提供服務的描述</span>
+									<textarea class="form-control" id="serviceDesc" name="serviceDesc" aria-describedby="serviceLocationHelp" rows="13"></textarea>
+								</div>
+
+								<div class="mb-3">
+									<input type="file" class="form-control" multiple="true" name="inputRefPics" placeholder="上傳參考用照片">
+								</div>
+
+								<div class="d-flex col w-100 button-group justify-content-end">
+									<button class="btn btn-info mx-3" id="oneClickFill">一鍵輸入</button>
+									<button class="btn btn-info mx-3" id="cancel">取消</button>
+									<button class="btn btn-danger mx-3" type="reset">重置表單</button>
+									<button class="btn btn-primary mx-3" type="submit">確認新增</button>
+								</div>
+
+							</div>
+						</div>
+
+					</fieldset>
+
+				</form>
+			</div>
+		</main>
+
+
+
+
+
+
+
+
+		<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script>
+			$(document).ready(function () {
+				$('#oneClickFill').click(function () {
+					event.preventDefault();
+					$('#serviceName').val('環球影城婚攝套裝');
+					$('#serviceTypeOptions').val('活動紀錄攝影');
+					$('#servicePrice').val(88888);
+					$('#serviceDuration').val(7200);
+					$('#serviceLocation').val('日本大阪府');
+					$('#serviceCreator').val(34);
+					$('#serviceDesc').val('攝影師S的環球影城婚攝套裝以美國洛杉磯的環球影城作為拍攝場景，將浪漫唯美風格和華麗宮廷風格融合在一起。我們專注於捕捉婚禮時刻的浪漫與獨特體驗，為您創造出令人驚艷的婚禮照片。我們提供專業的攝影指導和造型建議，讓您在環球影城中展現最美的一面。照片後期處理將突出浪漫唯美風格和華麗宮廷風格的特點，讓您的照片更加迷人。我們致力於提供個性化的服務，確保您在環球影城的婚禮攝影體驗完美無瑕。讓我們一同創造出令人難忘的婚禮回憶吧！');
+				});
+			});
+		</script>
+
+
+	</div>
+
+	<!-- Footer -->
+	<div th:replace="~{forestage/shared/foreFooter}"></div>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script th:src="@{/forestage/photoService/js/scripts.js}"></script>
+	<script th:src="@{/forestage/photoService/js/axios.min.js}"></script>
+	<script th:src="@{/forestage/photoService/js/createPhotoService.js}"></script>
+</body>
+
+
+</html>

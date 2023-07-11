@@ -16,6 +16,10 @@
             position: sticky;
             top: 5%;
         }
+
+        .create-ps-btn {
+            width: auto;
+        }
     </style>
 </head>
 
@@ -43,16 +47,26 @@
 
 
 
+            <!-- widget: create PhotoService only for members -->
+            <div th:if="${session.isLoggedIn == 'true'}" class="input-group justify-content-center my-3" th:fragment="CreatePhotoServiceButton">
+                <a class="btn btn-outline-secondary w-100" th:href="@{/photoService/Create}">新增一筆攝影服務</a>
+            </div>
+
+
             <!-- Side widgets for ReadAll -->
             <div th:fragment="side-widgets" class="col-lg-4">
                 <div th:fragment="stickey-side-widgets" class="sticky-side-tool">
+                    <div th:if="${session.isLoggedIn==true}" th:replace="~{::CreatePhotoServiceButton}"></div>
                     <!-- Search widget-->
                     <div class="card mb-4">
                         <div class="card-header">搜尋</div>
                         <div class="card-body">
                             <div class="input-group">
-                                <input class="form-control" type="text" placeholder="請輸入關鍵字..." aria-label="Enter search term..." aria-describedby="button-search" />
-                                <button class="btn btn-primary" id="button-search" type="button">搜尋</button>
+                                <form class="input-group" method="get" th:action="@{/photoService/SearchByName}">
+                                    <input class="form-control" type="text" name="queryServiceName" placeholder="請輸入關鍵字..." aria-label="Enter search term..." aria-describedby="button-search" />
+                                    <button class="btn btn-primary" id="button-search" type="submit">搜尋</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -86,6 +100,7 @@
             <!-- Side widgets for ReadOne-->
             <div class="col-lg-4">
                 <div th:fragment="stickey-side-widgets-readone" class="sticky-side-tool">
+                    <!-- <div th:replace="~{::CreatePhotoServiceButton}"></div> -->
                     <!-- Search widget-->
                     <div class="card mb-4">
                         <div class="card-header">搜尋</div>
@@ -123,10 +138,10 @@
                         <!-- Button trigger modal -->
                         <div th:case="true" class="btn-group" role="group" aria-label="basic example">
                             <button id="edit-ps-service" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <i class="fa-regular fa-pen-to-square">修改此服務</i>
+                                <i class="fa-regular fa-pen-to-square"> 修改此服務</i>
                             </button>
-                            <button id="update-ps-service" type="button" class="btn btn-dark" style="z-index: 2; display: none;">
-                                <i class="fa-solid fa-floppy-disk">儲存修改</i>
+                            <button id="delete-ps-service" type="button" class="btn btn-danger" style="z-index: 2;">
+                                <i class="fa-solid fa-delete-left"> 刪除這筆服務</i>
                             </button>
                         </div>
                         <div th:case="false" class="btn-group" role="group" aria-label="basic example">
