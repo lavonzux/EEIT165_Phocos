@@ -3,6 +3,7 @@ package com.phocos.photoService.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,4 +110,19 @@ public class ReferencePictureService {
 		rpRepo.deleteById(optional.get().getPictureID());
 		return optional.get();
 	}
+	
+	
+	public List<ReferencePicture> deleteReferencePictures(Set<Integer> deleteID) {
+		ArrayList<ReferencePicture> deletedReferencePictures = new ArrayList<>();
+		for (Integer onePicID : deleteID) {
+			ReferencePicture deleteReferencePicture = deleteReferencePicture(onePicID);
+			deletedReferencePictures.add(deleteReferencePicture);
+		}
+		return deletedReferencePictures;
+	}
+	
+	
+	
+	
+	
 }

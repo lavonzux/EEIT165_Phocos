@@ -5,31 +5,6 @@ const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') +
 
 
 
-const test_url = 'http://localhost:8080/phocos/referencePicture/api/getPicIds?serviceID=1027'
-
-function testAxios() {
-    axios.get(test_url)
-        .then(res => {
-            console.log(res);
-            return res.data
-        })
-        .catch(err => {
-            console.log(err);
-        })
-}
-
-
-ajaxAll()
-async function ajaxAll() {
-    let ajaxData1 = await axios.get(test_url)
-    // let ajaxData2 = await testAxios()
-    // console.log(await testAxios());
-    console.log(ajaxData1.data);
-    // console.log(ajaxData2);
-}
-
-
-
 window.onload = function () {
     grabAllCarousel();
 }

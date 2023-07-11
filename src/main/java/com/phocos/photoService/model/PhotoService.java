@@ -9,10 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.core.sym.Name;
 import com.phocos.member.Member;
+import com.phocos.photoService.Dto.PhotoServiceDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -76,6 +75,8 @@ public class PhotoService implements java.io.Serializable{
 	public PhotoService() {
 //		System.out.println("New PhotoService constructed!");
 	}
+	
+	
 
 	/*
 	// ==================== GETTERs ====================
@@ -110,7 +111,7 @@ public class PhotoService implements java.io.Serializable{
 	*/
 
 	public String getFormattedCreatedOn() {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss");
 		String formatedCreatedOn = createdOn.format(format);
 		
 		return formatedCreatedOn;
@@ -118,7 +119,7 @@ public class PhotoService implements java.io.Serializable{
 	
 	
 	public String getFormattedUpdatedOn() {
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss");
 		String formatedUpdatedOn = updatedOn.format(format);
 		
 		return formatedUpdatedOn;
