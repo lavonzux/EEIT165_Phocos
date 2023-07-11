@@ -56,7 +56,6 @@ public class Member {
 	@JsonManagedReference // 由這邊做JSON序列化
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Login> login = new ArrayList<>();
-   
     
 // -------------------- 文章留言 --------------------
  	@JsonIgnore

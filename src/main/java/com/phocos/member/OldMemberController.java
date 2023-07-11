@@ -19,8 +19,16 @@ public class OldMemberController {
 	@Autowired
 	private MemberService memberService;
 	
-
-	
+	@ResponseBody
+	@GetMapping("/searchMemberByMemberName")
+	public List<Member> searchMemberByMemberName(
+			@RequestParam String keyword){
+		if("".equals(keyword)) {
+			return null;
+		}
+		List<Member> searchByMemberName = memberService.searchByMemberName(keyword);
+		return searchByMemberName;
+	}
 	
 	
 	@GetMapping("/dashboard/member")

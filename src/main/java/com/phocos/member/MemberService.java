@@ -17,6 +17,12 @@ public class MemberService {
 	@Autowired
 	private MemberRepository memberRepo;
 	
+	// 以名稱查詢
+	public List<Member> searchByMemberName(String keyword) {
+		return memberRepo.searchByMemberName(keyword);
+	}
+	
+	
 	// 新增單筆資料
 	public void insert(Member member) {
 		memberRepo.save(member);
