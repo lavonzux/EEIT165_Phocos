@@ -84,7 +84,7 @@ $(function() {
 			if (result.isConfirmed) {
 				$.ajax({
 					type: "POST",
-					url: "/phocos/api/store", // 修改为与后端控制器中的请求映射路径相对应
+					url: "/phocos/cart/store", // 修改为与后端控制器中的请求映射路径相对应
 					contentType: "application/json",
 					data: JSON.stringify(shoppingCart),
 					success: function() {

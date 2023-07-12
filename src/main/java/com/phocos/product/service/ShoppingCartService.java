@@ -18,4 +18,9 @@ public class ShoppingCartService {
 		shopRepo.saveAll(shoppingCartItems);
 	}
 	
+	// 取得修改資料
+	// 用ID查詢
+    public List<ShoppingCartItem> getByMemberId(int memberId) {
+        return shopRepo.findByMemberID(memberId);
+    }
 }

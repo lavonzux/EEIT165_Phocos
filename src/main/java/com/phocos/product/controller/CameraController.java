@@ -2,7 +2,6 @@ package com.phocos.product.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.phocos.member.Member;
 import com.phocos.product.model.Camera;
 import com.phocos.product.service.CameraService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -144,15 +141,6 @@ public class CameraController {
 	}
 
 	////////////////// 前台////////////////////
-
-	@GetMapping("/products/camerashop")
-	public String getcameraPage(@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
-
-		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
-		model.addAttribute("page", page);
-		return "forestage/towakawaii/CameraShop"; // 返回對應的視圖模板
-	}
-
 	@GetMapping("/products/camerashop2")
 	public String getcamera2Page(@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
 
@@ -161,36 +149,10 @@ public class CameraController {
 		return "forestage/towakawaii/CameraShop2"; // 返回對應的視圖模板
 	}
 
-	@GetMapping("/products/shoppingcar")
-	public String gotoshoppingcar(Model model, HttpSession session) {
-	    Integer memberId = (Integer) session.getAttribute("memberID");
-
-	    if (memberId != null) {
-	        // 存在 memberId，执行跳转到 ShoppingCar
-	        return "forestage/towakawaii/ShoppingCar";
-	    } else {
-	        // 不存在 memberId，跳回 login
-	        return "redirect:/login";
-	    }
-	}
-
-	@GetMapping("/products/shoppingcar2")
-	public String gototheshoppingcar(Model m) {
-		return "forestage/towakawaii/ShoppingCar";
-	}
-
 	@GetMapping("/products/cameradetail")
 	public String detailforestage(@RequestParam("productID") Integer productID, Model model) {
 		Camera camera = cameraService.getById(productID);
 		model.addAttribute("camera", camera);
 		return "forestage/towakawaii/Cameradetails";
-	}
-
-	@GetMapping("/products/lenshop2")
-	public String getlens2Page(@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
-
-		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
-		model.addAttribute("page", page);
-		return "forestage/towakawaii/lenshop2"; // 返回對應的視圖模板
 	}
 }
