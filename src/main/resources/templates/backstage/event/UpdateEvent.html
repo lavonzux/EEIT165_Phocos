@@ -27,7 +27,7 @@
                 font-size: 14px;
                 background-color: #ffadadd4;
             }
-            #editStudio{
+            #editEvent{
                 border: 0.5px solid rgb(195, 195, 195);
                 font-size: 14px;
                 background-color: #d1f0c2;
@@ -49,7 +49,7 @@
                 border-radius: 5%;
             }
         </style>
-    </head>
+     </head>
     <body class="sb-nav-fixed">
         <ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
         <div id="layoutSidenav">
@@ -58,19 +58,26 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">活動管理</h1>
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <br>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">活動管理</li>
+                        </ol>
                         <div class="card mb-4">
                             <div class="card-body">
-                                新增活動資料
+                                編輯活動資料
                                 <br>
                                 <form method="get" th:action="@{/events}">
                                     <button id="back">回到上一頁</button>
                                 </form>
                             </div>
                             </div>
-
-                                <form th:action="@{/event/insertData}" method="post">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                活動管理
+                            </div>
+                            <div class="card-body">
+                                <form th:method="put" th:action="@{/event/editData}"  th:object="${event}">
                                 <table >
                                     <thead>
                                         <tr>
@@ -80,55 +87,49 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>活動ID</td>
-                                            <td><input type="text" name="eventID"/></td>
-                                        </tr>
-                                        <tr>
-                                            <td>會員ID</td>
-                                            <td><input type="text" name="memberID" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>活動類型</td>
-                                            <td><textarea name="eventType" rows="3" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>活動主題</td>
-                                            <td><textarea name="eventTopic" rows="3" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>活動資訊</td>
-                                            <td><textarea name="eventInfo" rows="7" cols="40"></textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td>活動日期</td>
-                                            <td><input type="text" name="eventDate" /></td>
-                                        </tr>
+                                        <input type="hidden" id="eventID" name="eventID" th:value="${event.eventID}">
+									<tr>
+									    <td>會員編號</td>
+									    <td><input type="text" name="memberID" th:value="${event.memberID}"/></td>
+									</tr>
+									<tr>
+									    <td>活動類型</td>
+									    <td><textarea name="eventType" rows="3" cols="40" th:text="${event.eventType}"></textarea></td>
+									</tr>
+									<tr>
+									    <td>活動主題</td>
+									    <td><textarea name="eventTopic" rows="3" cols="40" th:text="${event.eventTopic}"></textarea></td>
+									</tr>
+									<tr>
+									    <td>活動資訊</td>
+									    <td><textarea name="eventInfo" rows="7" cols="40" th:text="${event.eventInfo}"></textarea></td>
+									</tr>
+									<tr>
+                                        <td>活動日期</td>
+                                        <td><input type="text" name="eventDate" th:value="${event.eventDate}"/></td>
+                                    </tr>
                                     </tbody>
                                 </table>
-                                
                                 <br>
                                 <input id="add" type="submit" value="儲存";/>
                             </form>
-
-						</div>
-					</div>
-			</main>
-			<div th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"></div>
-		</div>
-	</div>
-        <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
-        <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
-            crossorigin="anonymous"></script>
-        <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
-            crossorigin="anonymous"></script>
-        <script th:src="@{/js/datatables-simple-demo.js}"></script>
-        <script th:src="@{/js/scripts.js}"></script>
-        <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
-        <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <div th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"></div>
+            </div>
+        </div>
+            <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+            <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+            <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
         <script>
-
-
         </script>
     </body>
 </html>
