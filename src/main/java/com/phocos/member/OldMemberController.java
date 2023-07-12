@@ -19,6 +19,11 @@ public class OldMemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@GetMapping("/dashboard/memberChart")
+	public String memberChart() {
+		return "backstage/member/memberChart";
+	}
+	
 	@ResponseBody
 	@GetMapping("/searchMemberByMemberName")
 	public List<Member> searchMemberByMemberName(
