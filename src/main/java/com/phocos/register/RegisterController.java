@@ -61,11 +61,12 @@ public class RegisterController {
 	}
 
 	@GetMapping("/register/verifyPage")
-	public String verifyPage(HttpSession session) {
+	public String verifyPage(@RequestParam("email") String email,HttpSession session) {
 		String storedCode = (String) session.getAttribute("code");
 		if (storedCode ==null) {
 			return "redirect:/";
 		}
+		session.setAttribute("email", email);
 		return "forestage/register/registerVerify";
 	}
 
@@ -76,7 +77,11 @@ public class RegisterController {
 
 	// 點擊按鈕之後會發送驗證碼訊息到Email，並將驗證碼存在session中
 	@PostMapping("/register/sendVerificationCode")
-	public ResponseEntity<String> sendMail(@RequestParam String memberEmail, HttpSession session) {
+	public ResponseEntity<String> sendMail(
+			@RequestParam("memberEmail") String memberEmail, 
+			HttpSession session) {
+		session.removeAttribute("code");
+		
 		String code = registerService.sendVerificationEmail(memberEmail);
 
 		session.setAttribute("code", code);
