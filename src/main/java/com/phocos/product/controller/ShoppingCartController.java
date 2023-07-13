@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.phocos.product.model.ShoppingCartItem;
 import com.phocos.product.service.ShoppingCartService;
@@ -51,4 +52,23 @@ public class ShoppingCartController   {
 	public String gototheshoppingcar(Model m) {
 		return "forestage/towakawaii/ShoppingCar";
 	}
+//	@PostMapping("/calculateTotalPrice")
+//	public ModelAndView calculateTotalPrice2(@RequestBody List<ShoppingCartItem> shoppingCartItems) {
+//	    int totalPrice = 0;
+//	    for (ShoppingCartItem item : shoppingCartItems) {
+//	        totalPrice += item.getPrice();
+//	    }
+//
+//	    String form = orderService.ecpayCheckout(totalPrice);
+//
+//	    ModelAndView modelAndView = new ModelAndView("generateHtml");
+//	    modelAndView.addObject("form", form);
+//	    modelAndView.addObject("totalPrice", totalPrice);
+//	    return modelAndView;
+//	} 
+	@GetMapping("/generateHtml")
+    public String generateHtml() {
+
+        return "forestage/towakawaii/htmlPage";
+    }
 }
