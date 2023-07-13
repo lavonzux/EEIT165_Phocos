@@ -136,7 +136,7 @@ public class ReferencePictureController {
 	}
 	
 	
-	@PostMapping
+	@PostMapping("/referencePicture/delete")
 	public void deleteReferencePicture(@RequestParam("pictureID") int pictureID) {
 		rpService.deleteReferencePicture(pictureID);
 	}

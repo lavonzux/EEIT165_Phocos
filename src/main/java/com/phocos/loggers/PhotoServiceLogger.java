@@ -1,7 +1,9 @@
 package com.phocos.loggers;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
 import org.aspectj.lang.JoinPoint;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import com.phocos.utils.PrintValueHelper;
 
-import ch.qos.logback.core.joran.action.ParamAction;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -38,7 +39,7 @@ public class PhotoServiceLogger {
 	
 	
 	@Pointcut("execution(* com.phocos.photoService.controller..*(..))")
-	public void psController() { 
+	public void psController() {
 		
 	}
 	
@@ -48,11 +49,22 @@ public class PhotoServiceLogger {
 	}
 	
 	
-	@Before("psController() || psRestfulController()")
-	public void before(JoinPoint joinPoint) {
+	
+//	@Pointcut("execution(String com.phocos.photoService.controller..*(..))")
+//	public void psControllerDestructive() {
+//		
+//	}
+	
+	
+	
+	
+	
+	
+	@Before("psController() ")
+	public void before(JoinPoint joinPoint) throws IOException {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		
-		String methodName = joinPoint.getSignature().getName();
+		String calledMethod = joinPoint.getSignature().getName();
 		String memberID = "guest account";
 		
 		
@@ -67,7 +79,7 @@ public class PhotoServiceLogger {
 		if (memberIDinReq != null) memberID = Integer.toString((int)memberIDinReq); 
 		
 		
-		logger.info(methodName+" was called by member: "+ memberID+"......");
+		logger.info(calledMethod+" was called by member: "+ memberID+"......");
 		
 		
 		
@@ -91,6 +103,26 @@ public class PhotoServiceLogger {
 		String remoteAddr = request.getRemoteAddr();
 		
 		
+		
+		
+		
+		
+		String logLine = memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
+		System.out.println(logLine);
+		
+		File loggerFile = new ClassPathResource(LOGGER_FILE_PATH).getFile();
+		System.out.println( loggerFile.isFile() );
+		System.out.println( loggerFile.canWrite() );
+		
+		
+		
+		FileWriter logWriter = new FileWriter(loggerFile, true);
+		logWriter.write(logLine);
+		logWriter.close();
+		
+		
+		
+		
 		// ========== Final log String ==========
 		
 //		System.out.printf("MemberID: %s requesting %s from: %s --- ",memberID, requestMethod, remoteAddr);
@@ -100,7 +132,7 @@ public class PhotoServiceLogger {
 	}
 	
 	
-	@After("psController() || psRestfulController()")
+	@After("psController()")
 	public void after(JoinPoint joinPoint) {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		String methodName = joinPoint.getSignature().getName();
