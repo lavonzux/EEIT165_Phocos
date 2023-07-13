@@ -64,93 +64,78 @@
 					<!-- Preview image figure-->
 					<figure class="text-center mb-4">
 						<img width="400px" class="img-fluid rounded"
-							th:src="@{'/downloadcameraImage/' + ${camera.productID}}" />
+							th:src="@{'/downloadcameraImage/' + ${lens.productID}}" />
 					</figure>
 					<!-- Post content-->
 					<section class="green mb-5">
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">相機接環:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraMount}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭接環:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensMount}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">感光元件類型:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraSensor}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭焦距:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensFocalLength}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">像素數量::</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraPx}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭鏡組:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensGroup}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最高解析度:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraRecPx}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">光學防手震:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensOIS}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">防震功能:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraIBIS}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">放大倍率:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensMagnification}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">觀景窗:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraEVF}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">最近對焦距離:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensMinFocusDist}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">屏幕類型:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraLCD}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">最小光圈:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensApertureMin}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">對焦系統:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraFocusSys}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">最大光圈:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensApertureMax}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">測光方式:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraPhotometry}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">光圈葉片:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensBlades}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最低ISO:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraISOMin}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">濾鏡尺寸:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensFilterSize}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">最高ISO:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraISOMax}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭尺寸:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensDims}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">快門類型:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraShutter}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭重量:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensWeight}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">連拍速度:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraSensor}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">鏡頭視角:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensFOV}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">存儲卡類型:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraMemCard}"></font>
-							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
-						</div>
-						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">電池類型:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraBattery}"></font>
-							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
-						</div>
-						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">尺寸:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraDims}"></font>
-							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
-						</div>
-						<div>
-							<font size="5" class="fw-bolder fs-5 mb-4">重量:</font>
-							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${camera.cameraWeight}"></font>
+							<font size="5" class="fw-bolder fs-5 mb-4">驅動方式:</font>
+							<font size="5" class="fw-bolder fs-5 mb-4" th:text="${lens.lensDrive}"></font>
 							<font size="5" class="fw-bolder fs-5 mb-4">&nbsp</font><br>
 						</div>
 					</section>
@@ -162,16 +147,16 @@
 			<div class="col-lg-4">
 				<div>
 					<div class="text-center mb-4">
-						<font size="7" class="text-center fw-bolder" th:id="'brand_'+${camera.productID}"
-							th:text="${camera.cameraBrand}"></font><br>
-						<font size="7" class="text-center fw-bolder" th:id="'model_'+${camera.productID}"
-							th:text="${camera.cameraModel}"></font>
+						<font size="7" class="text-center fw-bolder" th:id="'brand_'+${lens.productID}"
+							th:text="${lens.lensBrand}"></font><br>
+						<font size="7" class="text-center fw-bolder" th:id="'model_'+${lens.productID}"
+							th:text="${lens.lensModel}"></font>
 					</div>
 					<div class="text-center mb-4">
 						<font size="6" class="fw-bolder mb-4">價格:</font>
 						<font size="7" style="color: #dd2626;" class="fw-bolder mb-4">$</font>
 						<font size="7" style="color: #dd2626;" class="fw-bolder mb-4 "
-							th:id="'price_'+${camera.productID}" th:text="${camera.cameraPrice}"> </font><br>
+							th:id="'price_'+${lens.productID}" th:text="${lens.lensPrice}"> </font><br>
 					</div>
 				</div>
 				<div class="card mb-4 text-center">
@@ -182,15 +167,15 @@
 						<span id="numberSelect">
 							<font for="quantitySelect" size="5" class="fw-bolder mb-4">購買數量:</font> <select
 								name="goods_number" id="quantitySelect" stlyle="font-size: 18px;">
-								<option th:each="i : ${#numbers.sequence(1, camera.cameraStocks)}" th:value="${i}"
+								<option th:each="i : ${#numbers.sequence(1, lens.lensStocks)}" th:value="${i}"
 									th:text="${i}"></option>
 							</select>
 						</span><br>
 						<button id="addToCartBtn" class="butt"
-							th:onclick="addToCart([[${camera.productID}]])">加入購物車</button>
+							th:onclick="addToCart([[${lens.productID}]])">加入購物車</button>
 						<br>
 						<font size="5" class="fw-bolder mb-4">庫存數量:</font>
-						<font size="5" class="fw-bolder mb-4" th:text="${camera.cameraStocks}"></font>
+						<font size="5" class="fw-bolder mb-4" th:text="${lens.lensStocks}"></font>
 					</div>
 				</div>
 			</div>
