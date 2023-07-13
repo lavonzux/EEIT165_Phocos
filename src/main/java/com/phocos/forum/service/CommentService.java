@@ -15,6 +15,9 @@ public class CommentService {
 		return commentRepo.save(comment);
 	}
 	
-//	---------------------------------------- 新增回覆 ----------------------------------------
-	
+//	---------------------------------------- 刪除回覆 ----------------------------------------
+	public void delete(Integer id) {
+	    commentRepo.deleteById(id);
+	}
+
 }

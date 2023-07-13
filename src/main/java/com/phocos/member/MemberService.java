@@ -23,6 +23,7 @@ public class MemberService {
 		
 	}
 	
+	@Transactional
 	// 以帳號做查詢會員資料
 	public Member findByMemberAccount(String memberAccount) {
 		return memberRepo.findByMemberAccount(memberAccount);

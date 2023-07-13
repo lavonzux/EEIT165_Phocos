@@ -13,16 +13,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "articleLikes")
-public class ArticleLikes {
+@Table(name = "articleCollect")
+public class ArticleCollect {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer articleLikeId;
+	private Integer articleCollectId;
 
-	private Integer liked;
+	private Integer collected;
 
-// -------------------- 跟文章關聯 --------------------	
+// -------------------- 跟文章關聯 --------------------
 	@ManyToOne
 	@JoinColumn(name = "articleId")
 	private Article article;
