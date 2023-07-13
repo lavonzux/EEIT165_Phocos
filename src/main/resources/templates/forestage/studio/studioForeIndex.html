@@ -147,7 +147,7 @@
         <a class="page-link">第一頁</a> <!-- 添加一个空格 -->
     </li>
     <li th:case="${true}" class="page-item">
-        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number})}">上一頁</a>
+        <a class="page-link" th:href="@{/browsestudiospage?(p=${page.number})}">上一頁</a>
     </li>
 </th:block>
 
@@ -155,7 +155,7 @@
 <th:block th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
   <th:block th:switch="${page.number != pageNumber - 1 }">
 	  <li th:case=${true} class="page-item">
-	     <a class="page-link" th:href="@{/browsestudios/page?(p=${pageNumber})}">[[${pageNumber}]]</a>
+	     <a class="page-link" th:href="@{/browsestudiospage?(p=${pageNumber})}">[[${pageNumber}]]</a>
 	  </li>
 	  <li th:case=${false} class="page-item active">
 	    <span class="page-link" th:text="${pageNumber}"></span>
@@ -163,12 +163,12 @@
   </th:block>
 </th:block>
 
-<th:block th:switch="${page.number == page.totalPages}">
+<th:block th:switch="${page.number == page.totalPages-1}">
     <li th:case="${true}" class="page-item">
         <span class="page-link">尾頁</span>
     </li>
     <li th:case="${false}" class="page-item">
-        <a class="page-link" th:href="@{/browsestudios/page?(p=${page.number + 2})}">下一頁</a>
+        <a class="page-link" th:href="@{/browsestudiospage?(p=${page.number + 2})}">下一頁</a>
     </li>
 </th:block>
 </ul>
