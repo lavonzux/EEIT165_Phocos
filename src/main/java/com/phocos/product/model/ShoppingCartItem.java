@@ -33,7 +33,7 @@ public class ShoppingCartItem {
     private String brand;
     
 	@Column(name = "price")
-    private double price;
+    private int price;
     
 	@Column(name = "timestamp")
 	private Date timestamp;

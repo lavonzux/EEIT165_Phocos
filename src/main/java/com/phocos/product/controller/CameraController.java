@@ -155,4 +155,21 @@ public class CameraController {
 		model.addAttribute("camera", camera);
 		return "forestage/towakawaii/Cameradetails";
 	}
+	@GetMapping("/products/shoppingcar")
+	public String gotoshoppingcar(Model model, HttpSession session) {
+	    Integer memberId = (Integer) session.getAttribute("memberID");
+
+	    if (memberId != null) {
+	        // 存在 memberId，执行跳转到 ShoppingCar
+	        return "forestage/towakawaii/ShoppingCar";
+	    } else {
+	        // 不存在 memberId，跳回 login
+	        return "redirect:/login";
+	    }
+	}
+
+	@GetMapping("/products/shoppingcar2")
+	public String gototheshoppingcar(Model m) {
+		return "forestage/towakawaii/ShoppingCar";
+	}
 }

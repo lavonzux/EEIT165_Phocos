@@ -32,15 +32,16 @@ function updateCart() {
 		row.appendChild(modelCell);
 
 		var priceCell = document.createElement('td');
-		priceCell.innerText = item.price.toFixed(2); // 保留两位小数
+		priceCell.innerText = item.price; // 保留两位小数
 		row.appendChild(priceCell);
 
 		cartItems.appendChild(row);
 
 		total += item.price;
 	}
-
-	totalPrice.innerText = '總價: ' + total.toFixed(2); // 显示总价，保留两位小数
+var totalPriceInput = document.getElementById('totalPriceInput');
+    totalPriceInput.value = total; // 
+	totalPrice.innerText = '總價: ' + total; // 显示总价，保留两位小数
 }
 
 $(function() {
@@ -82,30 +83,24 @@ $(function() {
 			cancelButtonText: '取消'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				$.ajax({
-					type: "POST",
-					url: "/phocos/cart/store", // 修改为与后端控制器中的请求映射路径相对应
-					contentType: "application/json",
-					data: JSON.stringify(shoppingCart),
-					success: function() {
-						Swal.fire({
-							title: '購買完成',
-							text: '商品已成功購買',
-							icon: 'success',
-							confirmButtonColor: '#3085d6',
-							confirmButtonText: '確認'
-						});
-						shoppingCart = [];
-						updateCart();
-						setCookie('shoppingCart', '', -1);
-					},
-					error: function() {
-						alert("保存購物車數據時出错。");
-					}
-				});
 			}
 		});
 	});
 });
 
+				$.ajax({
+					type: "post",
+					url: "/phocos/cart/checkout", // 修改为与后端控制器中的请求映射路径相对应
+					contentType: "application/json",
+					data: JSON.stringify(shoppingCart),
+					success: function() {
+						shoppingCart = [];
+						updateCart();
+						setCookie('shoppingCart', '', -1);
+						 window.location.href = 'http://localhost:8080/phocos/cart/generateHtml'; 
+					},
+					error: function() {
+						alert("保存購物車數據時出错。");
+					}
+				});
 
