@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.phocos.studio.util.StudioPic;
 import com.phocos.studio.util.Studio;
 
+@Repository
 public interface StudioPicRepository extends JpaRepository<StudioPic, Integer> {
 
 	@Query("SELECT sp FROM StudioPic sp WHERE sp.studio.studioID = :studioID")

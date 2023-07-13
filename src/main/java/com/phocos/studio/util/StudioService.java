@@ -41,6 +41,12 @@ public class StudioService {
 		Page<Studio> page = sRepo.findAll(pgb);
 		return page;
 	}
+	
+	
+    public List<Studio> findByKeyword(String keyword) {
+        return sRepo.findByKeyword(keyword);
+    }
+
 
 	//新增資料
 	public void insertStudio(Studio studio) {
@@ -96,5 +102,6 @@ public class StudioService {
 		return null;
 		
 	}
+
 
 }

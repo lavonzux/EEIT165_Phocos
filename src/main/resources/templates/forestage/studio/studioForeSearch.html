@@ -38,8 +38,6 @@
 
 			}
 			.search-slt{
-			    margin-left: auto;
-    margin-right: auto;
 			    display: block;
 			    width: 100%;
 			    font-size: 0.875rem;
@@ -51,8 +49,6 @@
 			    border-radius:0;
 			}
 			.wrn-btn{
-			    margin-left: auto;
-    			margin-right: auto;
 			    width: 100%;
 			    font-size: 16px;
 			    font-weight: 400;
@@ -60,13 +56,20 @@
 			    height: calc(3rem + 2px) !important;
 			    border-radius:0;
 			    background-color: #6B705C;
-			    color: #fff;			    
+			    color: #fff;		
+			    	    
 			}
 			#searchbtn {
-		    	margin-left: auto;
-    			margin-right: auto;
 			    background-color: #6B705C;
 			    border: 1px solid #6B705C;
+			}
+			#deletebtn {
+			    background-color: #9c8270;
+			    border: 1px solid #9c8270;
+			}
+			.wrn-btn-container {
+			    display: flex;
+			    align-items: center;
 			}
 
 		</style>
@@ -91,7 +94,7 @@
                             <input type="text" class="form-control search-slt" name="keyword" placeholder="輸入關鍵字">
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <select class="form-control search-slt">
+                            <select class="form-control search-slt" name="style">
                                 <option value="">選擇風格</option>
                                 <option value="北歐風">北歐風</option>
                                 <option value="居家風">居家風</option>
@@ -100,17 +103,20 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                            <select class="form-control search-slt">
+                            <select class="form-control search-slt" name="price">
                                 <option value="">選擇價位</option>
-                                <option value="1000以下">1000以下</option>
+                                <a><option value="1000以下">1000以下</option></a>
                                 <option value="1000~2000">1000~2000</option>
                                 <option value="2000~3000">2000~3000</option>
                                 <option value="3000以上">3000以上</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                        <div class="col-lg-2 col-md-2 col-sm-11 p-0">
                             <button type="submit" id="searchbtn" class="btn btn-danger wrn-btn">搜尋</button>
                         </div>
+						<div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-center justify-content-center">
+						    <a id="deletebtn" class="btn btn-danger wrn-btn" th:href="@{browsestudiospage}">✕</a>
+						</div>
                     </div>
                 </div>
             </div>
@@ -121,12 +127,12 @@
 <section>
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
-            <th:block th:each="studio : ${page.content}">
+            <th:block th:each="studio : ${studios}">
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Product image-->
                         <a th:href="@{/browsestudio(studioID=${studio.studioID})}">
-                        <img class="card-img-top" th:src="@{'/studioPic/indexPic/' + ${studio.studioID}}" />
+                            <img class="card-img-top" th:src="@{'/studioPic/indexPic/' + ${studio.studioID}}" />
                         </a>
                         <!-- Product details-->
                         <div class="card-body p-4">
@@ -141,37 +147,7 @@
         </div>
     </div>
 </section>
-<ul class="pagination">
-<th:block th:switch="${page.number != 0}">
-    <li th:case="${false}" class="page-item">
-        <a class="page-link">第一頁</a> <!-- 添加一个空格 -->
-    </li>
-    <li th:case="${true}" class="page-item">
-        <a class="page-link" th:href="@{/browsestudiospage?(p=${page.number})}">上一頁</a>
-    </li>
-</th:block>
 
-
-<th:block th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
-  <th:block th:switch="${page.number != pageNumber - 1 }">
-	  <li th:case=${true} class="page-item">
-	     <a class="page-link" th:href="@{/browsestudiospage?(p=${pageNumber})}">[[${pageNumber}]]</a>
-	  </li>
-	  <li th:case=${false} class="page-item active">
-	    <span class="page-link" th:text="${pageNumber}"></span>
-	  </li>
-  </th:block>
-</th:block>
-
-<th:block th:switch="${page.number == page.totalPages-1}">
-    <li th:case="${true}" class="page-item">
-        <span class="page-link">尾頁</span>
-    </li>
-    <li th:case="${false}" class="page-item">
-        <a class="page-link" th:href="@{/browsestudiospage?(p=${page.number + 2})}">下一頁</a>
-    </li>
-</th:block>
-</ul>
 
         <!-- Footer-->
  <div th:replace="~{forestage/shared/foreFooter}"></div>
