@@ -2,107 +2,118 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<title>Insert Article data</title>
-<style>
-body {
-	background-color: #FFF0F5;
-	font-family: 'Courier New', Courier, monospace;
-	font-size: 18px;
-	line-height: 1.6;
-	color: #333;
-}
-
-form {
-	background-color: #FFF;
-	padding: 30px;
-	border: 1px solid #EEE;
-	width: 50%;
-	margin: 0 auto;
-	border-radius: 10px;
-	box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-}
-
-input[type="text"], textarea {
-	display: block;
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #EEE;
-	margin-bottom: 20px;
-	box-sizing: border-box;
-	font-size: 18px;
-}
-
-input[type="submit"] {
-	background-color: #FFB6C1;
-	color: white;
-	padding: 12px 24px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 18px;
-	transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover {
-	background-color: #FFA07A;
-}
-
-input[type="reset"] {
-	background-color: #ADD8E6;
-	color: white;
-	padding: 12px 24px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 18px;
-}
-
-input[type="reset"]:hover {
-	background-color: #87CEFA;
-}
-
-h2 {
-	text-align: center;
-	color: #808080;
-}
-
-button[type="submit"] {
-	padding: 12px 24px;
-	background-color: #FFB6C1;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 18px;
-	transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-	background-color: #FFA07A;
-}
-</style>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>論壇新增文章</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- Bootstrap icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
 </head>
 
-<body>
-	<h2>新增文章</h2>
+<body class="d-flex flex-column h-100">
+	<main class="flex-shrink-0">
+		<!-- Navigation-->
+		 <div th:replace="~{forestage/shared/foreTopNav}"></div>
 
-	<form method="post" th:action="@{/forum/article/insert}">
+		<!-- Main content -->
+		<div class="container mt-5">
+			<h2>新增文章</h2>
+			<form th:action="@{/forum/article/insert}" method="POST" enctype="multipart/form-data">
+				<!-- 文章標題 -->
+				<div class="mb-3">
+					<label for="articleTitle" class="form-label">文章標題</label>
+					<input type="text" class="form-control" id="articleTitle" name="articleTitle" placeholder="輸入文章標題">
+				</div>
+
+				<!-- CKEditor 文章內容 -->
+				<div class="mb-3">
+					<label for="articleContent" class="form-label">文章內容</label>
+					<textarea class="form-control" id="articleContent" name="articleContent"></textarea>
+				</div>
+
+				<!-- Hashtags -->
+				<div class="mb-3">
+					<label for="hashtag" class="form-label">Hashtag</label>
+					<input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="輸入文章的Hashtag">
+				</div>
+
+				<!-- 圖片上傳 -->
+				<div class="mb-3">
+					<label for="articlePic" class="form-label">上傳圖片</label>
+					<input class="form-control" type="file" id="articlePic" name="articlePic" onchange="previewFile()"
+						multiple>
+				</div>
+
+				<!-- 圖片預覽 -->
+				<div class="mb-3">
+					<div id="previewImage"></div>
+					<!-- 預覽單張圖片 -->
+					<!-- <img id="previewImage" src="#" alt="圖片預覽" style="width: 300px; display: none;"> -->
+				</div>
+
+				<button type="submit" class="btn btn-primary">提交</button>
+			</form>
+		</div>
+
+		<!-- Include CKEditor JS -->
+		<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+
+
+		<!-- Initialize CKEditor -->
+		<script>
+			CKEDITOR.replace('articleContent');
+		</script>
+
+		<!-- Preview uploaded image -->
+		<script>
+			function previewFile() {
+				var files = document.querySelector('#articlePic').files;
+				var preview = document.querySelector('#previewImage');
+				preview.innerHTML = ""; // 清空預覽
+
+				Array.from(files).forEach(file => {
+					var reader = new FileReader();
+
+					reader.onloadend = function () {
+						var img = document.createElement('img'); // 創建新的 img 元素
+						img.src = reader.result; // 將讀取到的結果賦值給 img
+						img.style.width = '300px'; // 設定寬度
+						preview.appendChild(img); // 添加到預覽區域
+					}
+
+					if (file) {
+						reader.readAsDataURL(file);
+					}
+				});
+			}
+		</script>
 		
-	 文章標題: <input type="text"  name="articleTitle"/><p>
-	 文章內容:	<textarea rows="10" cols="30" name="articleContent"></textarea><p>
-	 Hashtag: <input type="text" name="hashtag" /><p><p>
-	 <input type="hidden" name="articlePostTime"  /><p>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-	<div style="text-align: center;">
-	 <input type="submit" value="確定" /> <input type="reset" value="重來" /><p/>
-	</div>
-	</form>
-	<div style="text-align: center;">
-	<form method="get" th:action="@{/forum/article/foreMainPage}">
-		<button style="padding: 12px 24px; font-size: 18px; " type="submit">回首頁</button>
-	</form>
-	</div>
+		<script>
+			document.querySelector('form').addEventListener('submit', function (e) {
+				var hashTagInput = document.querySelector('input[name="hashtag"]');
+				var hashTags = hashTagInput.value.split(' ');
+
+				if (hashTags.length > 5) {
+					e.preventDefault();
+					swal("請注意", "Hashtag 標籤上限為 5 個，您已超過", "error");
+				}
+			});
+		</script>
+
+		<!-- 結尾部分 -->
+</body>
+
+
+<!-- 結尾部分 -->
 </body>
 
 </html>

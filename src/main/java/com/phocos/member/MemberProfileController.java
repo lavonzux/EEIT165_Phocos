@@ -55,8 +55,9 @@ public class MemberProfileController {
 				byte[] avatarData = file.getBytes();
 
 				Member updatedMember = memberService.updateMemberAvatar(memberID, avatarData);
-
-				// 返回成功响应
+				
+				session.setAttribute("avatarExist", "avatarExist");	
+				
 				return ResponseEntity.ok().body("上傳成功");
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -19,6 +19,8 @@ import com.phocos.photoService.Dto.PhotoServiceDto;
 import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.PhotoServiceRepository;
 import com.phocos.photoService.model.ReferencePicture;
+import com.phocos.photoService.model.ReferencePictureRepository;
+import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.model.ServiceTypeRepository;
 
 @Service
@@ -33,6 +35,9 @@ public class PhotoServiceService {
 
 	@Autowired
 	private MemberRepository mRepo;
+	
+	@Autowired
+	private ReferencePictureRepository rpRepo;
 	
 	
 	
@@ -61,19 +66,41 @@ public class PhotoServiceService {
 	public List<PhotoService> readAllEntries() {
 		return psRepo.findAll();
 	}
+	public List<PhotoService> readAllEntries(boolean includeDeleted) {
+		if (includeDeleted) return psRepo.findAll();
+		return psRepo.findByServiceDeleted(0);
+	}
 
 	
 	public Page<PhotoService> readAllByPage() {
 		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
-		Page<PhotoService> pages = psRepo.findAll(page);
-		return pages; 
+		return psRepo.findByServiceDeleted(0, page);
+	}
+	
+	public Page<PhotoService> readAllByPage(int index, int size) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		Page<PhotoService> pageNotDeleted = psRepo.findByServiceDeleted(0, page);
+		return pageNotDeleted;
 	}
 	
 	
-	public Page<PhotoService> readAllByPage(int index, int size) {
-		PageRequest page = PageRequest.of(index, size, Direction.DESC, "createdOn");
-		Page<PhotoService> pages = psRepo.findAll(page);
-		return pages; 
+	public Page<PhotoService> readAllByPage(int index, int size, boolean includeDeleted) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		if (includeDeleted) { return psRepo.findAll(page); }
+		
+		return psRepo.findByServiceDeleted(0, page);
+	}
+	
+
+	public Page<PhotoService> readAllByPageByType(ServiceType queryType) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findByServiceType(queryType, page);
+	}
+	
+
+	public Page<PhotoService> readByName(String queryServiceName) {
+		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findByServiceNameContainsIgnoreCase(queryServiceName, page);
 	}
 	
 
@@ -109,19 +136,20 @@ public class PhotoServiceService {
 	
 	/**
 	 * Find a entry by given {@code photoServiceID} first, 
-	 * then delete the entry with .delete() method if entry was found. 
+	 * then set the entry's serviceDeleted to 1 (stand for deleted), 
+	 * then use .save() method to update the entry in db. 
 	 * 
-	 * !!! THIS FUNCTION WILL BECOME SETTING STATUS FIELD IN FUTURE !!!
-	 * 
-	 * @param photoServiceID
-	 * @return boolean value for whether the deletion is successful 
+	 * @param photoServiceID : choose the target entry
+	 * @return true if deletion (update) is successful 
 	 */
 	public boolean deleteEntry(int photoServiceID) {
 		Optional<PhotoService> optional = psRepo.findById(photoServiceID);
 		if (optional.isEmpty()) {
 			return false;
 		}else {			
-			psRepo.delete(optional.get());
+			PhotoService toDeleteBean = optional.get();
+			toDeleteBean.setServiceDeleted(1);
+			psRepo.save(toDeleteBean);
 			return true;
 		}
 	}
@@ -143,25 +171,63 @@ public class PhotoServiceService {
 		
 		if (dto.getServiceLocation()!=null) returnPSB.setServiceLocation(dto.getServiceLocation());
 		
-		if (dto.getServiceCreatorId()!=null) {
-			Optional<Member> creatorMember = mRepo.findById(dto.getServiceCreatorId());
+		if (dto.getServiceCreatorID()!=null) {
+			Optional<Member> creatorMember = mRepo.findById(dto.getServiceCreatorID());
 			if (creatorMember.isPresent()) returnPSB.setServiceCreator(creatorMember.get());
 		}
 		
-		if (dto.getInputRefPics() != null && dto.getInputRefPics().length > 0) {
-			ArrayList<ReferencePicture> refPics = new ArrayList<ReferencePicture>();
+		if (dto.getServiceDesc()!=null) returnPSB.setServiceDesc(dto.getServiceDesc());
+		
+		
+		/*
+		try {
+			MultipartFile[] inputRefPics = dto.getInputRefPics();
+			System.out.print("The length of inputRefPic is:... ");
+			System.out.println(inputRefPics.length);
+			
+			MultipartFile multipartFile = inputRefPics[0];
+			System.out.println(multipartFile.isEmpty());
+			byte[] bytes = multipartFile.getBytes();
+			System.out.println(bytes.length);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		*/
+		
+		
+		
+		
+		if (dto.getInputRefPics()!=null && !dto.getInputRefPics()[0].isEmpty()) {
+			List<ReferencePicture> refPics = rpRepo.findAllByPhotoServiceServiceID(dto.getServiceID());
+			
+			// removing the pictures client want to delete
+			List<Integer> picIDsToDelete = dto.getPicIDsToDelete();
+			for (int picIDToDelete : picIDsToDelete) {
+				for (ReferencePicture oneRefPic : refPics) {
+					if (picIDToDelete == oneRefPic.getPictureID()) {
+						refPics.remove(oneRefPic);
+					}
+				}
+			}
+			
+			// adding the new pictures
 			for (MultipartFile oneInput : dto.getInputRefPics()) {
 				ReferencePicture oneRefPic = new ReferencePicture();
 				oneRefPic.setPhotoService(returnPSB);
 				try {oneRefPic.setPictureFile(oneInput.getBytes());} catch (IOException e){e.printStackTrace();}
 				oneRefPic.setPictureName(oneInput.getOriginalFilename());
 				refPics.add(oneRefPic);
-				returnPSB.setReferencePictures(refPics);
+//				returnPSB.setReferencePictures(refPics);
+				returnPSB.getReferencePictures().clear();
+				returnPSB.getReferencePictures().addAll(refPics);
+//				returnPSB.setReferencePictures(refPics);
 			}
 		}
+		
 		if (dto.getServiceType()!=null && stRepo.findById(dto.getServiceType()).isPresent() ) {
 			returnPSB.setServiceType(stRepo.findById(dto.getServiceType()).get());
 		}
+		
 		return psRepo.save(returnPSB);
 	}
 	
@@ -183,7 +249,7 @@ public class PhotoServiceService {
 		newPSB.setServiceDuration(dto.getServiceDuration());
 		newPSB.setServiceLocation(dto.getServiceLocation());
 		
-		newPSB.setServiceCreator(mRepo.findById(dto.getServiceCreatorId()).get());
+		newPSB.setServiceCreator(mRepo.findById(dto.getServiceCreatorID()).get());
 		newPSB.setServiceDesc(dto.getServiceDesc());
 		
 		
@@ -205,7 +271,7 @@ public class PhotoServiceService {
 	
 	public boolean parentExist(PhotoServiceDto dto) {
 		boolean typeExist = stRepo.findById(dto.getServiceTypeName()).isPresent();
-		boolean memberExist = mRepo.findById(dto.getServiceCreatorId()).isPresent();
+		boolean memberExist = mRepo.findById(dto.getServiceCreatorID()).isPresent();
 		
 		if (!typeExist) return false;
 		if (!memberExist) return false;

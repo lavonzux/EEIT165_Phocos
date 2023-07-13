@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.phocos.forum.model.ArticleLikes;
 import com.phocos.forum.model.ArticleLikesRepository;
 
+@Transactional
 @Service
 public class ArticleLikesService {
 

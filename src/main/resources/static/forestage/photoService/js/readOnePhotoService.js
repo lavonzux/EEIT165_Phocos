@@ -1,96 +1,118 @@
+// import Swal from 'sweetalert2'
+
 const currentHref = window.location.href
-// console.log(window.location);
 const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') + 6)
-// console.log(ContextPathname);
-
-const carouselCard = document.getElementById('carousel-figure')
-const reserveBtn = document.getElementById('reserveBtn')
-
-// reserveBtn.onclick(goToReserve())
 
 
-const editButton = document.getElementById('edit-ps-service')
 const deletePicBtns = document.querySelectorAll('.pictureDeleteBtn')
 const updateBtn = document.getElementById('go-update-ps')
+const deletePSBtn = document.getElementById('delete-ps-service')
+
+const gotoCalBtn = document.getElementById('go-to-gcalendar')
+const mailtoBtn = document.getElementById('send-mail')
 
 window.onload = function () {
     fetchServiceTypes()
+
+    updateBtn.addEventListener('click', (e) => pressedUpdateService())
+
 
     deletePicBtns.forEach(oneBtn => {
         oneBtn.addEventListener('click', (event) => addDeletePicID2Set(oneBtn))
     });
 
-    updateBtn.addEventListener('click', (e) => pressedUpdateService())
+    if (gotoCalBtn != null) {
+        gotoCalBtn.addEventListener('click', (e) => gotoGoogleCalendar())
+    }
+    if (deletePSBtn != null) {
+        deletePSBtn.addEventListener('click', (e) => pressedDeleteService())
+    }
+    if (mailtoBtn != null) {
+        mailtoBtn.addEventListener('click', (e) => sendMailToCreator(mailtoBtn))
+    }
 
+    fetchPopularTypes()
 }
 
 
-function fetchServiceTypes(event) {
-    // event.preventDefault
+function fetchServiceTypes() {
     const serviceTypeOptions = document.getElementById('serviceTypeOptions')
+    const currentServiceType = serviceTypeOptions.dataset.servicetype
 
     axios.get(ContextPathname + '/serviceType/api/ReadAll')
         .then(res => {
             const serviceTypesList = res.data
-            serviceTypesList.forEach(oneType => {
+            serviceTypesList.forEach((oneType, index) => {
                 const option = document.createElement('option')
                 option.setAttribute('value', oneType.typeName)
+                if (oneType.typeName == currentServiceType) {
+                    option.setAttribute('selected', 'true')
+                }
                 option.innerHTML = oneType.typeName
                 serviceTypeOptions.appendChild(option)
                 document.getElementById('serviceName').focus()
             });
         })
         .catch(err => {
-            console.log();
-        })
-}
-
-
-
-
-var picturesToDelete = new Set()
-function addDeletePicID2Set(deleteBtn) {
-    let pictureID = deleteBtn.dataset.existpictureid
-    picturesToDelete.add(pictureID)
-    console.log(pictureID + ' was added to delete pending set!');
-
-    const toBeDltImg = document.querySelector('#carousel-in-modal-' + pictureID)
-    console.log(toBeDltImg);
-    toBeDltImg.classList.add('pendingForDelete')
-}
-
-
-
-
-function pressedUpdateService() {
-    console.log('update Pressed');
-
-    let form = document.getElementById('update-ps-service-form')
-    let formDataObj = new FormData(form)
-    console.log(formDataObj);
-
-    let stringifyIDs = JSON.stringify([...picturesToDelete])
-
-    sendUpdateService(formDataObj)
-    goDeletePictures(picturesToDelete)
-}
-
-
-function goDeletePictures(pictureIDs) {
-    axios({
-        method: 'delete',
-        url: ContextPathname + '/referencePicture/api/deleteMultiple',
-        data: JSON.stringify([...pictureIDs])
-    })
-        .then(res => {
-            console.log(res.data);
-        })
-        .catch(err => {
             console.log(err);
         })
 }
 
-function sendUpdateService(form) {
+
+
+
+let picturesToDelete = new Array()
+function addDeletePicID2Set(deleteBtn) {
+    let pictureID = deleteBtn.dataset.existpictureid
+    const toBeDltImg = document.querySelector('#carousel-in-modal-' + pictureID)
+    console.log(picturesToDelete.includes(pictureID));
+
+    if (picturesToDelete.includes(pictureID)) {
+        let id_index = picturesToDelete.indexOf(pictureID)
+        picturesToDelete.splice(id_index, 1)
+        console.log(pictureID + ' was removed from delete pending set!');
+        console.log(picturesToDelete + ' are pending for delete');
+        toBeDltImg.classList.remove('pendingForDelete')
+    } else {
+        picturesToDelete.push(pictureID)
+        console.log(pictureID + ' was added to delete pending set!');
+        console.log(picturesToDelete + ' are pending for delete');
+
+        toBeDltImg.classList.add('pendingForDelete')
+
+    }
+}
+
+function cancelDeletePicSet() {
+    picturesToDelete.length = 0
+    document.querySelectorAll('.pendingForDelete').forEach(oneNode => { oneNode.classList.remove('pendingForDelete') })
+}
+
+
+
+function pressedUpdateService() {
+    let form = document.getElementById('update-ps-service-form')
+    let formDataObj = new FormData(form)
+    formDataObj.append('picIDsToDelete', picturesToDelete)
+
+    Swal.fire({
+        title: '確認更新資料嗎？',
+        text: "刪除的照片沒辦法回復哦！",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確認更新！'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            ajaxUpdateService(formDataObj)
+        }
+    })
+
+}
+
+
+function ajaxUpdateService(form) {
     console.log(form);
     axios({
         method: 'put',
@@ -98,8 +120,8 @@ function sendUpdateService(form) {
         data: form
     })
         .then(res => {
-            console.log(res.data);
-            // location.reload()
+            // console.log(res.data);
+            location.reload()
         })
         .catch(err => {
             console.log(err);
@@ -107,26 +129,127 @@ function sendUpdateService(form) {
 }
 
 
+function pressedDeleteService() {
+    let form = new FormData()
+    const input_serviceID = document.getElementById('serviceID')
+    console.log(input_serviceID);
+
+    const serviceID = input_serviceID.value
+    console.log(serviceID);
+    form.append('serviceID', serviceID)
+
+    Swal.fire({
+        title: '你確定要刪除這筆服務嗎？',
+        text: "刪除後就沒辦法復原囉！",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '對，確定刪除！'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios({
+                method: 'delete',
+                url: ContextPathname + '/photoService/api/Delete',
+                data: form
+            })
+                .then(res => {
+                    Swal.fire(
+                        '刪除成功！',
+                        '這筆資料已經刪除囉！',
+                        'success'
+                    )
+                    // console.log(res.data);
+                    history.back()
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    })
 
 
 
-
-
-
-function toggleEditable(block) {
-    if (block.contentEditable != true) {
-        block.contentEditable = true
-    } else {
-        block.contentEditable = false
-    }
 }
 
-function toggleBtnDisply(button) {
-    console.log(button.style.display);
-    if (button.style.display != 'none') {
-        button.style.display = 'none'
-    } else {
-        button.style.display = 'block'
-    }
+
+
+
+
+
+
+// Some simple relocate for send mail to service creator & go to my google calendar
+function sendMailToCreator(btn) {
+    let mail_target = `mailto:${btn.dataset.recipient}?subject=${btn.dataset.subject}`
+    console.log(mail_target);
+    window.location.href = mail_target
 }
 
+function gotoGoogleCalendar() {
+    window.location.href = 'https://calendar.google.com/calendar'
+}
+
+
+
+function fetchPopularTypes() {
+    const topTypes = []
+    axios({
+        method: 'get',
+        url: ContextPathname + '/serviceType/api/popular'
+    })
+        .then(res => {
+            console.log(res.data);
+            makeTypeLink(res.data)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+
+function makeTypeLink(serviceTypes) {
+    let serviceTypes1 = serviceTypes.slice(0, 3)
+    console.log(serviceTypes1);
+    let serviceTypes2 = serviceTypes.slice(3)
+    console.log(serviceTypes2);
+
+    const popularTypes1 = document.querySelector('#popularTypes1')
+    const popularTypes2 = document.querySelector('#popularTypes2')
+    serviceTypes1.forEach(ele => {
+        let oneli = document.createElement('li')
+        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
+        oneli.innerHTML = typeLink
+        popularTypes1.append(oneli)
+    });
+
+    serviceTypes2.forEach(ele => {
+        let oneli = document.createElement('li')
+        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
+        oneli.innerHTML = typeLink
+        popularTypes2.append(oneli)
+    });
+
+}
+
+
+
+
+
+
+// Deprecated function, deleting ReferencePicture is now controlled by updating PhotoService
+/*
+function goDeletePictures(pictureIDs) {
+    if (pictureIDs.length > 0) {
+        axios({
+            method: 'delete',
+            url: ContextPathname + '/referencePicture/api/deleteMultiple',
+            data: pictureIDs
+        })
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+}*/

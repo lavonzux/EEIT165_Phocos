@@ -14,6 +14,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.phocos.email.EmailService;
 import com.phocos.member.Member;
 import com.phocos.member.MemberService;
+import com.phocos.register.RegisterRepository;
+import com.phocos.register.RegisterService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +27,9 @@ public class LoginController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private RegisterService registerService;
 
 	@GetMapping("/login")
 	public String loginPage(HttpSession session) {
@@ -69,19 +74,30 @@ public class LoginController {
 		if (memberAccount != null) {
 			Member member = memberService.findByMemberAccount(memberAccount);
 			Integer status = member.getAccountStatusId();
+			
+			System.out.println(member.getAccountStatusId());
+			
 			String memberEmail = member.getMemberEmail();
 			Integer memberID = member.getMemberID();
 			String memberName = member.getMemberName();
+			
+			System.out.println(member.getMemberName());
+			
 			byte[] memberAvatar = member.getMemberAvatar();
 
 			switch (status) {
 			// 0為未驗證狀態
 			case 0: {
+				
 				session.removeAttribute("memberID");
+				
+				session.setAttribute("memberID", memberID);
+				
 				session.removeAttribute("code");
-
-				// 未驗證狀態，重新發送驗證碼
-				emailService.resendVerificationCode(memberEmail);
+				
+				String code = registerService.sendVerificationEmail(memberEmail);
+				
+				session.setAttribute("code", code);
 				
 				return "nonverifyLogin";
 
@@ -92,6 +108,10 @@ public class LoginController {
 				session.setAttribute("memberAccount", memberAccount);
 				session.setAttribute("memberID", memberID);				
 				session.setAttribute("memberName", memberName);
+				session.setAttribute("member", member);
+				
+				System.out.println(session.getAttribute("memberName"));
+				
 				if (memberAvatar != null) {
 					session.setAttribute("avatarExist", "avatarExist");					
 				}

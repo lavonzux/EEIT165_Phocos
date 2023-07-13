@@ -15,17 +15,21 @@ import lombok.Data;
 @Entity
 @Table(name = "articleLikes")
 public class ArticleLikes {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer articleLikeId;
-	
-	@ManyToOne
-	@JoinColumn(name="memberID")
-	private Member member;
-	
+
+	private Integer liked;
+
+// -------------------- 跟文章關聯 --------------------	
 	@ManyToOne
 	@JoinColumn(name = "articleId")
 	private Article article;
-	
-	private Integer liked;
+
+// -------------------- 跟會員關聯 --------------------
+	@ManyToOne
+	@JoinColumn(name = "memberID")
+	private Member member;
+
 }

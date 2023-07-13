@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>影遇論壇首頁</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
+    <!-- 加入 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <main class="flex-shrink-0">
+        <!-- Navigation-->
+        <div th:replace="~{forestage/shared/foreTopNav}"></div>
+        <header class="bg-white py-4">
+            <div class="container px-5">
+                <!-- First row for the categories and search -->
+                <div class="row gx-3 align-items-start justify-content-end">
+                    <!-- Search widget in its own column -->
+                    <div class="col-auto">
+                        <div class="input-group" style="width: auto; max-width: 300px;">
+                            <input class="form-control" type="text" placeholder="Enter search term..."
+                                aria-label="Enter search term..." aria-describedby="button-search" />
+                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                        </div>
+                    </div>
+                    <!-- First feature in its own column -->
+                    <div class="col-auto">
+                        <div class="mr-2">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a th:href="@{/forum/article/add}">
+                                        <img th:src="@{/forestage/forum/mainPage/assets/newArticle.png}" alt="新增貼文"
+                                            width="125px" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Second feature in its own column -->
+                    <div class="col-auto">
+                        <div class="ml-2">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a href="#">
+                                        <img th:src="@{/forestage/forum/mainPage/assets/myArticle.png}" alt="我的貼文"
+                                            width="125px" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Second row for the article content -->
+                <div class="row gx-5 align-items-start justify-content-between">
+                    <div class="col-lg-12">
+                        <!-- Navigation tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="page1.html">最新文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="hot-articles-link" href="#">熱門文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="page3.html">精選文章</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled">Disabled</a>
+                            </li>
+                        </ul>
+
+
+                        <!-- 新增的卡片程式碼部分 -->
+                        <div class="row mt-4"> <!-- 在這裡添加了 'mt-4'，這會產生一個上邊距（margin-top）-->
+                            <th:block th:each="article:${articleList}">
+                                <div class="col-lg-12">
+                                    <!-- Blog post-->
+                                    <div class="card mb-4">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <!-- 加上 d-flex align-items-center 來使圖片置中 -->
+                                                <a href="#!" class="d-block mx-auto"> <!-- 加上 d-block mx-auto 來使圖片置中 -->
+                                                    <img th:src="@{/forum/article/{articleId}/image(articleId=${article.articleId})}"
+                                                        alt="..." class="card-img1" style="object-fit: contain;" />
+                                                    <!-- 加上 object-fit: contain; 來使圖片維持原始比例 -->
+                                                </a>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <div class="small text-muted"
+                                                        th:text="${#dates.format(article.articlePostTime,'yyyy-MM-dd, HH:mm:ss')}">
+                                                    </div>
+                                                    <h2 class="card-title h4"
+                                                        th:text="${article}?${article.articleTitle}">
+                                                    </h2>
+                                                    <!-- 要將CKEditor編輯器的內容正確顯示，而不只是純文字，可以在th:text標籤替換為th:utext。th:utext會將其內容作為未經過轉譯的HTML處理，而不是僅僅將其視為純文本 -->
+                                                    <p class="card-text"
+                                                        th:utext="${article}?${article.articleContent}">
+                                                    </p>
+                                                    <a class="btn btn-primary"
+                                                        th:href="@{'/forum/article/read/' + ${article.articleId}}">Read
+                                                        more →</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end paginationByWen">
+                                <li class="page-item" th:classappend="${articleList.first ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                        th:href="@{/forum/article/mainPage(page=${articleList.number-1})}"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="item : ${#numbers.sequence(0, articleList.totalPages-1)}"
+                                    th:classappend="${item==articleList.number ? 'active' : ''}">
+                                    <a class="page-link" th:href="@{/forum/article/mainPage(page=${item})}"
+                                        th:text="${item + 1}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${articleList.last ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                        th:href="@{/forum/article/mainPage(page=${articleList.number+1})}"
+                                        aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+
+
+        <!-- Call to action-->
+        <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
+            <div
+                class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
+                <div class="mb-4 mb-xl-0">
+                    <div class="fs-3 fw-bold text-white">New products, delivered to you.</div>
+                    <div class="text-white-50">Sign up for our newsletter for the latest updates.</div>
+                </div>
+                <div class="ms-xl-4">
+                    <div class="input-group mb-2">
+                        <input class="form-control" type="text" placeholder="Email address..."
+                            aria-label="Email address..." aria-describedby="button-newsletter" />
+                        <button class="btn btn-outline-light" id="button-newsletter" type="button">Sign
+                            up</button>
+                    </div>
+                    <div class="small text-white-50">We care about privacy, and will never share your data.
+                    </div>
+                </div>
+            </div>
+        </aside>
+        </div>
+        </section>
+    </main>
+    <!-- Footer-->
+    <div th:replace="~{forestage/shared/foreFooter}"></div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#hot-articles-link').on('click', function (e) {
+                e.preventDefault();  // 防止連結的默認行為
+
+                $.ajax({
+                    url: 'http://localhost:8080/phocos/forum/article/hotArticles',  // 你的 API URL
+                    type: 'GET',
+                    data: {
+                        page: 0  // 傳送到伺服器的數據，這裡傳送的是頁碼
+                    },
+                    success: function (data) {
+                        // 當 AJAX 請求成功時，更新文章列表
+                        var articleListDiv = $('.row.mt-4');  // 找到放置文章列表的 div
+                        articleListDiv.empty();  // 清空列表
+
+                        // 假設每篇文章都有 title 和 content 兩個屬性
+                        for (var i = 0; i < data.length; i++) {
+                            var article = data[i];
+                            // 建立一個新的 div，並插入文章的標題和內容
+                            var articleDiv = $('<div class="col-lg-12"></div>');
+
+                            // 以下部分模擬你的 Thymeleaf 生成的 HTML
+                            var card = $('<div class="card mb-4"></div>');
+                            // 你需要根據你的 API 回傳的數據結構來調整這裡的程式碼
+                            var cardBody = $('<div class="card-body"></div>');
+                            cardBody.append('<div class="small text-muted">' + article.articlePostTime + '</div>');
+                            cardBody.append('<h2 class="card-title h4">' + article.articleTitle + '</h2>');
+                            cardBody.append('<p class="card-text">' + article.articleContent + '</p>');
+                            cardBody.append('<a class="btn btn-primary" href="/phocos/forum/article/read/' + article.articleId + '">Read more →</a>');
+                            card.append(cardBody);
+
+                            articleDiv.append(card);
+                            articleListDiv.append(articleDiv);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        // 當 AJAX 請求失敗時，輸出錯誤訊息到控制台
+                        console.error(textStatus, errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Core theme JS-->
+    <script th:src="@{/forestage/forum/mainPage/js/scripts.js}"></script>
+</body>
+
+</html>
