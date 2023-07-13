@@ -21,18 +21,20 @@
 			background-image:
 				url(https://memeprod.ap-south-1.linodeobjects.com/user-template/64b3e0854cb3e2ce030e9189d32c3fd7.png);
 		}
-		.redword{
+
+		.redword {
 			color: red;
 		}
-		.greenword{
-			color: #6B705C ;
+
+		.greenword {
+			color: #6B705C;
 		}
 	</style>
 
 </head>
 
 <body>
-<div th:replace="~{forestage/shared/foreTopNav}"></div>
+	<div th:replace="~{forestage/shared/foreTopNav}"></div>
 	<div id="layoutAuthentication">
 		<div id="layoutAuthentication_content">
 			<main>
@@ -53,8 +55,7 @@
 										<div class="form-floating mb-3">
 											<input class="form-control" id="memberAccount" name="memberAccount"
 												type="text" placeholder="name@example.com" /> <label
-												for="mebmerAccount">輸入帳號</label>
-											<span id="accountResult"></span>
+												for="mebmerAccount">輸入帳號</label> <span id="accountResult"></span>
 										</div>
 										<div class="form-floating mb-3">
 											<input class="form-control" id="memberEmail" name="memberEmail" type="text"
@@ -67,8 +68,8 @@
 										</div>
 										<div class="form-check mb-3">
 											<input class="form-check-input" id="show_hide_password" type="checkbox"
-												value="" />
-											<label class="form-check-label" for="show_hide_password">顯示密碼</label>
+												value="" /> <label class="form-check-label"
+												for="show_hide_password">顯示密碼</label>
 										</div>
 
 										<label for="memberGender">性別：</label> <select id="memberGender"
@@ -93,8 +94,7 @@
 								</div>
 								<div class="card-footer text-center py-3">
 									<div class="small">
-										已經有帳號了嗎？
-										<a th:href="@{/login}">前往登入頁面</a>
+										已經有帳號了嗎？ <a th:href="@{/login}">前往登入頁面</a>
 									</div>
 								</div>
 							</div>
@@ -154,7 +154,7 @@
 						$.ajax({
 							url: 'http://localhost:8080/phocos/register/sendVerificationCode',
 							method: 'POST',
-							data: {memberEmail: memberEmail},
+							data: { memberEmail: memberEmail },
 							success: function (response) {
 								// Send the member data to the server for database insertion
 								console.log(memberAccount);
@@ -211,47 +211,55 @@
 				event.preventDefault();
 
 				var memberAccount = $(this).val();
-				
+
 				console.log(memberAccount);
-				$.ajax({
-					url: 'http://localhost:8080/phocos/register/checkAccount',
-					method: 'POST',
-					data: {memberAccount: memberAccount},
-					success: function (response) {
-						$('#accountResult').text(response);
-
-						if (response === '帳號已存在，請更換一個') {
-							// 禁用註冊按鈕
-							$('#registerButton').prop('disabled', true);
-							$('#accountResult').addClass('redword');
-						} 
-						if(response === '帳號可使用'){
-							// 啟用註冊按鈕
-							$('#registerButton').prop('disabled', false);
-							$('#accountResult').removeClass('redword');
-							$('#accountResult').addClass('greenword');
-							
-						}
-						
-					},
-
-					error: function (xhr, status, error) {
-						console.log(error);
-					}
-				});
+				checkAccount(memberAccount);
 			});
 		});
+
+		function checkAccount(memberAccount) {
+			$.ajax({
+				url: 'http://localhost:8080/phocos/register/checkAccount',
+				method: 'POST',
+				data: { memberAccount: memberAccount },
+				success: function (response) {
+					$('#accountResult').text(response);
+
+					if (response === '帳號已存在，請更換一個') {
+						// 禁用註冊按鈕
+						$('#registerButton').prop('disabled', true);
+						$('#accountResult').addClass('redword');
+					}
+					if (response === '帳號可使用') {
+						// 啟用註冊按鈕
+						$('#registerButton').prop('disabled', false);
+						$('#accountResult').removeClass('redword');
+						$('#accountResult').addClass('greenword');
+
+					}
+
+				},
+
+				error: function (xhr, status, error) {
+					console.log(error);
+				}
+			});
+
+		}
+
 
 		$(document).ready(function () {
 			$('#fillFormButton').click(function (event) {
 				event.preventDefault();
-
-				$('#memberAccount').val('phocosMember001');
+				var memberAccount = 'phocosMember001';
+				$('#memberAccount').val(memberAccount);
+				console.log(memberAccount);
 				$('#memberPassword').val('phocos');
 				$('#memberEmail').val('a10912555@gmail.com');
 				$('#memberName').val('黃柏翔');
 				$('#memberGender').val('男性'); // 選擇對應的性別選項值
 
+				checkAccount(memberAccount);
 
 			});
 		});
