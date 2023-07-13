@@ -30,6 +30,7 @@ public class ArticleBackController {
 	@GetMapping("/forum/backPage")
 	public String forumAdmin(Model model) {
 		List<Article> articleList = articleService.findAll();
+		
 		model.addAttribute("articleList", articleList);
 		return "backstage/forum/forumBackPage";
 	}

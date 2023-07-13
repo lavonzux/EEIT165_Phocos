@@ -74,9 +74,15 @@ public class LoginController {
 		if (memberAccount != null) {
 			Member member = memberService.findByMemberAccount(memberAccount);
 			Integer status = member.getAccountStatusId();
+			
+			System.out.println(member.getAccountStatusId());
+			
 			String memberEmail = member.getMemberEmail();
 			Integer memberID = member.getMemberID();
 			String memberName = member.getMemberName();
+			
+			System.out.println(member.getMemberName());
+			
 			byte[] memberAvatar = member.getMemberAvatar();
 
 			switch (status) {
@@ -102,6 +108,10 @@ public class LoginController {
 				session.setAttribute("memberAccount", memberAccount);
 				session.setAttribute("memberID", memberID);				
 				session.setAttribute("memberName", memberName);
+				session.setAttribute("member", member);
+				
+				System.out.println(session.getAttribute("memberName"));
+				
 				if (memberAvatar != null) {
 					session.setAttribute("avatarExist", "avatarExist");					
 				}
