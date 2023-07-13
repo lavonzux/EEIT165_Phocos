@@ -28,7 +28,7 @@ import com.phocos.photoService.model.PhotoService;
 import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.service.PhotoServiceService;
 import com.phocos.photoService.service.ServiceTypeService;
-import com.phocos.utils.FieldsHelper;
+import com.phocos.utils.PrintValueHelper;
 
 import jakarta.transaction.Transactional;
 
@@ -46,6 +46,9 @@ public class PhotoServiceRestController {
 	private ServiceTypeService stService;
 
 	
+	
+	// ==================== CREATE SECTION ====================
+	
 	@PostMapping(path = "/photoService/api/Create")
 	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result) throws IOException {
 //		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
@@ -54,25 +57,31 @@ public class PhotoServiceRestController {
 			System.out.println(result.toString()); 
 			return "create failed";
 		}
-			
+		
 		PhotoService resultBean = psService.createEntry(createPhotoServiceBean);
 		
 		System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
 		return "PhotoService ID: "+resultBean.getServiceID()+"has been add to DB successfully";
 	}
-
+	
+	
+	
+	
+	// ==================== READ SECTION ====================
 
 	@GetMapping(path = "/photoService/api/ReadAll")
 	public List<PhotoService> processReadAllPhotoServiceAction(Model model) {
 		return psService.readAllEntries();
 	}
 
+	
 	@GetMapping(path = "/photoService/api/ReadAllPage")
 	public Page<PhotoService> gotoReadAllPhotoService(Model model) {
 		Page<PhotoService> resultPage = psService.readAllByPage();
 		return resultPage;
 	}
 
+	
 	@GetMapping(path = "/photoService/api/ReadOne")
 	public PhotoService processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
@@ -82,6 +91,8 @@ public class PhotoServiceRestController {
 
 	
 	
+	// ==================== UPDATE SECTION ====================
+
 	@Transactional
 	@PutMapping("/photoService/api/Update")
 	public List<PhotoServiceDto> processUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -108,9 +119,12 @@ public class PhotoServiceRestController {
 		}
 		return null;
 	}
-
-
-
+	
+	
+	
+	
+	// ==================== DELETE SECTION ====================
+	
 	@DeleteMapping("/photoService/api/Delete")
 	public PhotoService processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID) {
 //		System.out.println("==================== Incoming deletion request... ====================");
@@ -126,5 +140,8 @@ public class PhotoServiceRestController {
 
 		return deletedPhotoServiceBean;
 	}
-
+	
+	
+	
+	
 }

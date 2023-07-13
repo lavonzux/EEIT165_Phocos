@@ -74,19 +74,13 @@
                     <div class="card mb-4">
                         <div class="card-header">熱門攝影風格</div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" id="popularTypes">
                                 <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">Web Design</a></li>
-                                        <li><a href="#!">HTML</a></li>
-                                        <li><a href="#!">Freebies</a></li>
+                                    <ul class="list-unstyled mb-0" id="popularTypes1">
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">JavaScript</a></li>
-                                        <li><a href="#!">CSS</a></li>
-                                        <li><a href="#!">Tutorials</a></li>
+                                    <ul class="list-unstyled mb-0" id="popularTypes2">
                                     </ul>
                                 </div>
                             </div>
@@ -113,28 +107,22 @@
                     </div>
                     <!-- Categories widget-->
                     <div class="card mb-4">
-                        <div class="card-header">熱門攝影風格</div>
+                        <div class="card-header">熱門攝影類型</div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" id="popularTypes">
                                 <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">Web Design</a></li>
-                                        <li><a href="#!">HTML</a></li>
-                                        <li><a href="#!">Freebies</a></li>
+                                    <ul class="list-unstyled mb-0" id="popularTypes1">
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">JavaScript</a></li>
-                                        <li><a href="#!">CSS</a></li>
-                                        <li><a href="#!">Tutorials</a></li>
+                                    <ul class="list-unstyled mb-0" id="popularTypes2">
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <th:block th:switch=" ${session.memberID!=null} AND ${session.memberID==resultBean.serviceCreator} OR ${session.memberID==34} ">
+                    <th:block th:switch=" ${session.memberID!=null} AND ${session.memberID==resultBean.serviceCreatorID} OR ${session.memberID==34} ">
                         <!-- Button trigger modal -->
                         <div th:case="true" class="btn-group" role="group" aria-label="basic example">
                             <button id="edit-ps-service" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -145,8 +133,8 @@
                             </button>
                         </div>
                         <div th:case="false" class="btn-group" role="group" aria-label="basic example">
-                            <button type="button" class="btn btn-outline-danger" id="reservebtn">預約</button>
-                            <button type="button" class="btn btn-outline-success" id="checkschedulebtn">發信給攝影師</button>
+                            <button type="button" class="btn btn-outline-info" id="go-to-gcalendar">看看我的行事曆</button>
+                            <button type="submit" class="btn btn-outline-success" id="send-mail" th:data-subject="'預約'+${resultBean.serviceName}" th:data-recipient="${creatorEmail}">發信給攝影師</button>
                         </div>
                     </th:block>
                 </div>

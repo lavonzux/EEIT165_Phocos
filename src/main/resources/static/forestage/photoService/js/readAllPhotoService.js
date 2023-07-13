@@ -7,6 +7,7 @@ const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') +
 
 window.onload = function () {
     grabAllCarousel();
+    fetchPopularTypes()
 }
 
 async function grabAllCarousel() {
@@ -90,4 +91,47 @@ function refPicImgHtmlMaker(pictureID) {
     // const targetImg = document.getElementById('targetImg')
     // console.log('fetcing pic for' + pictureID + '......');
     return `<img class="d-block w-100 sclDwn" src="${url}" id="targetImg"/>`
+}
+
+
+
+
+function fetchPopularTypes() {
+    const topTypes = []
+    axios({
+        method: 'get',
+        url: ContextPathname + '/serviceType/api/popular'
+    })
+        .then(res => {
+            console.log(res.data);
+            makeTypeLink(res.data)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+
+function makeTypeLink(serviceTypes) {
+    let serviceTypes1 = serviceTypes.slice(0, 3)
+    console.log(serviceTypes1);
+    let serviceTypes2 = serviceTypes.slice(3)
+    console.log(serviceTypes2);
+
+    const popularTypes1 = document.querySelector('#popularTypes1')
+    const popularTypes2 = document.querySelector('#popularTypes2')
+    serviceTypes1.forEach(ele => {
+        let oneli = document.createElement('li')
+        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
+        oneli.innerHTML = typeLink
+        popularTypes1.append(oneli)
+    });
+
+    serviceTypes2.forEach(ele => {
+        let oneli = document.createElement('li')
+        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
+        oneli.innerHTML = typeLink
+        popularTypes2.append(oneli)
+    });
+
 }
