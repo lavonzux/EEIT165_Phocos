@@ -14,6 +14,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.phocos.email.EmailService;
 import com.phocos.member.Member;
 import com.phocos.member.MemberService;
+import com.phocos.register.RegisterRepository;
+import com.phocos.register.RegisterService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +27,9 @@ public class LoginController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private RegisterService registerService;
 
 	@GetMapping("/login")
 	public String loginPage(HttpSession session) {
@@ -83,11 +88,16 @@ public class LoginController {
 			switch (status) {
 			// 0為未驗證狀態
 			case 0: {
+				
 				session.removeAttribute("memberID");
+				
+				session.setAttribute("memberID", memberID);
+				
 				session.removeAttribute("code");
-
-				// 未驗證狀態，重新發送驗證碼
-				emailService.resendVerificationCode(memberEmail);
+				
+				String code = registerService.sendVerificationEmail(memberEmail);
+				
+				session.setAttribute("code", code);
 				
 				return "nonverifyLogin";
 

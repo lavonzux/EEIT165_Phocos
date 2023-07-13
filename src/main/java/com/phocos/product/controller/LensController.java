@@ -138,12 +138,19 @@ public class LensController {
 	}
 	
 	////////////////// 前台////////////////////
-	
-	@GetMapping("/products/lensshop")
-	public String getlensPage(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+	@GetMapping("/products/lensshop2")
+	public String getlens2Page(@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
 
 		Page<Lens> page = lensService.findBylensPage(pageNumber);
 		model.addAttribute("page", page);
-		return "forestage/towakawaii/LensShop"; // 返回對應的視圖模板
+		return "forestage/towakawaii/lensshop2"; // 返回對應的視圖模板
 	}
+	
+	@GetMapping("/products/lensdetail")
+	public String detailforestage(@RequestParam("productID") Integer productID, Model model) {
+		Lens lens = lensService.getById(productID);
+		model.addAttribute("lens", lens);
+		return "forestage/towakawaii/Lensdetails";
+	}
+	
 }

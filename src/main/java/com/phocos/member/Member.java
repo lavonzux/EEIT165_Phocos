@@ -55,6 +55,12 @@ public class Member {
 	@Lob
 	private byte[] memberAvatar;
 
+  @JsonManagedReference // 由這邊做JSON序列化
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Login> login = new ArrayList<>();
+
+  
+  
 //	@JsonManagedReference // 由這邊做JSON序列化
 //	@JsonIgnore
 //	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -64,6 +70,8 @@ public class Member {
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Article> article = new ArrayList<>();
+
+
     
 // -------------------- 文章留言 --------------------
  	@JsonIgnore

@@ -45,38 +45,22 @@
 
 <body>
     <!-- Responsive navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#!">Start Bootstrap</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div th:replace="~{forestage/shared/foreTopNav}"></div>
+
     <!-- Page header with logo and tagline-->
-    <header class="py-5 bg-light border-bottom mb-4">
+    <header class="py-1 bg-light border-bottom mb-4">
         <div class="container">
-            <div class="text-center my-5">
-                <h1 class="fw-bolder">Welcome to Blog Home!</h1>
-                <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+            <div class="text-center my-1">
+                <h1 class="fw-bolder">歡迎來到影遇的攝影媒合平台</h1>
+                <span class="lead mb-0">以下是目前所有會員提供的攝影服務</span>
             </div>
         </div>
     </header>
+
     <!-- Page content-->
     <div class="container">
         <div class="row">
             <!-- Blog entries-->
-
-
-
             <div class="col-lg-8" id="photoService-container">
 
                 <!-- Featured blog post-->
@@ -84,19 +68,19 @@
                 <th:block th:each="oneBean : ${resultPage.content}">
 
                     <div class="card mb-4" id="card-top">
-                        <a th:href="@{'/photoService/ReadOne/'+${oneBean.serviceID}}">
+                        <a th:href="@{/photoService/ReadOne(serviceID=${oneBean.serviceID})}">
                             <div class="carousel-card" th:data-serviceid="${oneBean.serviceID}">
                                 <div class="position-absolute top-50 start-50 translate-middle">尚未上傳參考圖片</div>
                                 <img class="card-img-top sclDwn" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="..." />
                             </div>
                         </a>
                         <div class="card-body">
-                            <div class="small text-muted" th:text="${oneBean.formattedCreatedOn}+'  由  '+${oneBean.serviceCreator}+'  建立'"></div>
-                            <h2 class="card-title" th:text="${oneBean.serviceName}"></h2>
-                            <div>
-                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
-                                <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
+                            <div class="small text-muted" th:text="${oneBean.formattedCreatedOn}+'  由  '+${oneBean.serviceCreator.memberName}+'  建立'"></div>
+                            <div class="d-flex justify-content-between">
+                                <h2><a th:href="@{/photoService/ReadOne?(serviceID=${oneBean.serviceID})}" class="card-title" th:text="${oneBean.serviceName}"></a></h2>
+                                <span class="align-self-center card-text" th:text="'地點：' + ${oneBean.serviceLocation}"></span>
                             </div>
+                            <p class="card-text" th:text="${oneBean.serviceType.typeName} + ' ' + ${oneBean.serviceLocation}"></p>
                             <a class="btn btn-primary" th:href="@{/photoService/ReadOne?(serviceID=${oneBean.serviceID})}">詳細資訊 →</a>
                         </div>
                     </div>
@@ -156,11 +140,7 @@
         </div>
     </div>
     <!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
-        </div>
-    </footer>
+    <div th:replace="~{forestage/shared/foreFooter}"></div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->

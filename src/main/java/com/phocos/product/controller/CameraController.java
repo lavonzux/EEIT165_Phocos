@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.phocos.product.model.Camera;
 import com.phocos.product.service.CameraService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class CameraController {
 
@@ -33,7 +35,7 @@ public class CameraController {
 		m.addAttribute("cameras", cameras);
 		return "backstage/towakawaii/CameraHome";
 	}
-	
+
 	@GetMapping("/product/insertcamerapage")
 	public String insertPage() {
 		return "backstage/towakawaii/CameraAdd";
@@ -139,27 +141,18 @@ public class CameraController {
 	}
 
 	////////////////// 前台////////////////////
-	
-	@GetMapping("/products/camerashop")
-	public String getcameraPage(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
-
-		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
-		model.addAttribute("page", page);
-		return "forestage/towakawaii/CameraShop"; // 返回對應的視圖模板
-	}
 	@GetMapping("/products/camerashop2")
-	public String getcamera2Page(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
+	public String getcamera2Page(@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
 
 		Page<Camera> page = cameraService.findBycameraPage(pageNumber);
 		model.addAttribute("page", page);
 		return "forestage/towakawaii/CameraShop2"; // 返回對應的視圖模板
 	}
-	@GetMapping("/products/shoppingcar")
-	public String changepagetoshoppingcar() {
 
-		return "forestage/towakawaii/ShoppingCar"; // 返回對應的視圖模板
-
+	@GetMapping("/products/cameradetail")
+	public String detailforestage(@RequestParam("productID") Integer productID, Model model) {
+		Camera camera = cameraService.getById(productID);
+		model.addAttribute("camera", camera);
+		return "forestage/towakawaii/Cameradetails";
 	}
-	
-	
 }

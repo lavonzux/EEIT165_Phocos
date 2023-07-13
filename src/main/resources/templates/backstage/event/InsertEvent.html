@@ -22,12 +22,18 @@
                 font-size: 14px;
                 background-color: #c2f0ec;
             }
+            #fillFormButton{
+                border: 0.5px solid rgb(195, 195, 195);
+                float:right;
+                font-size: 14px;
+                background-color: #c2f0ec;
+            }
             #del{
                 border: 0.5px solid rgb(195, 195, 195);
                 font-size: 14px;
                 background-color: #ffadadd4;
             }
-            #editStudio{
+            #editEvent{
                 border: 0.5px solid rgb(195, 195, 195);
                 font-size: 14px;
                 background-color: #d1f0c2;
@@ -58,8 +64,10 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">活動管理</h1>
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <br>
+                        <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">活動管理</li>
+                        </ol>
                         <div class="card mb-4">
                             <div class="card-body">
                                 新增活動資料
@@ -69,8 +77,16 @@
                                 </form>
                             </div>
                             </div>
-
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                活動管理
+                            </div>
+                            <div class="card-body">
+							<br>
+							<br>
                                 <form th:action="@{/event/insertData}" method="post">
+      
                                 <table >
                                     <thead>
                                         <tr>
@@ -81,34 +97,33 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>活動ID</td>
-                                            <td><input type="text" name="eventID"/></td>
+                                            <td>活動編號</td>
+                                            <td><input type="text" id="eventID" name="eventID"/></td>
                                         </tr>
                                         <tr>
-                                            <td>會員ID</td>
-                                            <td><input type="text" name="memberID" /></td>
+                                            <td>會員編號</td>
+                                            <td><input type="text" id="memberID" name="memberID" /></td>
                                         </tr>
                                         <tr>
                                             <td>活動類型</td>
-                                            <td><textarea name="eventType" rows="3" cols="40"></textarea></td>
+                                            <td><textarea id="eventType" name="eventType" rows="3" cols="40"></textarea></td>
                                         </tr>
                                         <tr>
                                             <td>活動主題</td>
-                                            <td><textarea name="eventTopic" rows="3" cols="40"></textarea></td>
+                                            <td><textarea id="eventTopic" name="eventTopic" rows="3" cols="40"></textarea></td>
                                         </tr>
                                         <tr>
                                             <td>活動資訊</td>
-                                            <td><textarea name="eventInfo" rows="7" cols="40"></textarea></td>
+                                            <td><textarea id="eventInfo" name="eventInfo" rows="7" cols="40"></textarea></td>
                                         </tr>
                                         <tr>
                                             <td>活動日期</td>
-                                            <td><input type="text" name="eventDate" /></td>
+                                            <td><input type="text" id="eventDate" name="eventDate" /></td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                
-                                <br>
                                 <input id="add" type="submit" value="儲存";/>
+                                <button id="fillFormButton">一鍵輸入</button>
                             </form>
 
 						</div>
@@ -122,11 +137,23 @@
             crossorigin="anonymous"></script>
         <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
             crossorigin="anonymous"></script>
-        <script th:src="@{/js/datatables-simple-demo.js}"></script>
-        <script th:src="@{/js/scripts.js}"></script>
+        <script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+        <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
         <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
         <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
         <script>
+$(document).ready(function () {
+  $('#fillFormButton').click(function (event) {
+    event.preventDefault();
+
+    $('#eventID').val('10011');
+    $('#memberID').val('66');
+    $('#eventType').val('cosplay');
+    $('#eventTopic').val('個人寫真');
+    $('#eventInfo').val('主要拍攝原神申鶴');
+    $('#eventDate').val('2023-06-30');
+  });
+});;
 
 
         </script>

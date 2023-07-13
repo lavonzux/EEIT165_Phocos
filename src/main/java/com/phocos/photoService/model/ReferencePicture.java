@@ -50,7 +50,6 @@ public class ReferencePicture {
 	public String getEncode64PictureFile() {
 		if (pictureFile==null) { return null; }
 		String encodedString = Base64.getEncoder().encodeToString(pictureFile);
-//		pictureFile = new byte[0];
 		return encodedString;
 	}
 	
