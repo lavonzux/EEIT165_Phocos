@@ -50,8 +50,9 @@ public class StudioController {
 //		model.addAttribute("studios",studios);
 //		return "forestage/studio/studioForeIndex";
 //	}
+	
 	//前台煥頁
-	@GetMapping("/browsestudios/page")
+	@GetMapping("/browsestudiospage")
 	public String showStudio(@RequestParam(name="p", defaultValue = "1") Integer pageNumber, Model model) {
 		Page<Studio> page = sServ.findByPage(pageNumber);
 		model.addAttribute("page", page);
@@ -75,6 +76,22 @@ public class StudioController {
 		return "forestage/studio/studioForePage";
 	}
 	
+	//前台依條件取得所有資料
+	@GetMapping("/browsestudios")
+	public String findByKeyword(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
+		System.out.println("Inside findAllByKeyword method");
+		List<Studio> studios;
+	    System.out.println(keyword);
+	    if (keyword != null && !keyword.isEmpty()) {
+	        studios = sServ.findByKeyword(keyword);
+	    } else {
+	        studios = sServ.findAll();
+	    }
+
+	    model.addAttribute("studios", studios);
+	    return "forestage/studio/studioForeSearch";
+	}
+
 	
 	
 

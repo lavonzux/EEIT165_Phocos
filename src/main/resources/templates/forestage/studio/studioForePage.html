@@ -28,6 +28,11 @@
                 background-color: #DDBEA9;
                 color: #000;
             }
+		    #map {
+		        height: 20%;
+		        width: 60%;
+		            margin: 0 auto;
+		    }            
         </style>
     </head>
     <body class="d-flex flex-column">
@@ -63,14 +68,14 @@
 							        <td style="width: 10%">地址</td>
 							        <td th:text="${studio.studioAddress}"></td>
 							    </tr>
-							    <tr>
-							        <td>緯度</td>
-							        <td th:text="${studio.studioLong}"></td>
-							    </tr>
-							    <tr>
-							        <td>經度</td>
-							        <td th:text="${studio.studioLat}"></td>
-							    </tr>
+								<tr>
+								    <td>緯度</td>
+								    <td th:text="${studio.studioLong}" id="studioLong"></td>
+								</tr>
+								<tr>
+								    <td>經度</td>
+								    <td th:text="${studio.studioLat}" id="studioLat"></td>
+								</tr>
 							    <tr>
 							        <td>聯絡電話</td>
 							        <td th:text="${studio.studioPhone}"></td>
@@ -96,7 +101,10 @@
                         </div>
                     </div>
                 </div>
+                    <br>
+                <div id="map" style="height: 200px; width: 70%;"></div>
             </section>
+            
             <!-- About section two-->
 <th:block th:each="shed : ${sheds}">
     <section class="py-5">
@@ -134,27 +142,28 @@
                         </tbody>
                     </table>
                 </div>
-<div class="carousel slide col-lg-6" th:id="'carouselExampleControl2-' + ${shed.shedID}" data-bs-ride="carousel" style="width: 50%; height: 50%;">
-    <div class="carousel-inner">
-        <th:block th:each="studioPic, stat : ${sPicsList}" th:if="${studioPic.shed.shedID == shed.shedID}">
-            <div class="carousel-item" th:classappend="${studioPic.shed.shedID == shed.shedID} ? 'active'">
-                <img th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" class="d-block w-100" alt="..." th:attr="data-shedID=${studioPic.shed.shedID}">
-            </div>
-        </th:block>
-    </div>
-    <button class="carousel-control-prev" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'prev\')'">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'next\')'">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-            </div>
-        </div>
-    </section>
-</th:block>
+		<div class="carousel slide col-lg-6" th:id="'carouselExampleControl2-' + ${shed.shedID}" data-bs-ride="carousel" style="width: 50%; height: 50%;">
+		    <div class="carousel-inner">
+		        <th:block th:each="studioPic, stat : ${sPicsList}" th:if="${studioPic.shed.shedID == shed.shedID}">
+		            <div class="carousel-item" th:classappend="${studioPic.shed.shedID == shed.shedID} ? 'active'">
+		                <img th:src="@{'/studioPic/' + ${studioPic.studioPicID}}" class="d-block w-100" alt="..." th:attr="data-shedID=${studioPic.shed.shedID}">
+		            </div>
+		        </th:block>
+		    </div>
+		    <button class="carousel-control-prev" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'prev\')'">
+		        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		        <span class="visually-hidden">Previous</span>
+		    </button>
+		    <button class="carousel-control-next" type="button" th:onclick="'slideCarousel(\'carouselExampleControl2-' + ${shed.shedID} + '\', \'next\')'">
+		        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		        <span class="visually-hidden">Next</span>
+		    </button>
+		</div>
+		            </div>
+		        </div>
+		    </section>
+
+		</th:block>
         </main>
         <!-- Footer-->
         <div th:replace="~{forestage/shared/foreFooter}"></div>
@@ -163,24 +172,44 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script>
-    function preloadImages() {
-        var images = document.getElementsByClassName('carousel-item');
-        for (var i = 0; i < images.length; i++) {
-            var img = new Image();
-            img.src = images[i].getElementsByTagName('img')[0].src;
-        }
-    }
-    function slideCarousel(carouselId, direction) {
-        var carousel = document.getElementById(carouselId);
-        var carouselInstance = new bootstrap.Carousel(carousel);
+            var studioLong = parseFloat(document.getElementById('studioLong').textContent);
+    var studioLat = parseFloat(document.getElementById('studioLat').textContent);
         
-        if (direction === 'prev') {
-            carouselInstance.prev();
-        } else if (direction === 'next') {
-            carouselInstance.next();
-        }
-    }
-			
+		    function preloadImages() {
+		        var images = document.getElementsByClassName('carousel-item');
+		        for (var i = 0; i < images.length; i++) {
+		            var img = new Image();
+		            img.src = images[i].getElementsByTagName('img')[0].src;
+		        }
+		    }
+		    function slideCarousel(carouselId, direction) {
+		        var carousel = document.getElementById(carouselId);
+		        var carouselInstance = new bootstrap.Carousel(carousel);
+		        
+		        if (direction === 'prev') {
+		            carouselInstance.prev();
+		        } else if (direction === 'next') {
+		            carouselInstance.next();
+		        }
+		    }
+		    function initMap() {
+			    var Studio_latlng = { lat: studioLat, lng: studioLong };
+			    var map = new google.maps.Map(document.getElementById('map'), {
+			        zoom: 14,
+			        center: Studio_latlng
+			    });
+		
+		        //--------下面是呼叫一個新marker------
+		
+		        var marker = new google.maps.Marker({
+		            position: Studio_latlng, //marker的放置位置
+		            map: map //這邊的map指的是第四行的map變數
+		        });
+		
+		    }
+    </script>		
 		</script>
+		    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8MOz4dZE9izXoU5lvftc1YsdfbvMkLq0&callback=initMap">
+    </script>
     </body>
 </html>

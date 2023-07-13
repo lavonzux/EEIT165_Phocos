@@ -78,9 +78,9 @@
                     </th:block>
 
                     <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="about.html">會員中心</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">活動資訊</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="products.html">攝影媒合</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">場地一覽</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browseevents}">活動資訊</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{photoService}">攝影媒合</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browsestudiospage}">場地一覽</a></li>
                     <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">線上商城</a></li>
                     <li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
                             href="http://localhost:8080/phocos/forum/article/mainPage">討論區</a></li>
@@ -95,13 +95,11 @@
                     th:src="@{/forestage/shared_layout/assets/img/intro.jpg}" alt="..." />
                 <div class="intro-text left-0 text-center bg-faded p-5 rounded">
                     <h2 class="section-heading mb-4">
-                        <span class="section-heading-upper">Fresh Coffee</span>
-                        <span class="section-heading-lower">Worth Drinking</span>
+                        <span class="section-heading-upper">找攝影師？</span>
+                        <span class="section-heading-lower">人像攝影服務</span>
                     </h2>
-                    <p class="mb-3">Every cup of our quality artisan coffee starts with locally sourced, hand picked
-                        ingredients. Once you try it, our coffee will be a blissful addition to your everyday morning
-                        routine - we guarantee it!</p>
-                    <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="#!">Visit Us Today!</a>
+                    <p class="mb-3">歡迎光臨PHOCOS人像攝影平台！我們提供攝影師自訂照相方案服務，為您提供專業的攝影服務，無論是婚禮、家庭、個人肖像還是商業活動，我們都能為您捕捉珍貴的時刻和獨特的氛圍。無論您需要傳達什麼樣的故事或情感，我們將用專業技術和細膩的攝影手法為您呈現最佳效果。讓我們成為您生活中重要時刻的見證者，為您帶來美好回憶！</p>
+                    <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" th:href="@{photoService}">媒合攝影師</a>
                     </div>
                 </div>
             </div>
@@ -113,13 +111,13 @@
                 <div class="col-xl-9 mx-auto">
                     <div class="cta-inner bg-faded text-center rounded">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Our Promise</span>
-                            <span class="section-heading-lower">To You</span>
+                            <span class="section-heading-upper">我們提供的服務</span>
+                            <span class="section-heading-lower">探索攝影的無限可能</span>
                         </h2>
-                        <p class="mb-0">When you walk into our shop to start your day, we are dedicated to providing you
-                            with friendly service, a welcoming atmosphere, and above all else, excellent products made
-                            with the highest quality ingredients. If you are not satisfied, please let us know and we
-                            will do whatever we can to make things right!</p>
+                        <p class="mb-0">近年隨著Youtube、Instagram等影像式社群平台的興起，台灣的人像攝影社群—包含攝影師、模特、Cosplayer以及攝影棚——的數量急遽地上升。
+然而這樣新興活躍中的社群，並沒有一個專屬平台可以用來預約、洽談合作，或是招募、應徵攝影相關的工作，而是使用Facebook社團、Instagram私訊等非結構化的社群平台，無法集中資訊的同時，也容易造成金錢交易的糾紛，甚至人身安全的事件。
+應運而生的人像攝影媒合平台「影遇」，象徵著攝影和人像的相遇之旅，隱喻攝影師、模特兒和攝影愛好者在這個平台上相遇，帶來的情感交流和創作共鳴，透過建置攝影師、模特兒、攝影設備廠商、攝影棚營運方的線上交易服務模式，提供安全、公開的媒合平台並集中資訊、熱絡社群。
+</p>
                     </div>
                 </div>
             </div>
@@ -127,7 +125,7 @@
     </section>
     <footer class="footer text-faded text-center py-5">
         <div class="container">
-            <p class="m-0 small">Copyright &copy; Your Website 2023</p>
+            <p class="m-0 small">Copyright &copy; PHOCOS 2023</p>
         </div>
     </footer>
     <!-- Bootstrap core JS-->

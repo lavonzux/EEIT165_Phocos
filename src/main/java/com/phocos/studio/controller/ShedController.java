@@ -18,6 +18,7 @@ import com.phocos.studio.util.ShedService;
 import com.phocos.studio.util.Studio;
 import com.phocos.studio.util.StudioPic;
 import com.phocos.studio.util.StudioPicService;
+import com.phocos.studio.util.StudioService;
 
 
 
@@ -27,7 +28,6 @@ public class ShedController {
 	private ShedService sServ;
 	@Autowired
 	private StudioPicService spServ;
-
 	
 	
 	//取得所有資料
@@ -48,6 +48,29 @@ public class ShedController {
 	    model.addAttribute("shed", shed);
 	    return "backstage/studio/InsertShed";
 	}
+	
+//	@GetMapping("/browsestudios/price")
+//	public String findByMaxPrice(@RequestParam(name = "price", required = false) String maxPrice, Model model) {
+//	    List<Shed> studioSheds = new LinkedList<>();
+//	    
+//	    if (maxPrice != null && !maxPrice.isEmpty()) {
+//	        int price = convertPriceStringToInt(maxPrice);
+//	        List<Shed> sheds = sServ.findByPrice(price);
+//	        
+//	        for (Shed shed : sheds) {
+//	            Integer studioID = sServ.findStudioIdByShedId(shed.getShedId());
+//	            if (studioID != null) {
+//	                studioSheds.add(shed);
+//	            }
+//	        }
+//	    } else {
+//	        // 若未指定價位，可以執行其他處理邏輯
+//	    }
+//	    
+//	    List<Studio> studios = ssServ.findBySheds(studioSheds);
+//	    model.addAttribute("studios", studios);
+//	    return "forestage/studio/studioForeSearch";
+//	}
 	
 	//新增資料
 	@PostMapping("/shed/insertData")
@@ -103,6 +126,7 @@ public class ShedController {
 	
 	@PutMapping("/shed/editData")
 	public String editPost(@ModelAttribute(name="StudioDetail") Shed shed) {
+		System.out.println(shed);
 		sServ.updateShedById(	        
 		shed.getShedID(),
 		shed.getStudioID(),

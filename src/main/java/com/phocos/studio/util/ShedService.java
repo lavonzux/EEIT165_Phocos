@@ -29,6 +29,16 @@ public class ShedService {
 	    return null; 
 	}
 	
+    public List<Shed> findByStyle(String style) {
+        return sRepo.findByStyle(style);
+    }
+
+    public List<Shed> findByPrice(int maxPrice) {
+        return sRepo.findByPrice(maxPrice);
+    }
+
+	
+	
 	
 
 	//新增取得資料
