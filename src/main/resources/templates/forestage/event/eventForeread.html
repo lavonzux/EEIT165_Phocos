@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>活動詳情</title>
+        <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+        <style>
+            #add{
+                border: 0.5px solid rgb(195, 195, 195);
+                float:right;
+                font-size: 14px;
+                background-color: #d1f0c2;
+            }
+            #back{
+                border: 0.5px solid rgb(195, 195, 195);
+                float:right;
+                font-size: 20px;
+                background-color: #c2f0ec;
+            }
+            #del{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #ffadadd4;
+            }
+            #editEvent{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #d1f0c2;
+            }
+            #enter {
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #c2f0ec;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            
+            th, td {
+                border: 0.5px solid rgb(195, 195, 195);
+                padding: 8px;
+                text-align: left;
+                border-radius: 5%;
+            }
+            .large-text {
+    			font-size: 24px; /* 調整字體大小為所需的大小，這裡使用24px作為示例 */
+			}
+			.large-icon {
+    			font-size: 30px; /* 調整字體大小為所需的大小，這裡使用24px作為示例 */
+			}
+        </style>
+     </head>
+    
+    <body class="sb-nav-fixed">
+             
+         <div th:replace="~{forestage/shared/foreTopNav}"></div>
+    
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">活動詳情</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                        </ol>
+			<div class="card mb-4">
+				<div class="card-header">
+					<i class="fas fa-table me-1 large-icon"></i>
+					<div style="display: flex; justify-content: space-between">
+						<h1 class="large-text">活動內容</h1>
+						<form method="get" th:action="@{/browseevents}">
+							<button id="back" class="large-text">回前一頁</button>
+						</form>
+					</div>
+					<div class="card-body">
+
+						<form th:method="put" th:action="@{/event/editData}" th:object="${event}">
+							<table>
+								<thead>
+									<tr>
+										<th>項目</th>
+										<th>內容</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<input type="hidden" id="eventID" name="eventID" th:value="${event.eventID}">
+									<tr>
+										<td>會員編號</td>
+										<td><input type="text" name="memberID" th:value="${event.memberID}" readonly="true" /></td>
+									</tr>
+									<tr>
+										<td>活動類型</td>
+										<td><textarea name="eventType" rows="3" cols="40" th:text="${event.eventType}" readonly="true"></textarea></td>
+									</tr>
+									<tr>
+										<td>活動主題</td>
+										<td><textarea name="eventTopic" rows="3" cols="40" th:text="${event.eventTopic}" readonly="true"></textarea></td>
+									</tr>
+									<tr>
+										<td>活動資訊</td>
+										<td><textarea name="eventInfo" rows="7" cols="40" th:text="${event.eventInfo}" readonly="true"></textarea></td>
+									</tr>
+									<tr>
+										<td>活動日期</td>
+										<td><input type="text" name="eventDate" th:value="${event.eventDate}" readonly="true" /></td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<!-- <input id="add" type="submit" value="儲存";/>  -->
+						</form>
+					</div>
+				</div>
+			</div></main>
+                <div th:replace="~{forestage/shared/foreFooter}"></div>
+
+            <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+                crossorigin="anonymous"></script>
+            <script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+            <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+            <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+            <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+        <script>
+        </script>
+    </body>
+</html>
