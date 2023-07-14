@@ -23,20 +23,15 @@
                     <h1 class="mt-4">攝影服務管理</h1>
                     <ol th:replace="~{backstage/photoService/shared_templates/breadcrumbs::ps-breadcrumb-ReadAll}"> </ol>
                     <div class="card mb-4">
-                        <div class="card-body">
-                            <h5>攝影服務管理頁面</h5>
-                        </div>
-                    </div>
-                    <div class="card mb-4">
-                        <!--
                         <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            以下為所有攝影師帳戶創建的的攝影服務
-                            <form method="get" action="CreatePhotoService.controller">
-                                <input style="float: right" type="submit" value="手動新增攝影服務">
-                            </form>
+                            <div class="card-left-head">
+                                <h5>攝影服務管理頁面</h5>
+                            </div>
+                            <div class="card-right">
+                                <i class="fa-regular fa-clipboard"></i>
+                                <a th:href="@{/photoService/log}">伺服器存取紀錄</a>
+                            </div>
                         </div>
-                        -->
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>

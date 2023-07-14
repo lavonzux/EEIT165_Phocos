@@ -50,7 +50,7 @@ public class PhotoServiceRestController {
 	// ==================== CREATE SECTION ====================
 	
 	@PostMapping(path = "/photoService/api/Create")
-	public String processCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result) throws IOException {
+	public String doCreatePhotoServiceAction(@ModelAttribute("createPhotoService") PhotoServiceDto createPhotoServiceBean, BindingResult result) throws IOException {
 //		System.out.println("==================== CONFIRMED a create request... goto persist... ====================");
 		
 		if (!result.hasErrors()) {
@@ -70,7 +70,7 @@ public class PhotoServiceRestController {
 	// ==================== READ SECTION ====================
 
 	@GetMapping(path = "/photoService/api/ReadAll")
-	public List<PhotoService> processReadAllPhotoServiceAction(Model model) {
+	public List<PhotoService> doReadAllPhotoServiceAction(Model model) {
 		return psService.readAllEntries();
 	}
 
@@ -83,7 +83,7 @@ public class PhotoServiceRestController {
 
 	
 	@GetMapping(path = "/photoService/api/ReadOne")
-	public PhotoService processReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
+	public PhotoService doReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
 		return resultBean;
 	}
@@ -95,7 +95,7 @@ public class PhotoServiceRestController {
 
 	@Transactional
 	@PutMapping("/photoService/api/Update")
-	public List<PhotoServiceDto> processUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public List<PhotoServiceDto> doUpdatePhotoServiceAction(@ModelAttribute() PhotoServiceDto updatedDTO, BindingResult result) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
 		
 		if (result.hasErrors()) { 
@@ -126,7 +126,7 @@ public class PhotoServiceRestController {
 	// ==================== DELETE SECTION ====================
 	
 	@DeleteMapping("/photoService/api/Delete")
-	public PhotoService processDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID) {
+	public PhotoService doDeletePhotoServiceAction(@RequestParam("serviceID") int serviceID) {
 //		System.out.println("==================== Incoming deletion request... ====================");
 		
 		System.out.printf("========== Deleting PhotoServiceID: %d ==========%n",serviceID);
