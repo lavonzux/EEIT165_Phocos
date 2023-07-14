@@ -1,10 +1,11 @@
 package com.phocos.loggers;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,7 +15,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.phocos.utils.PrintValueHelper;
@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Aspect
 @Component
-public class PhotoServiceLogger {
+public class PhotoServiceLogger_access {
 
 	
 	@Autowired
@@ -34,38 +34,34 @@ public class PhotoServiceLogger {
 	private HttpSession httpSession;
 	
 	
-	private static final String LOGGER_FILE_PATH= "static/backstage/photoService/photoServiceLogger.txt";
+//	private static final String LOGGER_FILE_PATH= "static/backstage/photoService/photoServiceLogger.txt";
 	
 	
 	
-	@Pointcut("execution(* com.phocos.photoService.controller..*(..))")
+	@Pointcut("execution(* com.phocos.photoService.controller.*.goto*(..))")
 	public void psController() {
 		
 	}
 	
-	@Pointcut("execution(* com.phocos.photoService.controllerRestful..*(..))")
+	@Pointcut("execution(* com.phocos.photoService.controllerRestful.*.goto*(..))")
 	public void psRestfulController() {
 		
 	}
 	
 	
 	
-//	@Pointcut("execution(String com.phocos.photoService.controller..*(..))")
-//	public void psControllerDestructive() {
-//		
-//	}
 	
 	
 	
 	
 	
 	
-	@Before("psController() ")
+	@Before("psController() || psRestfulController()")
 	public void before(JoinPoint joinPoint) throws IOException {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		
 		String calledMethod = joinPoint.getSignature().getName();
-		String memberID = "guest account";
+		String memberID = "Guest";
 		
 		
 		
@@ -90,11 +86,11 @@ public class PhotoServiceLogger {
 		while (parameterNames.hasMoreElements()) {
 			String string = (String) parameterNames.nextElement();
 			System.out.print(string + " ...value:...");
-			
 			try {
-				Object attribute = request.getAttribute(string);
-				String valueOfObj = String.valueOf(attribute);
-				System.out.println(valueOfObj);
+				Object paramVal = request.getParameter(string);
+				System.out.println(paramVal.toString());
+//				PrintValueHelper.printFieldsAndValues(paramVal);
+				
 			} catch (Exception e) {
 				System.out.println("fail to convert "+string+" attribute to string");
 			}
@@ -102,60 +98,38 @@ public class PhotoServiceLogger {
 		}
 		String remoteAddr = request.getRemoteAddr();
 		
+
+		Instant currentTime = Instant.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(EE) HH:mm:ss '['O']'").withZone(ZoneId.systemDefault());
+		String currentTimeString = formatter.format(currentTime);
 		
 		
 		
+		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
 		
 		
-		String logLine = memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
+		String path = "/Users/lavonzux/Documents/EEIT65/SpringBoot/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt";
+		
+		File loggerFile = new File(path);
 		System.out.println(logLine);
-		
-		File loggerFile = new ClassPathResource(LOGGER_FILE_PATH).getFile();
-		System.out.println( loggerFile.isFile() );
-		System.out.println( loggerFile.canWrite() );
-		
 		
 		
 		FileWriter logWriter = new FileWriter(loggerFile, true);
 		logWriter.write(logLine);
+		logWriter.write("\r\n");
 		logWriter.close();
 		
 		
 		
 		
-		// ========== Final log String ==========
-		
-//		System.out.printf("MemberID: %s requesting %s from: %s --- ",memberID, requestMethod, remoteAddr);
-//		System.out.printf("with parameter: ",parameterNames);
-		
 		
 	}
 	
 	
-	@After("psController()")
+	@After("psController() || psRestfulController()")
 	public void after(JoinPoint joinPoint) {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		String methodName = joinPoint.getSignature().getName();
-
-		
-		
-		
-		
-		try {
-			new ClassPathResource(LOGGER_FILE_PATH).getFile();
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		logger.info(methodName+" end......");
 		
 	}

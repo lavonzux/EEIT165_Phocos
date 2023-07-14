@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>管理攝影服務</title>
+    <link th:href="@{/backstage/photoService/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/backstage/photoService/bootstrap.min.js}"></script>
+
+    <style>
+        .log-body {
+            font-family: monospace;
+            font-size: small;
+            color: black;
+            font-weight: 500;
+            border: 3px, solid, #333;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: antiquewhite;
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<head th:replace="~{backstage/shared_layout/scriptSource}"></head>
+
+<body class="sb-nav-fixed">
+    <nav th:replace="~{backstage/shared_layout/layout-static :: navbar}"> </nav>
+
+    <div id="layoutSidenav">
+        <div th:replace="~{backstage/shared_layout/layout-static :: sidebar}" id="layoutSidenav_nav"> </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">攝影服務管理</h1>
+                    <ol th:replace="~{backstage/photoService/shared_templates/breadcrumbs::ps-breadcrumb-ReadAll}"> </ol>
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-center">
+                            <div class="card-left-head" style="display: inline;">
+                                <h5>攝影服務管理頁面</h5>
+                            </div>
+                            <div class="card-right" style="display: inline;">
+                                <i class="fa-regular fa-clipboard"></i>
+                                <a th:href="@{/photoService/ReadAllPhotoService.controller}">回到資料管理頁面</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="log-body">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="accessing-log" data-bs-toggle="tab" data-bs-target="#accessing-log-pane" type="button" role="tab" aria-controls="accessing-log-pane" aria-selected="true">頁面跳轉請求紀錄</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="destructive-log" data-bs-toggle="tab" data-bs-target="#destructive-log-pane" type="button" role="tab" aria-controls="destructive-log-pane" aria-selected="false">資料刪改請求紀錄</button>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="accessing-log-pane" role="tabpanel" aria-labelledby="accessing-log" tabindex="0"></div>
+                                    <div class="tab-pane fade" id="destructive-log-pane" role="tabpanel" aria-labelledby="destructive-log" tabindex="0"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto"> </footer>
+        </div>
+    </div>
+
+
+
+    <script>
+        const accessingLogTab = document.querySelector('#accessing-log-pane')
+        const destructiveLogTab = document.querySelector('#destructive-log-pane')
+
+        const currentHref = window.location.href
+        const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') + 6)
+
+        axios.get(ContextPathname + '/photoService/api/log/accessing')
+            .then(res => {
+                const logContent = res.data
+                logContent.forEach((oneLine) => {
+                    const p = document.createElement('p')
+                    p.innerHTML = oneLine
+                    accessingLogTab.appendChild(p)
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+
+        axios.get(ContextPathname + '/photoService/api/log/destructive')
+            .then(res => {
+                const logContent = res.data
+                logContent.forEach((oneLine) => {
+                    const p = document.createElement('p')
+                    p.innerHTML = oneLine
+                    destructiveLogTab.appendChild(p)
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+
+    </script>
+</body>
+
+
+</html>
