@@ -94,7 +94,7 @@
 				<th:block th:switch="${page.number != 0}">
 
 					<li th:case=${true} class="page-item"><a class="page-link"
-							th:href="@{/products/camerashop?(p=${page.number})}">上一頁</a></li>
+							th:href="@{/products/camerashop2?(p=${page.number})}">上一頁</a></li>
 
 					<li th:case=${false} class="page-item disable"><span class="page-link">上一頁</span></li>
 				</th:block>
@@ -102,10 +102,10 @@
 				<th:block th:each=" pageNumber : ${#numbers.sequence(1, page.totalPages)}">
 					<th:block th:switch="${page.number != pageNumber - 1 }">
 						<li th:case=${true} class="page-item"><a class="page-link"
-								th:href="@{/products/camerashop?(p=${pageNumber})}">[[${pageNumber}]]</a>
+								th:href="@{/products/camerashop2?(p=${pageNumber})}">[[${pageNumber}]]</a>
 						</li>
 						<li th:case=${false} class="page-item active"><span class="page-link"
-								th:text="${pageNumber}"></span></li>
+							th:text="${pageNumber}"></span></li>
 					</th:block>
 				</th:block>
 
@@ -113,7 +113,7 @@
 					<li th:case="${true}" class="page-item"><span class="page-link">最後一頁了兄弟</span></li>
 
 					<li th:case="${false}" class="page-item"><a class="page-link"
-							th:href="@{/products/camerashop?(p=${page.number + 2})}">下一頁</a></li>
+							th:href="@{/products/camerashop2?(p=${page.number + 2})}">下一頁</a></li>
 				</th:block>
 
 			</ul>
