@@ -38,52 +38,60 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="index.html">首頁</a></li>
 
-                    <th:block>
-                        <li th:if="${session.isLoggedIn != null}" class="nav-item nav-item dropdown">
+
+						<th:block>
+							<li th:if="${session.isLoggedIn != null}" class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
+									<th:block>
+										<img th:if="${session.memberAvatar != null}" th:src="${session.memberAvatar}"
+											style=" width:20px; height: 20px; border-radius: 50%;" />
+										<th:block th:unless="${session.memberAvatar != null}">
+											<img th:if="${session.avatarExist != null}" class="squareAvatar"
+												th:src="@{'/avatar/' + ${session.memberID} }"
+												style="width: 20px; height: 20px; border-radius: 50%;">
+											<img th:unless="${session.avatarExist != null}" class="squareAvatar"
+												th:src="@{/forestage/member/assets/memberDefaultAvatar.png}"
+												style="width: 20px; height: 20px; border-radius: 50%;">
+										</th:block>
+									</th:block>
+									<span th:text="${session.memberName}"></span>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+									<li>
+										<th:block>
+											<a th:if="${session.gmail !=null}" class="dropdown-item" href="#">個人頁面</a>
+											<a th:unless="${session.gmail !=null}" class="dropdown-item"
+												th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a>
+										</th:block>
+									</li>
+									<li><a class="dropdown-item"
+											th:href="@{'/profile/edit/' + ${session.memberID}}">設定</a></li>
+									<li>
+										<hr class="dropdown-divider" />
+									</li>
+									<li><a class="dropdown-item" th:href="@{/logout}">登出</a></li>
+								</ul>
+							</li>
+							<li th:unless="${session.isLoggedIn != null}" class="nav-item"><a class="nav-link"
+									th:href="@{/login}">登入帳號</a></li>
+						</th:block>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browseevents}">活動資訊</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{photoService}">攝影媒合</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browsestudiospage}">場地一覽</a></li>
+                    						<li class="nav-item dropdown">
+
                             <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <th:block>
-                                    <img th:if="${session.memberAvatar != null}" th:src="${session.memberAvatar}"
-                                        style=" width:20px; height: 20px; border-radius: 50%;" />
-                                    <th:block th:unless="${session.memberAvatar != null}">
-                                        <img th:if="${session.avatarExist != null}" class="squareAvatar"
-                                            th:src="@{'/avatar/' + ${session.memberID} }"
-                                            style="width: 20px; height: 20px; border-radius: 50%;">
-                                        <img th:unless="${session.avatarExist != null}" class="squareAvatar"
-                                            th:src="@{/forestage/member/assets/memberDefaultAvatar.png}"
-                                            style="width: 20px; height: 20px; border-radius: 50%;">
-                                    </th:block>
-                                </th:block>
-                                <span th:text="${session.memberName}"></span>
-                            </a>
+                                data-bs-toggle="dropdown" aria-expanded="false">線上商城</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                <li>
-                                    <th:block>
-                                        <a th:if="${session.gmail !=null}" class="dropdown-item" href="#">個人頁面</a>
-                                        <a th:unless="${session.gmail !=null}" class="dropdown-item"
-                                            th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a>
-                                        <a class="dropdown-item" href="#">購物記錄</a>
-                                    </th:block>
-                                </li>
-                                <li><a class="dropdown-item" th:href="@{'/profile/edit/' + ${session.memberID}}">設定</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li><a class="dropdown-item" th:href="@{/logout}">登出</a></li>
+
+ <li><a class="dropdown-item" th:href="@{/products/camerashop2}">相機商場</a></li>
+                                <li><a class="dropdown-item" th:href="@{/products/lensshop2}">鏡頭商場</a></li>
+
                             </ul>
                         </li>
-                        <li th:unless="${session.isLoggedIn != null}" class="nav-item px-lg-4"><a class="nav-link"
-                                th:href="@{/login}">會員登入</a></li>
-                    </th:block>
 
-                    <!--    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="about.html">會員中心</a></li> -->
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">活動資訊</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{/photoService}">攝影媒合</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">場地一覽</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">線上商城</a></li>
                     <li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
                             href="http://localhost:8080/phocos/forum/article/mainPage">論壇中心</a></li>
                 </ul>
