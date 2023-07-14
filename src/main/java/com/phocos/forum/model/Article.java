@@ -55,6 +55,10 @@ public class Article {
 	@JoinColumn(name = "memberID")
 	private Member member;
 
+// -------------------- 文章回應 --------------------
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Comment> comments;
+
 // -------------------- 文章圖片 --------------------
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ArticlePic> articlePics;
@@ -63,7 +67,7 @@ public class Article {
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ArticleLikes> articleCounts;
 
-	// -------------------- 文章檢舉 --------------------
+// -------------------- 文章檢舉 --------------------
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ArticleReport> articleReports;
 

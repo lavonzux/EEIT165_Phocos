@@ -34,8 +34,6 @@ public class ArticleForeController {
 	@Autowired
 	private ArticleService articleService;
 
-	@Autowired
-	private ArticlePicService articlePicService;
 
 //	---------------------------------------- 測試有無吃到套版 ----------------------------------------
 //	@GetMapping("/forum/article/mainPage")

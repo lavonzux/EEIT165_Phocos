@@ -12,6 +12,7 @@
 	<link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
 	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://unpkg.com/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <head th:replace="~{backstage/shared_layout/scriptSource}"></head>
@@ -131,6 +132,8 @@
 				</div>
 
 
+
+
 				<script>
 
 					var reportStatus = {};  // 用來存儲報告狀態的對照表
@@ -178,7 +181,8 @@
 
 									// 將報告的內容填充到模態框中
 									$('#reportTime').text('檢舉時間：' + formattedDate);
-									$('#reportType').text('檢舉類型：' + report.reportType);
+									// Set the value of the selector to the report type
+									$('#reportType').val(report.reportType);
 									$('#reportContent').text('檢舉內容：' + report.reportContent);
 
 									// 打開模態框
@@ -194,20 +198,46 @@
 
 					$('#sendReportEmailButton').click(function () {
 						if (currentReportId) {
+							// Start pre-loading animation
+							Swal.fire({
+								title: '寄送郵件中...',
+								text: '請稍等',
+								onBeforeOpen: () => {
+									Swal.showLoading();
+								}
+							});
+
 							$.ajax({
 								type: 'POST',
 								url: '/phocos/reports/' + currentReportId + '/send-email',
 								success: function (data) {
-									alert(data.message);
+									// Remove pre-loading animation, display success message
+									Swal.fire({
+										title: '成功',
+										text: data.message,
+										icon: 'success'
+									});
 								},
 								error: function () {
-									alert('郵件發送失敗');
+									// Remove pre-loading animation, display error message
+									Swal.fire({
+										title: '錯誤',
+										text: '郵件發送失敗',
+										icon: 'error'
+									});
 								}
 							});
 						} else {
-							alert('沒有選擇的檢舉來發送郵件');
+							// No report selected, display error message
+							Swal.fire({
+								title: '錯誤',
+								text: '沒有選擇的檢舉來發送郵件',
+								icon: 'error'
+							});
 						}
 					});
+
+
 
 					$(document).ready(function () {
 						$('#modalCloseButton').click(function () {

@@ -40,6 +40,7 @@ public class Comment {
 	private Integer commentLikes = 0;
 	
 	@JsonIgnore
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "articleId")
 	private Article article;

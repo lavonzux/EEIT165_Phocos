@@ -20,7 +20,7 @@
 <body class="d-flex flex-column h-100">
 	<main class="flex-shrink-0">
 		<!-- Navigation-->
-		 <div th:replace="~{forestage/shared/foreTopNav}"></div>
+		<div th:replace="~{forestage/shared/foreTopNav}"></div>
 
 		<!-- Main content -->
 		<div class="container mt-5">
@@ -59,6 +59,7 @@
 				</div>
 
 				<button type="submit" class="btn btn-primary">提交</button>
+				<button id="autoFillButton">一鍵輸入</button>
 			</form>
 		</div>
 
@@ -94,7 +95,7 @@
 				});
 			}
 		</script>
-		
+
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 		<script>
@@ -106,6 +107,20 @@
 					e.preventDefault();
 					swal("請注意", "Hashtag 標籤上限為 5 個，您已超過", "error");
 				}
+			});
+		</script>
+
+		<script>
+			document.getElementById('autoFillButton').addEventListener('click', function () {
+				// 標題
+				document.getElementById('articleTitle').value = "發現完美場地，點亮攝影創作的舞台－場地分享";
+
+				// 內容
+				var content = `<p>在攝影創作中，場地的選擇是至關重要的。<strong>一個獨特而適合主題的場地能夠為作品增添豐富的故事性和視覺效果</strong>。現在，我要和大家分享一個令人驚艷的場地，這個場地將成為攝影師們打造出無限創意的舞台。</p><p>這個場地位於城市的心臟地帶，<span class="marker">充滿了獨特的建築風格和歷史韻味</span>。從古老的巷弄到現代摩天大樓，這裡擁有各種風格迥異的場景，給攝影師們<em>提供了豐富多樣的拍攝選擇</em>。無論你是喜歡純樸自然的風景攝影，還是偏愛時尚城市風格的人像攝影，這個場地<strong>都能夠滿足你的需求</strong>。</p><p>除了多樣的場景，這個場地還擁有優越的光線條件。在不同的時間段，陽光透過建築的角度和窗戶灑落，營造出迷人的光影效果。攝影師們可以善用這些自然光來創造獨特而生動的作品。</p><p>最重要的是，這個場地對攝影師們開放，提供了良好的拍攝許可條件。<strong><em>無論你是專業攝影師還是業餘愛好者，只需預約時間，就能夠在這個場地展開你的攝影創作</em></strong>。而且，場地的管理團隊也非常友善和支持，他們願意提供必要的協助，確保你能夠順利完成拍攝計劃。</p><p>總結來說，這個場地是攝影創作的寶藏，擁有<br></p><ul><li>多樣的場景<br></li><li>優越的光線條件<br></li><li>支持性的管理團隊<br></li></ul><p>如果你正在尋找一個能夠<span class="marker">點亮攝影創作的舞台</span>，我強烈推薦你來體驗這個場地的魅力。</p>`;
+				CKEDITOR.instances.articleContent.setData(content);
+
+				// Hashtag
+				document.getElementById('hashtag').value = "攝影場地 分享 攝影創作 建築 光影 拍攝";
 			});
 		</script>
 
