@@ -1,75 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>我的購物車</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script th:src="@{/forestage/product/js/shoppingcar.js}"></script>
-<script th:src="@{/forestage/product/js/productlist.js}"></script>
-<link rel="stylesheet"
-	href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-<style>
-.container {
-	margin: 0 auto;
-	max-width: 800px;
-	padding: 20px;
-}
+	<title>我的購物車</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script th:src="@{/forestage/product/js/shoppingcar.js}"></script>
+	<script th:src="@{/forestage/product/js/productlist.js}"></script>
+	<link rel="stylesheet"
+		href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+	<style>
+		.container {
+			margin: 0 auto;
+			max-width: 800px;
+			padding: 20px;
+		}
 
-table {
-	border-collapse: collapse;
-	width: 100%;
-}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
 
-th, td {
-	border: 1px solid #ddd;
-	padding: 8px;
-	text-align: left;
-}
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: left;
+		}
 
-th {
-	background-color: #f2f2f2;
-	font-weight: bold;
-}
+		th {
+			background-color: #f2f2f2;
+			font-weight: bold;
+		}
 
-tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
+		tr:nth-child(even) {
+			background-color: #f9f9f9;
+		}
 
-tr:hover {
-	background-color: #f5f5f5;
-}
+		tr:hover {
+			background-color: #f5f5f5;
+		}
 
-.buttons {
-	display: flex;
-	justify-content: flex-end;
-	gap: 10px;
-	margin-top: 10px;
-}
+		.buttons {
+			display: flex;
+			justify-content: flex-end;
+			gap: 10px;
+			margin-top: 10px;
+		}
 
-.butt1 {
-	background-color: #A5A58D;
-	border: none;
-	border-radius: 10px;
-	padding: 5px 10px;
-	color: white;
-	font-size: 15px;
-	margin: 5px;
-}
+		.butt1 {
+			background-color: #A5A58D;
+			border: none;
+			border-radius: 10px;
+			padding: 5px 10px;
+			color: white;
+			font-size: 15px;
+			margin: 5px;
+		}
 
-.butt2 {
-	background-color: #A5A58D;
-	border: none;
-	border-radius: 10px;
-	padding: 5px 10px;
-	color: white;
-	font-size: 30px;
-	margin: 5px;
-}
+		.butt2 {
+			background-color: #A5A58D;
+			border: none;
+			border-radius: 10px;
+			padding: 5px 10px;
+			color: white;
+			font-size: 30px;
+			margin: 5px;
+		}
 
-#totalPrice {
-	display: inline-block;
-	margin-top: 10px;
-}
-</style>
+		#totalPrice {
+			display: inline-block;
+			margin-top: 10px;
+		}
+	</style>
 </head>
 
 <body>
@@ -95,7 +97,7 @@ tr:hover {
 			<div class="buttons">
 				<form th:action="@{/checkout}" method="get">
 					<input id="totalPriceInput" name="totalPrice" type="hidden" /> <input
-						id="del" type="submit" value="結帳" class="buttons butt2 fw-bolder" />
+						type="submit" value="結帳" class="buttons butt2 fw-bolder" />
 				</form>
 			</div>
 		</div>
@@ -108,4 +110,5 @@ tr:hover {
 		crossorigin="anonymous"></script>
 	<script th:src="@{/forestage/product/js/productlist.js}"></script>
 </body>
+
 </html>
