@@ -11,6 +11,7 @@ import com.phocos.forum.model.Article;
 import com.phocos.forum.model.ArticleLikes;
 import com.phocos.forum.model.ArticleReport;
 import com.phocos.forum.model.Comment;
+import com.phocos.login.Login;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

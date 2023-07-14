@@ -16,6 +16,19 @@
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<style>
+		.img-btn {
+			border: none;
+			background: transparent;
+			padding: 0;
+		}
+
+		.img-btn img {
+			max-width: 100%;
+			height: auto;
+		}
+	</style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -62,20 +75,24 @@
 						<div class="btn-group" role="group" aria-label="Basic example"
 							style="position: absolute; bottom: 10px; right: 10px;">
 
-							<button type="button" class="btn btn-primary" id="likeButton"
+
+							<button type="button" class="img-btn" id="likeButton"
 								th:attr="onclick='toggleLike('+${article.articleId}+')'">
-								<i class="bi bi-hand-thumbs-up-fill"></i> Like
+								<img th:src="@{/forestage/forum/readArticle/assets/like.png}" alt="Like button image">
 							</button>
 
-							<button type="button" class="btn btn-warning" id="collectButton"
-								th:attr="onclick='toggleCollect('+${article.articleId}+')'"><i
-									class="bi bi-bookmark-fill"></i> Collect</button>
+							<button type="button" class="img-btn" id="collectButton"
+								th:attr="onclick='toggleCollect('+${article.articleId}+')'">
+								<img th:src="@{/forestage/forum/readArticle/assets/collect.png}"
+									alt="Collect button image">
+							</button>
 
 							<!-- Modal Trigger -->
-							<button type="button" class="btn btn-danger" data-bs-toggle="modal"
+							<button type="button" class="img-btn btn-danger" data-bs-toggle="modal"
 								data-bs-target="#reportModal"
 								th:attr="onclick='setCurrentArticleId('+${article.articleId}+')'">
-								<i class="bi bi-flag-fill"></i> Report
+								<img th:src="@{/forestage/forum/readArticle/assets/report.png}"
+									alt="Report button image">
 							</button>
 
 							<!-- Modal -->
@@ -89,24 +106,28 @@
 												aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											<label for="reportType">Report Type:</label>
+											<label for="reportType">檢舉類型：</label>
 											<select id="reportType" class="form-control">
-												<option selected>Choose...</option>
-												<!-- 你需要將這些值替換為你的檢舉類型 -->
-												<option value="spam">Spam</option>
-												<option value="abuse">Abuse</option>
-												<option value="other">Other</option>
+												<option selected>請選擇...</option>
+
+												<option value="spam">垃圾訊息</option>
+												<option value="abuse">濫用或騷擾</option>
+												<option value="false_information">虛假資訊</option>
+												<option value="plagiarism">抄襲</option>
+												<option value="other">其他</option>
 											</select>
 
-											<label for="reportContent">Please enter the report reason:</label>
+											<label for="reportContent">請輸入檢舉理由：</label>
 											<textarea class="form-control" id="reportContent" rows="3"></textarea>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary"
-												data-bs-dismiss="modal">Close</button>
+												data-bs-dismiss="modal">關閉</button>
 											<button type="button" class="btn btn-danger"
-												onclick="reportArticle()">Submit</button>
+												onclick="reportArticle()">提交</button>
+											<button id="autoFillReportButton">一鍵輸入檢舉</button>
 										</div>
+
 									</div>
 								</div>
 							</div>
@@ -124,40 +145,15 @@
 								<form id="comment-form" class="mb-4">
 									<textarea id="comment-content" class="form-control" rows="3"
 										placeholder="Join the discussion and leave a comment!"></textarea>
+
+									<!-- Hidden input field for the article ID -->
+									<input type="hidden" id="article-id" th:value="${article.articleId}" />
+
 									<button type="submit" class="btn btn-primary mt-2">Submit</button>
 								</form>
-								<!-- Comment with nested comments-->
-								<div class="d-flex mb-4">
-									<!-- Parent comment-->
-									<div class="flex-shrink-0"><img class="rounded-circle"
-											src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-									<div class="ms-3">
-										<div class="fw-bold">Commenter Name</div>
-										If you're going to lead a space frontier, it has to be government; it'll never
-										be private enterprise. Because the space frontier is dangerous, and it's
-										expensive, and it has unquantified risks.
-										<!-- Child comment 1-->
-										<div class="d-flex mt-4">
-											<div class="flex-shrink-0"><img class="rounded-circle"
-													src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
-											</div>
-											<div class="ms-3">
-												<div class="fw-bold">Commenter Name</div>
-												And under those conditions, you cannot establish a capital-market
-												evaluation of that enterprise. You can't get investors.
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- Single comment-->
-								<div class="d-flex">
-									<div class="flex-shrink-0"><img class="rounded-circle"
-											src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-									<div class="ms-3">
-										<div class="fw-bold">Commenter Name</div>
-										When I look at the universe and all the ways the universe wants to kill us, I
-										find it hard to reconcile that with statements of beneficence.
-									</div>
+
+								<!-- Comment list -->
+								<div id="comment-list">
 								</div>
 							</div>
 						</div>
@@ -179,14 +175,21 @@
 				.then(function (response) {
 					console.log(articleId);
 					console.log(response.data);
+					let heartParticles = document.getElementById('heartParticles');
+
 					if (response.data) {  // 加入這個檢查以確保response.data存在
 						var likeButton = document.getElementById('likeButton');
-						if (likeButton) {  // 加入這個檢查以確保likeButton元素存在
-							if (response.data.isLiked == 1) {
-								likeButton.style.backgroundColor = "red";
-							} else {
-								likeButton.style.backgroundColor = "";
-							}
+						if (response.data.isLiked == 1) {
+							likeButton.classList.add('zoom-and-shake');
+							setTimeout(() => {
+								likeButton.classList.remove('zoom-and-shake');
+							}, 500);
+							swal("好的！", "已經加到 '我喜歡的文章'！", "success");  // 顯示彈出訊息
+						} else {
+							likeButton.classList.add('shrink-and-fade-effect');
+							setTimeout(() => {
+								likeButton.classList.remove('shrink-and-fade-effect');
+							}, 500);
 						}
 					}
 				})
@@ -203,21 +206,28 @@
 				.then(function (response) {
 					console.log(articleId);
 					console.log(response.data);
-					// 更新前端介面，例如更新收藏數量，或收藏的狀態
-					// 根據response來更新收藏按鈕的顏色
-					var collectButton = document.getElementById('collectButton');
-					if (response.data.isCollected == 1) {
-						collectButton.style.backgroundColor = "red"; // 如果使用者點了收藏，按鈕變黃色
-					} else {
-						collectButton.style.backgroundColor = ""; // 如果使用者取消收藏，按鈕恢復原來的顏色
+					if (response.data) {  // Add this check to ensure response.data exists
+						var collectButton = document.getElementById('collectButton');
+						if (response.data.isCollected == 1) {
+							collectButton.classList.add('zoom-and-shake');
+							setTimeout(() => {
+								collectButton.classList.remove('zoom-and-shake');
+							}, 500);
+							swal("好的", "已經加到 '我收藏的文章'！", "success");  // Display alert message
+						} else {
+							collectButton.classList.add('shrink-and-fade-effect');
+							setTimeout(() => {
+								collectButton.classList.remove('shrink-and-fade-effect');
+							}, 500);
+						}
 					}
 				})
 				.catch(function (error) {
 					console.log(error);
-					// 處理錯誤，例如顯示錯誤訊息
 				});
 		};
 	</script>
+
 
 	<script>
 		var currentArticleId = null;
@@ -248,48 +258,74 @@
 		}
 	</script>
 
+	<script>
+		document.getElementById('autoFillReportButton').addEventListener('click', function () {
+			// 檢舉類型
+			document.getElementById('reportType').value = "plagiarism";
+			// 檢舉理由
+			document.getElementById('reportContent').value = "我在其他作者那邊看過一樣的文章";
+		});
+	</script>
+
 	<!-- 回覆的 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script>
 		$(document).ready(function () {
 			$('#comment-form').on('submit', function (event) {
-				event.preventDefault(); // Avoid page refresh
+				event.preventDefault();
 
 				var commentContent = $('#comment-content').val();
-				var commentData = {
-					// Here, we are hardcoding the values. Replace these with your actual data
-					commentId: 1,
-					parentCommentId: null,
-					commentContent: commentContent,
-					commentPostTime: new Date(),
-					commentUpdateTime: new Date(),
-					commentLikes: 0,
-					articleId: 1,
-					memberId: 1
-				};
+				var articleId = $('#article-id').val();
 
-				$.ajax({
-					url: 'http://localhost:8080/phocos/comment/add',  // Update this URL with your actual endpoint
-					type: 'POST',
-					contentType: 'application/json',
-					data: JSON.stringify(commentData),
-					success: function (response) {
-						// Add the newly created comment to the comments section
-						$('#comments-section').append(`
-                    <div class="comment">
-                        <p>${response.commentContent}</p>
-                    </div>
-                `);
-						// Clear the comment input field
-						$('#comment-content').val('');
+				if (!articleId || isNaN(articleId)) {
+					console.log('Invalid articleId:', articleId);
+					return;
+				}
+
+				axios({
+					method: 'post',
+					url: '/phocos/comment/add',
+					data: {
+						articleId: articleId,
+						commentContent: commentContent,
 					},
-					error: function (error) {
-						console.error(error);
+					headers: {
+						'Content-Type': 'application/json'
 					}
-				});
+				})
+					.then(function (response) {
+						console.log(response);
+						// Append new comment to comment list
+						$('#comment-list').append(`
+						<div class="d-flex mb-4">
+							<div class="flex-shrink-0"><img class="rounded-circle"
+								src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+							<div class="ms-3">
+								<div class="fw-bold">Commenter Name</div>
+								${commentContent}
+							</div>
+						</div>
+					`);
+						// Clear the comment content
+						$('#comment-content').val('');
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
 			});
 		});
 	</script>
 
+
+	// axios({
+	// method: 'post',
+	// url: '/phocos/comment/add',
+	// params: {
+	// articleId: articleId,
+	// commentContent: commentContent,
+
+	// },
+	// })
 
 </body>
 

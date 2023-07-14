@@ -139,6 +139,50 @@ h1,
   font-size: calc(1.375rem + 1.5vw);
 }
 
+/* 放大和抖動的動畫 */
+@keyframes zoomAndShake {
+    0% { transform: scale(1); }
+    10% { transform: scale(1.3); }
+    20% { transform: scale(1.2) translate3d(-1px, 0, 0); }
+    30% { transform: scale(1.2) translate3d(2px, 0, 0); }
+    40% { transform: scale(1.2) translate3d(-2px, 0, 0); }
+    50% { transform: scale(1.2) translate3d(1px, 0, 0); }
+    60% { transform: scale(1.2) translate3d(-1px, 0, 0); }
+    70% { transform: scale(1.2) translate3d(2px, 0, 0); }
+    80% { transform: scale(1.2) translate3d(-2px, 0, 0); }
+    90% { transform: scale(1.2) translate3d(1px, 0, 0); }
+    100% { transform: scale(1); }
+}
+
+/* 當按鈕有 .zoom-and-shake 類別時，應用這個動畫 */
+.img-btn.zoom-and-shake {
+    animation: zoomAndShake 0.5s;
+}
+
+@keyframes popAndGlow {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.2); filter: brightness(2); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes shrinkAndFade {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.8); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.pop-and-glow-effect {
+    animation: popAndGlow 0.5s;
+    animation-iteration-count: 1;
+}
+
+.shrink-and-fade-effect {
+    animation: shrinkAndFade 0.5s;
+    animation-iteration-count: 1;
+}
+
+
+
+
 @media (min-width: 1200px) {
 
   h1,
