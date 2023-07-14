@@ -48,12 +48,13 @@ public class PhotoServiceDto {
 	private String serviceTypeName;
 	
 	// ========== Correlated to serviceCreator -> Member ==========
-	private Integer serviceCreatorId;
+	private Integer serviceCreatorID;
 	
 	// ========== Correlated to List<referencPictures> -> ReferencePicture ==========
     private MultipartFile[] inputRefPics;
 	
-    
+	// ========== Correlated to List<referencPictures> -> ReferencePicture ==========
+    private List<Integer> picIDsToDelete;
     
     // ========== other ==========
 	private final String datetimeFormatPattern = "yyyy-MM-dd hh:mm:ss E";
@@ -94,6 +95,7 @@ public class PhotoServiceDto {
 		serviceDuration = photoService.getServiceDuration();
 		serviceLocation = photoService.getServiceLocation();
 		serviceCreator = photoService.getServiceCreator().getMemberName();
+		serviceCreatorID = photoService.getServiceCreator().getMemberID();
 		serviceDesc = photoService.getServiceDesc();
 		createdOn = photoService.getCreatedOn();
 		updatedOn = photoService.getUpdatedOn();

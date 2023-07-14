@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>活動列表</title>
+        <link th:href="@{/backstage/shared_layout/css/styles.css}" rel="stylesheet" />
+        <style>
+            #add{
+                border: 0.5px solid rgb(195, 195, 195);
+                float:right;
+                font-size: 20px;
+                background-color: #d1f0c2;
+            }
+
+            #editEvent{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #d1f0c2;
+            }
+            #enter{
+                border: 0.5px solid rgb(195, 195, 195);
+                font-size: 14px;
+                background-color: #c2f0ec;
+            }
+            a{
+            	color:black;
+            	text-decoration:none
+            }
+            .large-text {
+    			font-size: 24px; /* 調整字體大小為所需的大小，這裡使用24px作為示例 */
+			}
+			.large-icon {
+    			font-size: 30px; /* 調整字體大小為所需的大小，這裡使用24px作為示例 */
+			}
+			
+        </style>
+	</head>
+
+	<body class="sb-nav-fixed">
+
+         <div th:replace="~{forestage/shared/foreTopNav}"></div>
+         	
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">活動一覽</h1>
+                        <ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                               <i class="fas fa-table me-1 large-icon"></i>
+					<div style ="display : flex; justify-content : space-between">
+					<h1 class="large-text">活動列表</h1>
+					<form method="get" th:action="@{/event/insertFore}">
+						<button id="add" class="large-text">新增活動</button>
+					</form>
+					</div>
+				</div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+								<thead>
+									<tr>
+										<th>活動編號</th>
+										<th>會員編號</th>
+										<th>活動類型</th>
+										<th>活動主題</th>
+										<th>活動資訊</th>
+										<th>活動日期</th>
+										<th>活動詳情</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>活動編號</th>
+										<th>會員編號</th>
+										<th>活動類型</th>
+										<th>活動主題</th>
+										<th>活動資訊</th>
+										<th>活動日期</th>
+										<th>活動詳情</th>
+									</tr>
+								</tfoot>
+								<tbody>
+									<th:block th:each="event : ${events}">
+								      <tr>
+								        <td id="eventID" th:text="${event.eventID}"></td>                                        
+								        <td th:text="${event.memberID}"></td>
+								        <td th:text="${event.eventType}"></td>
+								        <td th:text="${event.eventTopic}"></td>
+								        <td th:text="${event.eventInfo}"></td>
+								        <td th:text="${event.eventDate}"></td>
+                                        <td>                                
+                                            <form method="get" th:action="@{/event/read}">
+                                            <input id="eventID" name="eventID" th:value="${event.eventID}" type="hidden" />
+                                            <input type="submit" value="進入" class="btn btn-outline-info btn-sm">
+                                            </form>
+                                        </td>
+								      </tr>
+								    </th:block>
+								  </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+ 				<div th:replace="~{forestage/shared/foreFooter}"></div>
+
+        <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+        <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+            crossorigin="anonymous"></script>
+        <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"
+            crossorigin="anonymous"></script>
+        <script th:src="@{/backstage/shared_layout/js/datatables-simple-demo.js}"></script>
+        <script th:src="@{/backstage/shared_layout/js/scripts.js}"></script>
+        <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+        <script th:src="@{https://code.jquery.com/jquery-3.6.4.js}"></script>
+	<script>
+		$(function () {
+			$('tbody').on('click', '#del', function () {
+				event.preventDefault();
+				let eventID = $(this).closest('tr').find('#eventID').val();
+				console.log(eventID);
+
+				Swal.fire({
+					title: '確認删除？',
+					text: '您確定要刪除這個活動資料吗？',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: '確認',
+					cancelButtonText: '取消'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// 使用Ajax向後端傳送刪除請求
+						$.ajax({
+							url: 'http://localhost:8080/phocos/event/delete', 
+							method: 'delete',
+							data: {eventID: eventID},
+							complete: function () {
+								// 刪除完成後強制重新載入頁面
+								location.reload();
+							}
+						});
+					}
+				});
+			});
+		});
+
+        </script>
+    </body>
+</html>

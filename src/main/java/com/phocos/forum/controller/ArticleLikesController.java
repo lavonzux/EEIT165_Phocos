@@ -16,6 +16,7 @@ import com.phocos.forum.service.ArticleLikesService;
 import com.phocos.forum.service.ArticleService;
 import com.phocos.member.Member;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -25,18 +26,20 @@ public class ArticleLikesController {
 	private ArticleService articleService;
 	@Autowired
 	private ArticleLikesService articleLikesService;
-	
+
 	@PostMapping("/article/{articleId}/likes")
-	public ResponseEntity<Map<String, Object>> toggleArticleLike(@PathVariable Integer articleId, HttpSession session) {
+	public ResponseEntity<Map<String, Object>> toggleArticleLike(@PathVariable Integer articleId,
+			HttpServletRequest request, HttpSession session) {
 		try {
+			session = request.getSession();
 			Member member = (Member) session.getAttribute("member");
+
 			Article article = articleService.findById(articleId);
 			Map<String, Object> response = new HashMap<>();
 			if (member == null) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			} else {
-				ArticleLikes isLiked = articleLikesService.findByMemberIDAndArticleId(member.getMemberID(),
-						articleId);
+				ArticleLikes isLiked = articleLikesService.findByMemberIDAndArticleId(member.getMemberID(), articleId);
 // ---------------------------------------- 按過讚 ----------------------------------------
 				if (isLiked != null) {
 // ---------------------------------------- 看按讚狀態去做+-讚數並更改狀態 ----------------------------------------
@@ -71,6 +74,7 @@ public class ArticleLikesController {
 					articleService.insert(article);
 					ArticleLikes like = new ArticleLikes();
 					like.setArticle(article);
+					// System.out.println("Test:"+member);
 					like.setMember(member);
 					like.setLiked(1);
 					articleLikesService.insert(like);

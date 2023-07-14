@@ -23,4 +23,25 @@ public class ShoppingCartService {
     public List<ShoppingCartItem> getByMemberId(int memberId) {
         return shopRepo.findByMemberID(memberId);
     }
+    
+    public double calculateTotalPrice(int memberID) {
+        List<ShoppingCartItem> items = shopRepo.findByMemberID(memberID);
+        int totalPrice = 0;
+
+        for (ShoppingCartItem item : items) {
+            totalPrice += item.getPrice();
+        }
+
+        return totalPrice;
+    }
+    
+    public double calculateTotalPrice(List<ShoppingCartItem> shoppingCartItems) {
+        int totalPrice = 0;
+
+        for (ShoppingCartItem item : shoppingCartItems) {
+            totalPrice += item.getPrice();
+        }
+
+        return totalPrice;
+    }
 }

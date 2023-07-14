@@ -68,6 +68,9 @@ public class PhotoService implements java.io.Serializable{
 	@OneToMany(mappedBy = "photoService", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<ReferencePicture> referencePictures;
+	
+	
+	private int serviceDeleted;
 
 
 	// ==================== CONSTRUCTOR ====================

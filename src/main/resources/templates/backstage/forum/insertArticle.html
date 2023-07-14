@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert Article data</title>
+<style>
+body {
+	background-color: #FFF0F5;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 18px;
+	line-height: 1.6;
+	color: #333;
+}
+
+form {
+	background-color: #FFF;
+	padding: 30px;
+	border: 1px solid #EEE;
+	width: 50%;
+	margin: 0 auto;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+input[type="text"], textarea {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #EEE;
+	margin-bottom: 20px;
+	box-sizing: border-box;
+	font-size: 18px;
+}
+
+input[type="submit"] {
+	background-color: #FFB6C1;
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 18px;
+	transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+	background-color: #FFA07A;
+}
+
+input[type="reset"] {
+	background-color: #ADD8E6;
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+input[type="reset"]:hover {
+	background-color: #87CEFA;
+}
+
+h2 {
+	text-align: center;
+	color: #808080;
+}
+
+button[type="submit"] {
+	padding: 12px 24px;
+	background-color: #FFB6C1;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 18px;
+	transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+	background-color: #FFA07A;
+}
+</style>
+</head>
+
+<body>
+	<h2>新增文章</h2>
+
+	<form method="post" th:action="@{/forum/article/insert}">
+		
+	 文章標題: <input type="text"  name="articleTitle"/><p>
+	 文章內容:	<textarea rows="10" cols="30" name="articleContent"></textarea><p>
+	 Hashtag: <input type="text" name="hashtag" /><p><p>
+	 <input type="hidden" name="articlePostTime"  /><p>
+
+	<div style="text-align: center;">
+	 <input type="submit" value="確定" /> <input type="reset" value="重來" /><p/>
+	</div>
+	</form>
+	<div style="text-align: center;">
+	<form method="get" th:action="@{/forum/article/foreMainPage}">
+		<button style="padding: 12px 24px; font-size: 18px; " type="submit">回首頁</button>
+	</form>
+	</div>
+</body>
+
+</html>
