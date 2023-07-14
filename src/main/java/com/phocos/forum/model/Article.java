@@ -56,19 +56,19 @@ public class Article {
 	private Member member;
 
 // -------------------- 文章回應 --------------------
-	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comment> comments;
 
 // -------------------- 文章圖片 --------------------
-	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
 	private List<ArticlePic> articlePics;
 
 // -------------------- 文章按讚 --------------------
-	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
 	private List<ArticleLikes> articleCounts;
 
 // -------------------- 文章檢舉 --------------------
-	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ArticleReport> articleReports;
 
 	@PrePersist // 當物件轉換成persist狀態以前，要做的事情放在方法裡面

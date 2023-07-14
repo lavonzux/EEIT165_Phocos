@@ -50,7 +50,7 @@ public class PhotoService implements java.io.Serializable{
 	private String serviceLocation;
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "serviceCreator")
 //	@JsonManagedReference
 	private Member serviceCreator;
