@@ -108,7 +108,7 @@ public class PhotoServiceLogger_desctructive {
 		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
 		
 		
-		String path = "/Users/lavonzux/Documents/EEIT65/SpringBoot/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_destructive.txt";
+		String path = "H:\\STS4\\workspace\\Phocos\\src\\main\\resources\\static\\backstage\\photoService\\photoServiceLogger_destructive.txt";
 		
 		File loggerFile = new File(path);
 		System.out.println(logLine);

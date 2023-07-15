@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PSloggerController {
 
 
-	final static String LOGGER_FILE_DESTRUCTIVE = "/Users/lavonzux/Documents/EEIT65/SpringBoot/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_destructive.txt";
-	final static String LOGGER_FILE_ACCESSING = "/Users/lavonzux/Documents/EEIT65/SpringBoot/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt";
+	final static String LOGGER_FILE_DESTRUCTIVE = "H:/STS4/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_destructive.txt";
+	final static String LOGGER_FILE_ACCESSING = "H:/STS4/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt";
 	
 	
 
 
 	@GetMapping("/photoService/log")
-	public String gotoPhotoServiceLog(Model model) throws IOException {
-//		List<String> readLogContent = readAccessingLog();
-//		model.addAttribute("logContent", readLogContent);
+	public String gotoPhotoServiceLog() {
 		return "backstage/photoService/Readlog";
 	}
 	
-	
+	@GetMapping("/photoService/logws")
+	public String gotoPhotoServiceWebsocketLog() {
+		return "backstage/photoService/ReadLogWeb";
+	}
 	
 	
 	

@@ -15,6 +15,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.phocos.utils.PrintValueHelper;
@@ -33,6 +34,8 @@ public class PhotoServiceLogger_access {
 	@Autowired
 	private HttpSession httpSession;
 	
+	@Autowired
+	private SimpMessagingTemplate msger;
 	
 //	private static final String LOGGER_FILE_PATH= "static/backstage/photoService/photoServiceLogger.txt";
 	
@@ -47,12 +50,6 @@ public class PhotoServiceLogger_access {
 	public void psRestfulController() {
 		
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -108,7 +105,7 @@ public class PhotoServiceLogger_access {
 		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
 		
 		
-		String path = "/Users/lavonzux/Documents/EEIT65/SpringBoot/workspace/Phocos/src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt";
+		String path = "H:\\STS4\\workspace\\Phocos\\src\\main\\resources\\static\\backstage\\photoService\\photoServiceLogger_accessing.txt";
 		
 		File loggerFile = new File(path);
 		System.out.println(logLine);
@@ -135,6 +132,28 @@ public class PhotoServiceLogger_access {
 	}
 	
 	
+	@Before("psController() || psRestfulController()")
+	public void sendLogToWebsocket(JoinPoint joinPoint) {
+		
+		String memberID = "Guest";
+		String requestMethod = request.getMethod();
+		String remoteAddr = request.getRemoteAddr();
+		
+		String calledMethod = joinPoint.getSignature().getName();
+		
+		
+		Instant currentTime = Instant.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(EE) HH:mm:ss '['O']'").withZone(ZoneId.systemDefault());
+		String currentTimeString = formatter.format(currentTime);
+
+		
+		
+		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
+
+		
+		
+		msger.convertAndSend("/pslog/accessing", logLine);
+	}
 	
 	
 }
