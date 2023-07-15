@@ -51,17 +51,20 @@
 
 											</div>
 											<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-												<button id="adminLoginButton" class="btn btn-primary ">管理員一鍵登入</button>
-												<button id="memberLoginButton" class="btn btn-primary ">會員一鍵登入</button>
-											</div>
-											<br>
-
-
-											<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
 												<a class="small" href="password.html">忘記密碼?</a>
 
 												<button id="loginButton" class="btn btn-primary ">確定登入</button>
 											</div>
+											
+											<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+												<button id="adminLoginButton" class="btn btn-primary ">管理員</button>
+												<button id="memberLoginButton" class="btn btn-primary ">會員001</button>
+												<button id="member2LoginButton" class="btn btn-primary ">會員999</button>
+											</div>
+											<br>
+
+
+
 										</form>
 
 										<div id="g_id_onload"
@@ -180,6 +183,18 @@
 
 			});
 		});
+		
+		$(document).ready(function () {
+			$('#member2LoginButton').click(function (event) {
+				event.preventDefault();
+
+				$('#memberAccount').val('phocosMember999');
+				$('#memberPassword').val('phocos');
+
+
+			});
+		});
+		
 
 		$(document).ready(function () {
 			$('#loginButton').click(function () {

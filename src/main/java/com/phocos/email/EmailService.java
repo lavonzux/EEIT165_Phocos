@@ -28,6 +28,7 @@ public class EmailService {
 		this.mailSender = mailSender;
 	}
 	//註冊發送驗證碼
+	@Async
 	public void sendVerificationCode(String recipientEmail, String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);

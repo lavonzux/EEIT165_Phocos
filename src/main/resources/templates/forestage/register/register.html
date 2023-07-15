@@ -81,7 +81,10 @@
 
 										<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
 											<div class="d-flex justify-content-center">
-												<button id="fillFormButton" class="btn btn-primary ">一鍵輸入</button>
+												<button id="fillFormButton" class="btn btn-primary ">會員001一鍵</button>
+											</div>
+											<div class="d-flex justify-content-center">
+												<button id="fillFormButton2" class="btn btn-primary ">會員999一鍵</button>
 											</div>
 											<div class="d-flex justify-content-center">
 												<button type="submit" id="registerButton"
@@ -255,7 +258,23 @@
 				$('#memberAccount').val(memberAccount);
 				console.log(memberAccount);
 				$('#memberPassword').val('phocos');
-				$('#memberEmail').val('a10912555@gmail.com');
+				$('#memberEmail').val('phocos.number1@gmail.com');
+				$('#memberName').val('黃柏翔');
+				$('#memberGender').val('男性'); // 選擇對應的性別選項值
+
+				checkAccount(memberAccount);
+
+			});
+		});
+		
+		$(document).ready(function () {
+			$('#fillFormButton2').click(function (event) {
+				event.preventDefault();
+				var memberAccount = 'phocosMember999';
+				$('#memberAccount').val(memberAccount);
+				console.log(memberAccount);
+				$('#memberPassword').val('phocos');
+				$('#memberEmail').val('phocos.number1@gmail.com');
 				$('#memberName').val('黃柏翔');
 				$('#memberGender').val('男性'); // 選擇對應的性別選項值
 

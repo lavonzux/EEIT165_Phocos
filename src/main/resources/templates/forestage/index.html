@@ -2,147 +2,232 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>影遇 Phocos</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Google fonts-->
-    <link
-        href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link th:href="@{/forestage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>影遇 Phocos</title>
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- -->
+	<link th:href="@{/bootstrap.min.css}" rel="stylesheet" />
+
+	<!-- Google fonts-->
+	<link
+		href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link th:href="@{/forestage/shared_layout/css/styles.css}" rel="stylesheet" />
+	<style>
+		.red-dot-container {
+			display: inline-block;
+			position: relative;
+		}
+
+		.red-dot {
+			width: 10px;
+			height: 10px;
+			background-color: red;
+			border-radius: 50%;
+			display: inline-block;
+			position: absolute;
+			top: -5px;
+			right: -5px;
+		}
+	</style>
 </head>
 
 <body>
-    <header>
-        <h1 class="site-heading text-center text-faded d-none d-lg-block">
-            <span class="site-heading-upper text-primary mb-3" style="font-family: 'Ysabeau SC', sans-serif">Take A
-                Photo Take A Chance</span>
-            <div class="site-heading-lower" style="height: 70px;">
-                <img th:src="@{/forestage/shared_layout/assets/img/logo.png}" alt="Phocos">
-            </div>
-        </h1>
-    </header>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+	<header>
+		<h1 class="site-heading text-center text-faded d-none d-lg-block">
+			<span class="site-heading-upper text-primary mb-3" style="font-family: 'Ysabeau SC', sans-serif">Take A
+				Photo Take A Chance</span>
+			<div class="site-heading-lower" style="height: 70px;">
+				<img th:src="@{/forestage/shared_layout/assets/img/logo.png}" alt="Phocos">
+			</div>
+		</h1>
+	</header>
+	<!-- Navigation-->
+	<nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+		<div class="container">
+			<a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto">
+			<input type="hidden" id="memberID" th:value="${session.memberID}"></input>
 
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mx-auto">
 
-						<th:block>
-							<li th:if="${session.isLoggedIn != null}" class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-									data-bs-toggle="dropdown" aria-expanded="false">
-									<th:block>
-										<img th:if="${session.memberAvatar != null}" th:src="${session.memberAvatar}"
-											style=" width:20px; height: 20px; border-radius: 50%;" />
-										<th:block th:unless="${session.memberAvatar != null}">
-											<img th:if="${session.avatarExist != null}" class="squareAvatar"
-												th:src="@{'/avatar/' + ${session.memberID} }"
-												style="width: 20px; height: 20px; border-radius: 50%;">
-											<img th:unless="${session.avatarExist != null}" class="squareAvatar"
-												th:src="@{/forestage/member/assets/memberDefaultAvatar.png}"
-												style="width: 20px; height: 20px; border-radius: 50%;">
-										</th:block>
+					<th:block>
+						<li th:if="${session.isLoggedIn != null}" class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								<th:block>
+									<img th:if="${session.memberAvatar != null}" th:src="${session.memberAvatar}"
+										style=" width:20px; height: 20px; border-radius: 50%;" />
+									<th:block th:unless="${session.memberAvatar != null}">
+										<img th:if="${session.avatarExist != null}" class="squareAvatar"
+											th:src="@{'/avatar/' + ${session.memberID} }"
+											style="width: 20px; height: 20px; border-radius: 50%;">
+										<img th:unless="${session.avatarExist != null}" class="squareAvatar"
+											th:src="@{/forestage/member/assets/memberDefaultAvatar.png}"
+											style="width: 20px; height: 20px; border-radius: 50%;">
 									</th:block>
-									<span th:text="${session.memberName}"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-									<li>
-										<th:block>
-											<a th:if="${session.gmail !=null}" class="dropdown-item" href="#">個人頁面</a>
-											<a th:unless="${session.gmail !=null}" class="dropdown-item"
-												th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a>
-										</th:block>
-									</li>
-									<li><a class="dropdown-item"
-											th:href="@{'/profile/edit/' + ${session.memberID}}">設定</a></li>
-									<li>
-										<hr class="dropdown-divider" />
-									</li>
-									<li><a class="dropdown-item" th:href="@{/logout}">登出</a></li>
-								</ul>
-							</li>
-							<li th:unless="${session.isLoggedIn != null}" class="nav-item"><a class="nav-link"
-									th:href="@{/login}">登入帳號</a></li>
-						</th:block>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browseevents}">活動資訊</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{photoService}">攝影媒合</a></li>
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browsestudiospage}">場地一覽</a></li>
-                    						<li class="nav-item dropdown">
+								</th:block>
+								<span th:text="${session.memberName}"></span>
 
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">線上商城</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+							</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+								<li>
+									<th:block>
+										<a th:if="${session.gmail !=null}" class="dropdown-item" href="#">個人頁面</a>
+										<a th:unless="${session.gmail !=null}" class="dropdown-item"
+											th:href="@{'/profile/' + ${session.memberID}}">個人頁面</a>
+									</th:block>
+								</li>
+								<li>
+									<a class="dropdown-item" th:href="@{/privateMessage} ">
+										私訊
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" th:href="@{'/profile/edit/' + ${session.memberID}}">
+										設定
+									</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider" />
+								</li>
+								<li><a class="dropdown-item" th:href="@{/logout}">登出</a></li>
+							</ul>
+						</li>
+						<li th:unless="${session.isLoggedIn != null}" class="nav-item"><a class="nav-link"
+								th:href="@{/login}">登入帳號</a></li>
+					</th:block>
+					<li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{browseevents}">活動資訊</a>
+					</li>
+					<li class="nav-item px-lg-4"><a class="nav-link text-uppercase" th:href="@{photoService}">攝影媒合</a>
+					</li>
+					<li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
+							th:href="@{browsestudiospage}">場地一覽</a></li>
+					<li class="nav-item dropdown">
 
- <li><a class="dropdown-item" th:href="@{/products/camerashop2}">相機商場</a></li>
-                                <li><a class="dropdown-item" th:href="@{/products/lensshop2}">鏡頭商場</a></li>
+						<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+							data-bs-toggle="dropdown" aria-expanded="false">線上商城</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
 
-                            </ul>
-                        </li>
+							<li><a class="dropdown-item" th:href="@{/products/camerashop2}">相機商場</a></li>
+							<li><a class="dropdown-item" th:href="@{/products/lensshop2}">鏡頭商場</a></li>
 
-                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
-                            href="http://localhost:8080/phocos/forum/article/mainPage">論壇中心</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+						</ul>
+					</li>
 
-    <section class="page-section clearfix">
-        <div class="container">
-            <div class="intro">
-                <img class="intro-img img-fluid mb-3 mb-lg-0 rounded"
-                    th:src="@{/forestage/shared_layout/assets/img/intro.jpg}" alt="..." />
-                <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-                    <h2 class="section-heading mb-4">
-                        <span class="section-heading-upper">找攝影師？</span>
-                        <span class="section-heading-lower">人像攝影服務</span>
-                    </h2>
-                    <p class="mb-3">歡迎光臨PHOCOS人像攝影平台！我們提供攝影師自訂照相方案服務，為您提供專業的攝影服務，無論是婚禮、家庭、個人肖像還是商業活動，我們都能為您捕捉珍貴的時刻和獨特的氛圍。無論您需要傳達什麼樣的故事或情感，我們將用專業技術和細膩的攝影手法為您呈現最佳效果。讓我們成為您生活中重要時刻的見證者，為您帶來美好回憶！</p>
-                    <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" th:href="@{photoService}">媒合攝影師</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="page-section cta">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-9 mx-auto">
-                    <div class="cta-inner bg-faded text-center rounded">
-                        <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">我們提供的服務</span>
-                            <span class="section-heading-lower">探索攝影的無限可能</span>
-                        </h2>
-                        <p class="mb-0">近年隨著Youtube、Instagram等影像式社群平台的興起，台灣的人像攝影社群—包含攝影師、模特、Cosplayer以及攝影棚——的數量急遽地上升。
-然而這樣新興活躍中的社群，並沒有一個專屬平台可以用來預約、洽談合作，或是招募、應徵攝影相關的工作，而是使用Facebook社團、Instagram私訊等非結構化的社群平台，無法集中資訊的同時，也容易造成金錢交易的糾紛，甚至人身安全的事件。
-應運而生的人像攝影媒合平台「影遇」，象徵著攝影和人像的相遇之旅，隱喻攝影師、模特兒和攝影愛好者在這個平台上相遇，帶來的情感交流和創作共鳴，透過建置攝影師、模特兒、攝影設備廠商、攝影棚營運方的線上交易服務模式，提供安全、公開的媒合平台並集中資訊、熱絡社群。
-</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer class="footer text-faded text-center py-5">
-        <div class="container">
-            <p class="m-0 small">Copyright &copy; PHOCOS 2023</p>
-        </div>
-    </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script th:src="@{/forestage/shared_layout/js/scripts.js}"></script>
+					<li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
+							href="http://localhost:8080/phocos/forum/article/mainPage">論壇中心</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<section class="page-section clearfix">
+		<div class="container">
+			<div class="intro">
+				<img class="intro-img img-fluid mb-3 mb-lg-0 rounded"
+					th:src="@{/forestage/shared_layout/assets/img/intro.jpg}" alt="..." />
+				<div class="intro-text left-0 text-center bg-faded p-5 rounded">
+					<h2 class="section-heading mb-4">
+						<span class="section-heading-upper">找攝影師？</span>
+						<span class="section-heading-lower">人像攝影服務</span>
+					</h2>
+					<p class="mb-3">
+						歡迎光臨PHOCOS人像攝影平台！我們提供攝影師自訂照相方案服務，為您提供專業的攝影服務，無論是婚禮、家庭、個人肖像還是商業活動，我們都能為您捕捉珍貴的時刻和獨特的氛圍。無論您需要傳達什麼樣的故事或情感，我們將用專業技術和細膩的攝影手法為您呈現最佳效果。讓我們成為您生活中重要時刻的見證者，為您帶來美好回憶！
+					</p>
+					<div class="intro-button mx-auto"><a class="btn btn-primary btn-xl"
+							th:href="@{photoService}">媒合攝影師</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="page-section cta">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-9 mx-auto">
+					<div class="cta-inner bg-faded text-center rounded">
+						<h2 class="section-heading mb-4">
+							<span class="section-heading-upper">我們提供的服務</span>
+							<span class="section-heading-lower">探索攝影的無限可能</span>
+						</h2>
+						<p class="mb-0">近年隨著Youtube、Instagram等影像式社群平台的興起，台灣的人像攝影社群—包含攝影師、模特、Cosplayer以及攝影棚——的數量急遽地上升。
+							然而這樣新興活躍中的社群，並沒有一個專屬平台可以用來預約、洽談合作，或是招募、應徵攝影相關的工作，而是使用Facebook社團、Instagram私訊等非結構化的社群平台，無法集中資訊的同時，也容易造成金錢交易的糾紛，甚至人身安全的事件。
+							應運而生的人像攝影媒合平台「影遇」，象徵著攝影和人像的相遇之旅，隱喻攝影師、模特兒和攝影愛好者在這個平台上相遇，帶來的情感交流和創作共鳴，透過建置攝影師、模特兒、攝影設備廠商、攝影棚營運方的線上交易服務模式，提供安全、公開的媒合平台並集中資訊、熱絡社群。
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div th:replace="~{forestage/shared_layout/toast :: toast}">
+		<footer class="footer text-faded text-center py-5">
+			<div class="container">
+				<p class="m-0 small">Copyright &copy; PHOCOS 2023</p>
+			</div>
+		</footer>
+
+	</div>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script th:src="@{/forestage/shared_layout/js/scripts.js}"></script>
+	<script th:src="@{/forestage/shared_layout/js/indexWesocket.js}"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 </body>
 
 </html>
+<script>
+	var stompClient = null;
+
+	$(function () {
+		var memberID = $('#memberID').val();
+
+		if (memberID != null) {
+			connect(memberID);
+		}
+	})
+
+	function connect(memberID) {
+		var socket = new SockJS('/phocos/ws');
+		stompClient = Stomp.over(socket);
+		stompClient.connect({}, function () {
+			stompClient.subscribe('/topic/' + memberID, function (message) {
+				console.log(message);
+				showMessage(JSON.parse(message.body));
+			});
+		});
+	}
+
+	function disconnect() {
+		if (stompClient !== null) {
+			stompClient.disconnect();
+		}
+		console.log("Disconnected");
+	}
+
+	function showMessage(message) {
+		var toast = $("#liveToast");
+
+		toast.find(".toast-header img").attr("src",  "http://localhost:8080/phocos/avatar/"+ message.senderID);
+		toast.find(".toast-header strong").text(message.senderName);
+		toast.find(".toast-header small").text(message.time);
+		toast.find(".toast-body").text(message.content);
+
+		toast.toast("show");
+	}
+
+</script>
