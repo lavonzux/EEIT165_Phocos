@@ -48,7 +48,7 @@
 								<!-- Post title-->
 								<h1 class="fw-bolder mb-1" th:text="${article.articleTitle}">Welcome to Blog Post!</h1>
 								<!-- Post meta content-->
-								<div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap
+								<div class="text-muted fst-italic mb-2">
 								</div>
 								<!-- Post hashtags-->
 								<th:block th:each="hashtag : ${#strings.arraySplit(article.hashtag, ' ')}">
