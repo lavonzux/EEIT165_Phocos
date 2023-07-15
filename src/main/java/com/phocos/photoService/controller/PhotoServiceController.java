@@ -23,6 +23,8 @@ import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.service.PhotoServiceService;
 import com.phocos.photoService.service.ServiceTypeService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class PhotoServiceController {
 
@@ -153,9 +155,20 @@ public class PhotoServiceController {
 	
 	
 	@GetMapping(path = {"/photoService", "/photoService/ReadAll"})
-	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, Model model) {
+	public String gotoReadAllPhotoServicePage(@RequestParam(name = "page", required = false) Integer page, HttpSession session, Model model) {
 		if (page == null) { page = 1; }
-		Page<PhotoService> resultPage = psService.readAllByPage(page-1, 5);
+		
+		Page<PhotoService> resultPage = null;
+		
+		Integer memberID = (Integer) session.getAttribute("memberID");
+		if (memberID!=null && memberID == 34) {
+			System.out.println("memberID is:..."+memberID);
+			resultPage = psService.readAllByPage();
+		}else {
+			resultPage = psService.readAllByPage(page-1, 5);
+			System.out.println("memberID do not exist");
+		}
+		
 		model.addAttribute("resultPage", resultPage);
 		return "forestage/photoService/ReadAllPhotoService";
 	}

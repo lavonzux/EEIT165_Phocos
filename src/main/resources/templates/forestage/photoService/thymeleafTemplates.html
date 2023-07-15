@@ -21,6 +21,34 @@
             width: auto;
         }
     </style>
+
+    <style th:fragment="templateCSS">
+        #typeCount li {
+            font-style: italic;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .serviceInfoBlock {
+            border: 2px, solid, black;
+            border-bottom: 2px, solid, #333;
+            border-bottom: 4px, solid, #555;
+            border-radius: 2%;
+            padding: 1rem;
+            background-color: beige;
+        }
+
+        .serviceInfoBlock table {
+            border-radius: 5%;
+        }
+
+        .serviceInfoBlock tr {
+            margin: 0.5rem;
+            border-bottom: 1px, solid, black;
+        }
+    </style>
+
+
+
 </head>
 
 <body>
@@ -72,17 +100,16 @@
                     </div>
                     <!-- Categories widget-->
                     <div class="card mb-4">
-                        <div class="card-header">熱門攝影風格</div>
-                        <div class="card-body">
-                            <div class="row" id="popularTypes">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0" id="popularTypes1">
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0" id="popularTypes2">
-                                    </ul>
-                                </div>
+                        <div class="card-header">熱門攝影類型</div>
+                        <div class="card-body row">
+                            <div class="col-10">
+                                <ul class="list-unstyled mb-0" id="popularTypes">
+                                </ul>
+                            </div>
+                            <div class="col-2">
+                                <ul class="list-unstyled mb-0" id="typeCount">
+
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -94,7 +121,6 @@
             <!-- Side widgets for ReadOne-->
             <div class="col-lg-4">
                 <div th:fragment="stickey-side-widgets-readone" class="sticky-side-tool">
-                    <!-- <div th:replace="~{::CreatePhotoServiceButton}"></div> -->
                     <!-- Search widget-->
                     <div class="card mb-4">
                         <div class="card-header">搜尋</div>
@@ -108,19 +134,43 @@
                     <!-- Categories widget-->
                     <div class="card mb-4">
                         <div class="card-header">熱門攝影類型</div>
-                        <div class="card-body">
-                            <div class="row" id="popularTypes">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0" id="popularTypes1">
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0" id="popularTypes2">
-                                    </ul>
-                                </div>
+                        <div class="card-body row">
+                            <div class="col-10">
+                                <ul class="list-unstyled mb-0" id="popularTypes">
+                                </ul>
+                            </div>
+                            <div class="col-2">
+                                <ul class="list-unstyled mb-0" id="typeCount">
+                                </ul>
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- service information -->
+                    <div class="card mb-4 p-1">
+                        <div class="serviceInfoBlock">
+                            <table class="table">
+                                <tr>
+                                    <td>價格：</td>
+                                    <td>[[${resultBean.servicePrice}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>預估所需時間：</td>
+                                    <td>[[${resultBean.serviceDuration}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>提供會員：</td>
+                                    <td><a th:href="'/profile/'+@{resultBean.serviceCreatorID}">[[${resultBean.serviceCreator}]]</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
                     <!-- Side widget-->
                     <th:block th:switch=" ${session.memberID!=null} AND ${session.memberID==resultBean.serviceCreatorID} OR ${session.memberID==34} ">
                         <!-- Button trigger modal -->
@@ -134,7 +184,7 @@
                         </div>
                         <div th:case="false" class="btn-group" role="group" aria-label="basic example">
                             <button type="button" class="btn btn-outline-info" id="go-to-gcalendar">看看我的行事曆</button>
-                            <button type="submit" class="btn btn-outline-success" id="send-mail" th:data-subject="'預約'+${resultBean.serviceName}" th:data-recipient="${creatorEmail}">發信給攝影師</button>
+                            <button type="submit" class="btn btn-outline-success" id="send-mail" th:data-subject="'預約'+${resultBean.serviceName}+'相關事宜'" th:data-recipient="${creatorEmail}">發信給攝影師</button>
                         </div>
                     </th:block>
                 </div>
@@ -157,6 +207,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script th:src="@{/forestage/photoService/js/scripts.js}"></script>
+
+    <script>
+
+    </script>
+
+
+
 </body>
 
 </html>

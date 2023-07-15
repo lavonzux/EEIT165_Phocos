@@ -74,18 +74,24 @@ public class PhotoServiceService {
 	
 	public Page<PhotoService> readAllByPage() {
 		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
-		return psRepo.findByServiceDeleted(0, page);
+		return psRepo.findAll(page);
 	}
 	
-	public Page<PhotoService> readAllByPage(int index, int size) {
+	public Page<PhotoService> readAllByPage(int includeDeleted) {
 		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findByServiceDeleted(includeDeleted, page);
+	}
+	
+	
+	public Page<PhotoService> readAllByPage(int index, int size) {
+		PageRequest page = PageRequest.of(index, size, Direction.DESC, "createdOn");
 		Page<PhotoService> pageNotDeleted = psRepo.findByServiceDeleted(0, page);
 		return pageNotDeleted;
 	}
 	
 	
 	public Page<PhotoService> readAllByPage(int index, int size, boolean includeDeleted) {
-		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		PageRequest page = PageRequest.of(index, size, Direction.DESC, "createdOn");
 		if (includeDeleted) { return psRepo.findAll(page); }
 		
 		return psRepo.findByServiceDeleted(0, page);

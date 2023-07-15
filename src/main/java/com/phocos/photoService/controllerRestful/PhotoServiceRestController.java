@@ -76,8 +76,9 @@ public class PhotoServiceRestController {
 
 	
 	@GetMapping(path = "/photoService/api/ReadAllPage")
-	public Page<PhotoService> gotoReadAllPhotoService(Model model) {
-		Page<PhotoService> resultPage = psService.readAllByPage();
+	public Page<PhotoService> gotoReadAllPhotoService(@RequestParam(name = "page", required = false) Integer page, Model model) {
+		if (page!=null) { page = 1; }
+		Page<PhotoService> resultPage = psService.readAllByPage(page-1, 5);
 		return resultPage;
 	}
 
