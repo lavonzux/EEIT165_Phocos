@@ -11,5 +11,7 @@ import com.phocos.member.Member;
 public interface PrivateMessageRepository extends JpaRepository<PrivateMessage, Integer> {
 	
     List<PrivateMessage> findBySenderOrReceiver(Member sender, Member receiver);
+    
+    List<PrivateMessage> findByPrivateChatRoom(PrivateChatRoom privateChatRoom);
 
 }

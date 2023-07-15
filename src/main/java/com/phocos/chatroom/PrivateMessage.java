@@ -41,5 +41,8 @@ public class PrivateMessage {
     
     private LocalDateTime timestamp;
     
+    private Integer isRead = 0 ;
+
+    
     
 }

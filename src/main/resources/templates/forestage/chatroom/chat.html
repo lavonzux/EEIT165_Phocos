@@ -289,8 +289,10 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="text" class="search-bar" id="searchMember" placeholder="搜尋會員">
+					<input type="text" class="search-bar" id="searchTerm" placeholder="搜尋會員">
+					<button type="button" id="searchMember" class="btn btn-primary">查詢</button>
 					<div id="memberData">
+
 
 					</div>
 				</div>
@@ -300,94 +302,107 @@
 	<div th:replace="~{forestage/shared/foreFooter}"></div>
 	<script>
 		$(function () {
-			var timer;
+			$('#searchTerm').keyup(function () {
+				if (event.keyCode === 13) {
+					searchMember();
+				}
+			})
 
-			$('#searchMember').on('input', function () {
-				var searchTerm = $(this).val();
+			$('#searchMember').click(function () {
+				searchMember();
+			});
+			function searchMember() {
+
+				var searchTerm = $("#searchTerm").val();
 				console.log(searchTerm);
 				$('#memberData').empty();
 
-				clearTimeout(timer);
+				$('#searchMember').prop('disabled', true);
 
-				timer = setTimeout(function () {
-					$.ajax({
-						url: 'http://localhost:8080/phocos/searchMemberByMemberName',
-						method: 'GET',
-						data: { keyword: searchTerm },
-						success: function (response) {
-							console.log(response[0]);
-							console.log(response[1]);
-							console.log(response[2]);
-							console.log(response.length);
 
-							var memberData = '';
+				$.ajax({
+					url: 'http://localhost:8080/phocos/searchMemberByMemberName',
+					method: 'GET',
+					data: {keyword: searchTerm},
+					success: function (response) {
+						console.log(response[0]);
+						console.log(response[1]);
+						console.log(response[2]);
+						console.log(response.length);
 
-							if (response != null) {
-								for (var i = 0; i < response.length; i++) {
-									var member = response[i];
-									var memberID = member.memberID;
-									var memberName = member.memberName;
+						var memberData = '';
 
-									memberData += '<div class="chat_list">';
-									memberData += '<div class="chat_people">';
-									memberData += '<div class="chat_img">';
-									memberData += '<img src="http://localhost:8080/phocos/avatar/' + member.memberID + ' " alt="' + member.memberName + '">';
-									memberData += '</div>';
-									memberData += '<input type="hidden" id="receiverID" value="' + member.memberID + '" ></input>';
-									memberData += '<div class="chat_ib">';
-									memberData += '<h5>' + memberName + ' <span class="chat_date"></span></h5>';
-									memberData += '</div>';
-									memberData += '</div>';
-									memberData += '</div>';
+						if (response != null) {
+							for (var i = 0; i < response.length; i++) {
+								var member = response[i];
+								var memberID = member.memberID;
+								var memberName = member.memberName;
 
-								}
-								$('#memberData').append(memberData);
+								memberData += '<div class="chat_list">';
+								memberData += '<div class="chat_people">';
+								memberData += '<div class="chat_img">';
+								memberData += '<img src="http://localhost:8080/phocos/avatar/' + member.memberID + ' " alt="' + member.memberName + '">';
+								memberData += '</div>';
+								memberData += '<input type="hidden" id="receiverID" value="' + member.memberID + '" ></input>';
+								memberData += '<div class="chat_ib">';
+								memberData += '<h5>' + memberName + ' <span class="chat_date"></span></h5>';
+								memberData += '</div>';
+								memberData += '</div>';
+								memberData += '</div>';
 
 							}
+							$('#memberData').append(memberData);
 
-							if (response == null) {
-								$('#memberData').append(memberData);
-
-							}
-
-							$('.chat_list').click(function () {
-
-								var receiverMemberID = $(this).find('#receiverID').val();
-
-								// 現在的會員ID
-								var currentMemberID = $('#memberID').val();
-
-								// 建立私訊聊天室
-								$.ajax({
-									url: 'http://localhost:8080/phocos/createChatRoom?currentMemberID=' + currentMemberID + '&receiverMemberID=' + receiverMemberID,
-									method: 'GET',
-									success: function (response) {
-										console.log(response);
-										console.log("建立聊天室成功！");
-										Swal.fire({
-											title: '建立聊天室成功！',
-											text: '成功建立聊天室',
-											icon: 'success',
-											confirmButtonText: '確定'
-										})
-										findchatRooms();
-									},
-									error: function (error) {
-										console.log("錯誤訊息：" + error);
-									}
-								})
-							})
-						},
-						error: function (xhr, status, error) {
-							console.log(error); // 处理错误
 						}
-					});
-				}, 500)
+
+						if (response == null) {
+							$('#memberData').append(memberData);
+
+						}
+
+						$('.chat_list').click(function () {
+
+							var receiverMemberID = $(this).find('#receiverID').val();
+
+							// 現在的會員ID
+							var currentMemberID = $('#memberID').val();
+
+							// 建立私訊聊天室
+							$.ajax({
+								url: 'http://localhost:8080/phocos/createChatRoom?currentMemberID=' + currentMemberID + '&receiverMemberID=' + receiverMemberID,
+								method: 'GET',
+								success: function (response) {
+									console.log(response);
+									console.log("建立聊天室成功！");
+
+									$('#myModal').modal('hide');
+
+									Swal.fire({
+										title: '建立聊天室成功！',
+										text: '成功建立聊天室',
+										icon: 'success',
+										confirmButtonText: '確定'
+									})
+									findchatRooms();
+								},
+								error: function (error) {
+									console.log("錯誤訊息：" + error);
+								}
+							})
+						})
+						$('#searchMember').prop('disabled', false);
+
+					},
+					error: function (xhr, status, error) {
+						console.log(error); // 处理错误
+					}
+				});
+
+			}
 
 
-			});
+		});
 
-		})
 	</script>
 	<script>
 		$('.write_msg').keydown(function (event) {
