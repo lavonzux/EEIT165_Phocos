@@ -2,6 +2,8 @@
 mvnw
 mvnw.cmd
 cMsg.txt
+src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt
+src/main/resources/static/backstage/photoService/photoServiceLogger_destructive.txt
 
 
 HELP.md
