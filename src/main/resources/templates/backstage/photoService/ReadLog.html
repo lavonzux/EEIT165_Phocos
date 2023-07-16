@@ -26,11 +26,13 @@
         }
 
         .tab-pane {
-            min-height: 35vh;
-            max-height: 80vh;
+            background-color: white;
+            min-height: 40vh;
+            max-height: 60vh;
             overflow-y: scroll;
             overflow-x: auto;
             border: 1px solid, black;
+            padding: 5px;
         }
     </style>
 </head>
@@ -96,8 +98,8 @@
         const accessingLogPane = document.querySelector('#accessing-log-pane')
         const destructiveLogPane = document.querySelector('#destructive-log-pane')
 
-        const accessingWebsocketTab = document.querySelector('#accessing-websocket-pane')
-        const destructiveWebsocketTab = document.querySelector('#destructive-websocket-pane')
+        const accessingWebSocketPane = document.querySelector('#accessing-websocket-pane')
+        const destructiveWebSocketPane = document.querySelector('#destructive-websocket-pane')
 
         const currentHref = window.location.href
         const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') + 6)
@@ -111,10 +113,6 @@
             connectAccessingLog()
             connectDestructiveLog()
         }
-
-
-
-
 
 
         function fetchAccessingData() {
@@ -155,7 +153,6 @@
             stompClientA = Stomp.over(socket);
             stompClientA.connect({}, function () {
                 stompClientA.subscribe('/pslog/accessing', function (message) {
-                    console.log(message);
                     appendAccessingLog(message.body);
                 });
             });
@@ -163,7 +160,7 @@
         function appendAccessingLog(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
-            accessingLogTab.append(newLine)
+            accessingWebSocketPane.appendChild(newLine)
         }
         function disconnect() {
             if (stompClientA !== null) {
@@ -178,7 +175,6 @@
             stompClientD = Stomp.over(socket);
             stompClientD.connect({}, function () {
                 stompClientD.subscribe('/pslog/destructive', function (message) {
-                    console.log(message);
                     appendAccessingLog(message.body);
                 });
             });
@@ -186,7 +182,7 @@
         function appendAccessingLog(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
-            accessingLogTab.append(newLine)
+            destructiveWebSocketPane.appendChild(newLine)
         }
         function disconnect() {
             if (stompClientD !== null) {

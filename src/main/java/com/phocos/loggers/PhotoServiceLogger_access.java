@@ -121,7 +121,7 @@ public class PhotoServiceLogger_access {
 		
 		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
 		
-		msger.convertAndSend("/pslog/destructive", logLine);
+		msger.convertAndSend("/pslog/accessing", logLine);
 	}
 	
 	
