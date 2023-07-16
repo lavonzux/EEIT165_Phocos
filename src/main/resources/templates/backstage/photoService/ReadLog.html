@@ -153,11 +153,11 @@
             stompClientA = Stomp.over(socket);
             stompClientA.connect({}, function () {
                 stompClientA.subscribe('/pslog/accessing', function (message) {
-                    appendAccessingLog(message.body);
+                    appendAccessingPane(message.body);
                 });
             });
         }
-        function appendAccessingLog(logLine) {
+        function appendAccessingPane(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
             accessingWebSocketPane.appendChild(newLine)
@@ -175,11 +175,11 @@
             stompClientD = Stomp.over(socket);
             stompClientD.connect({}, function () {
                 stompClientD.subscribe('/pslog/destructive', function (message) {
-                    appendAccessingLog(message.body);
+                    appendDestructivePane(message.body);
                 });
             });
         }
-        function appendAccessingLog(logLine) {
+        function appendDestructivePane(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
             destructiveWebSocketPane.appendChild(newLine)

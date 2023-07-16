@@ -70,7 +70,7 @@ public class PhotoServiceRestController {
 	// ==================== READ SECTION ====================
 
 	@GetMapping(path = "/photoService/api/ReadAll")
-	public List<PhotoService> doReadAllPhotoServiceAction(Model model) {
+	public List<PhotoService> gotoReadAllPhotoServiceAction(Model model) {
 		return psService.readAllEntries();
 	}
 
@@ -84,7 +84,7 @@ public class PhotoServiceRestController {
 
 	
 	@GetMapping(path = "/photoService/api/ReadOne")
-	public PhotoService doReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
+	public PhotoService gotoReadOnePhotoServiceAction(@RequestParam("serviceID") int serviceID, Model model) {
 		PhotoService resultBean = psService.readEntry(serviceID);
 		return resultBean;
 	}
