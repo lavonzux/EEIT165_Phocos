@@ -23,22 +23,19 @@
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container px-5">
 				<a class="navbar-brand" href="http://localhost:8080/phocos/">
-					<img th:src="@{/forestage/sharedForBar/assets/logoForPage.png}" alt="Logo" height="30"
-						style="margin-right:10px;"> <!-- logo 圖片 -->
-					<span
-						style="font-family: 'Ysabeau SC', sans-serif; font-size: 22px; text-shadow: 0.5px 0.5px 0.5px #FEFAE0;">
+					<!-- logo 圖片 -->
+					<img th:src="@{/forestage/sharedForBar/assets/logoForPage.png}" alt="Logo" height="30" style="margin-right:10px;">
+					<span style="font-family: 'Ysabeau SC', sans-serif; font-size: 22px; text-shadow: 0.5px 0.5px 0.5px #FEFAE0;">
 						Phocos 影遇
 					</span>
 				</a>
 
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-					aria-expanded="false" aria-label="Toggle navigation"><span
-						class="navbar-toggler-icon"></span></button>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						<li class="nav-item"><a class="nav-link" href="http://localhost:8080/phocos/">首頁</a></li>
-
+						<li class="nav-item"><a class="nav-link" th:href="@{/}">首頁</a></li>
 
 						<th:block>
 							<li th:if="${session.isLoggedIn != null}" class="nav-item dropdown">
@@ -79,17 +76,17 @@
 						</th:block>
 
 						<li class="nav-item"><a class="nav-link" th:href="@{/browseevents}">活動資訊</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{photoService}">攝影媒合</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{browsestudiospage}">場地一覽</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/photoService}">攝影媒合</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/browsestudiospage}">場地一覽</a></li>
 						<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">線上商城</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
- <li><a class="dropdown-item" th:href="@{/products/camerashop2}">相機商場</a></li>
-                                <li><a class="dropdown-item" th:href="@{/products/lensshop2}">鏡頭商場</a></li>
+							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">線上商城</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+								<li><a class="dropdown-item" th:href="@{/products/camerashop2}">相機商場</a></li>
+								<li><a class="dropdown-item" th:href="@{/products/lensshop2}">鏡頭商場</a></li>
 
-                            </ul>
-                        </li>
+							</ul>
+						</li>
 
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"

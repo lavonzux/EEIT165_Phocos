@@ -24,6 +24,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -57,7 +58,7 @@ public class Member {
 	private byte[] memberAvatar;
 
   @JsonManagedReference // 由這邊做JSON序列化
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Login> login = new ArrayList<>();
 
   
@@ -70,26 +71,31 @@ public class Member {
 // -------------------- 文章 --------------------
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ToString.Exclude
 	private List<Article> article = new ArrayList<>();
     
 // -------------------- 文章留言 --------------------
  	@JsonIgnore
  	@JsonManagedReference
  	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ 	@ToString.Exclude
  	private List<Comment> comments = new ArrayList<>(0);
     
 // -------------------- 文章按讚 --------------------
  	@JsonIgnore
  	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ 	@ToString.Exclude
  	private List<ArticleLikes> articleLikes = new ArrayList<>();
  	
 // -------------------- 文章檢舉 --------------------
  	@JsonIgnore
  	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ 	@ToString.Exclude
  	private List<ArticleReport> articleReport = new ArrayList<>();
 
 	@JsonManagedReference // 由這邊做JSON序列化
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+	@ToString.Exclude
 	private List<MemberPicture> memberPictures = new ArrayList<>();
 
 }

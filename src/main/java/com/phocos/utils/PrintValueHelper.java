@@ -3,6 +3,7 @@ package com.phocos.utils;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 public class PrintValueHelper {
@@ -11,7 +12,7 @@ public class PrintValueHelper {
 	
 	
 	
-	public static void printFieldsAndValues(Object obj) {
+	public static void printObjectFieldsAndValues(Object obj) {
 		
 			Field[] declaredFields = obj.getClass().getDeclaredFields();
 			System.out.println("===================== printing all fields and values ===========================");
@@ -44,7 +45,23 @@ public class PrintValueHelper {
 	}	
 	
 	
-	
+	public static void printRequestParamsAndValues(HttpServletRequest httpRequest) {
+		Enumeration<String> parameterNames = httpRequest.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = (String) parameterNames.nextElement();
+			System.out.print(paramName + " ...value:...");
+			try {
+				Object paramVal = httpRequest.getParameter(paramName);
+				System.out.println(paramVal.toString());
+				
+			} catch (Exception e) {
+				System.out.println("fail to convert ["+paramName+"]'s attribute to string");
+			}
+			
+		}
+
+		
+	}
 	
 	
 }

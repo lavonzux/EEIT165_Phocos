@@ -2,20 +2,16 @@ package com.phocos.photoService.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.model.ServiceTypeRepository;
+import com.phocos.photoService.Dto.ServiceTypeAndCount;
 
 @Service
 public class ServiceTypeService {
@@ -60,12 +56,21 @@ public class ServiceTypeService {
 			}
 		};
 		allTypes.sort(sortByCount);
-		/*
-		for (ServiceType oneType : allTypes) {
-			int containedCount = oneType.getPhotoService().size();
-			System.out.println(oneType.getTypeName()+" 出現了 "+containedCount+" 次!");
-		}*/
 		List<ServiceType> returnList = allTypes.subList(0, topN);
+		return returnList;
+	}
+	
+	
+	public List<ServiceTypeAndCount> readNthPopularWithCount(int topN) {
+		ArrayList<ServiceTypeAndCount> returnList = new ArrayList<ServiceTypeAndCount>();
+		List<ServiceType> topNservices = read_Nth_Popular(topN);
+		
+		for (ServiceType oneService : topNservices) {
+			ServiceTypeAndCount oneTypeAndCount = new ServiceTypeAndCount(oneService, oneService.getPhotoService().size());
+			returnList.add(oneTypeAndCount);
+			System.out.println(oneService.getTypeName() +"出現"+ oneService.getPhotoService().size() +"次");
+		}
+		
 		return returnList;
 	}
 	

@@ -94,16 +94,13 @@ function refPicImgHtmlMaker(pictureID) {
 }
 
 
-
-
 function fetchPopularTypes() {
     const topTypes = []
     axios({
         method: 'get',
-        url: ContextPathname + '/serviceType/api/popular'
+        url: ContextPathname + '/serviceType/api/popularAndCount'
     })
         .then(res => {
-            console.log(res.data);
             makeTypeLink(res.data)
         })
         .catch(err => {
@@ -111,27 +108,19 @@ function fetchPopularTypes() {
         })
 }
 
+function makeTypeLink(serviceTypesAndCount) {
+    const popularTypes = document.querySelector('#popularTypes')
+    const typeCount = document.querySelector('#typeCount')
 
-function makeTypeLink(serviceTypes) {
-    let serviceTypes1 = serviceTypes.slice(0, 3)
-    console.log(serviceTypes1);
-    let serviceTypes2 = serviceTypes.slice(3)
-    console.log(serviceTypes2);
+    serviceTypesAndCount.forEach(ele => {
+        let onelink = document.createElement('li')
+        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.serviceType.typeName}">${ele.serviceType.typeName}</a>`
+        onelink.innerHTML = typeLink
+        popularTypes.append(onelink)
 
-    const popularTypes1 = document.querySelector('#popularTypes1')
-    const popularTypes2 = document.querySelector('#popularTypes2')
-    serviceTypes1.forEach(ele => {
-        let oneli = document.createElement('li')
-        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
-        oneli.innerHTML = typeLink
-        popularTypes1.append(oneli)
+        let oneCount = document.createElement('li')
+        oneCount.innerText = `${ele.count}筆`
+        typeCount.append(oneCount)
+
     });
-
-    serviceTypes2.forEach(ele => {
-        let oneli = document.createElement('li')
-        typeLink = `<a href="${ContextPathname}/photoService/ReadByType?serviceType=${ele.typeName}">${ele.typeName}</a>`
-        oneli.innerHTML = typeLink
-        popularTypes2.append(oneli)
-    });
-
 }

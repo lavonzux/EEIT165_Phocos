@@ -37,7 +37,7 @@ public class PhotoServiceDto {
 	
 	private List<ReferencePicture> referencePictures;
 	
-	
+	private int serviceDeleted;
 	
 	
 	
@@ -100,6 +100,7 @@ public class PhotoServiceDto {
 		createdOn = photoService.getCreatedOn();
 		updatedOn = photoService.getUpdatedOn();
 		referencePictures = photoService.getReferencePictures();
+		serviceDeleted = photoService.getServiceDeleted();
 	}
 	
 	

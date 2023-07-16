@@ -35,8 +35,13 @@ public class PrivateChatRoom {
     @JoinColumn(name = "member2ID")
     private Member member2;
     
+    @JoinColumn(name = "unreadMessagesCount")
+    private Integer unreadMessagesCount = 0;
+    
     @JsonManagedReference
 	@OneToMany(mappedBy = "privateChatRoom", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<PrivateMessage> privateMessages = new ArrayList<>();
+    
+    
     
 }

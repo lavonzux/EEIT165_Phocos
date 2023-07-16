@@ -41,7 +41,13 @@ public class PrivateChatRoomController {
 	@GetMapping("/chatRooms/{memberID}")
 	public List<PrivateChatRoom> getChatRoomsByMember(@PathVariable Integer memberID) {
 		Member member = memberService.findById(memberID);
-		return privateChatRoomService.findChatRoomsByMember(member);
+		List<PrivateChatRoom> chatRooms = privateChatRoomService.findChatRoomsByMember(member);
+		for (PrivateChatRoom chatRoom : chatRooms) {
+			Integer unreadCount = privateChatRoomService.calculateUnreadMessagesCount(chatRoom, memberID);
+			chatRoom.setUnreadMessagesCount(unreadCount);
+		}
+		return chatRooms;
+
 	}
 
 	@ResponseBody
@@ -87,9 +93,11 @@ public class PrivateChatRoomController {
 		privateMessageToReceiver.setTimestamp(LocalDateTime.now());
 		privateMessageToReceiver.setPrivateChatRoom(privateChatRoom);
 		privateMessageRepository.save(privateMessageToReceiver);
-
 		// 發送訊息到這個私訊聊天室
 		messagingTemplate.convertAndSend("/topic/messages/" + privateChatRoomID, message);
+
+		messagingTemplate.convertAndSend("/topic/" + receiverID, message);
+
 	}
 
 }
