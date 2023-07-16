@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -9,7 +9,9 @@
     <meta name="author" content="" />
     <title>管理攝影服務</title>
     <link th:href="@{/backstage/photoService/bootstrap.min.css}" rel="stylesheet">
-    <script th:src="@{/backstage/photoService/bootstrap.min.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <style>
         .log-body {
@@ -21,7 +23,14 @@
             border-radius: 10px;
             padding: 20px;
             background-color: antiquewhite;
-            overflow: scroll;
+        }
+
+        .tab-pane {
+            min-height: 35vh;
+            max-height: 80vh;
+            overflow-y: scroll;
+            overflow-x: auto;
+            border: 1px solid, black;
         }
     </style>
 </head>
@@ -57,11 +66,19 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="destructive-log" data-bs-toggle="tab" data-bs-target="#destructive-log-pane" type="button" role="tab" aria-controls="destructive-log-pane" aria-selected="false">資料刪改請求紀錄</button>
                                     </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="accessing-websocket" data-bs-toggle="tab" data-bs-target="#accessing-websocket-pane" type="button" role="tab" aria-controls="accessing-websocket-pane" aria-selected="false">頁面跳轉請求即時監測</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="destructive-websocket" data-bs-toggle="tab" data-bs-target="#destructive-websocket-pane" type="button" role="tab" aria-controls="destructive-websocket-pane" aria-selected="false">資料刪改請求即時監測</button>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="accessing-log-pane" role="tabpanel" aria-labelledby="accessing-log" tabindex="0"></div>
-                                    <div class="tab-pane fade" id="destructive-log-pane" role="tabpanel" aria-labelledby="destructive-log" tabindex="0"></div>
+                                    <div class="tab-pane fade" id="destructive-log-pane" role="tabpanel" aria-labelledby="destructive-log" tabindex="1"></div>
+                                    <div class="tab-pane fade" id="accessing-websocket-pane" role="tabpanel" aria-labelledby="accessing-websocket" tabindex="2"></div>
+                                    <div class="tab-pane fade" id="destructive-websocket-pane" role="tabpanel" aria-labelledby="destructive-websocket" tabindex="3"></div>
                                 </div>
                             </div>
                         </div>
@@ -73,41 +90,110 @@
     </div>
 
 
+    <script th:src="@{/backstage/bootstrap.bundle.min.js}"></script>
 
     <script>
-        const accessingLogTab = document.querySelector('#accessing-log-pane')
-        const destructiveLogTab = document.querySelector('#destructive-log-pane')
+        const accessingLogPane = document.querySelector('#accessing-log-pane')
+        const destructiveLogPane = document.querySelector('#destructive-log-pane')
+
+        const accessingWebsocketTab = document.querySelector('#accessing-websocket-pane')
+        const destructiveWebsocketTab = document.querySelector('#destructive-websocket-pane')
 
         const currentHref = window.location.href
         const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') + 6)
 
-        axios.get(ContextPathname + '/photoService/api/log/accessing')
-            .then(res => {
-                const logContent = res.data
-                logContent.forEach((oneLine) => {
-                    const p = document.createElement('p')
-                    p.innerHTML = oneLine
-                    accessingLogTab.appendChild(p)
+        window.onload = function () {
+            fetchAccessingData()
+
+            document.getElementById('accessing-log').addEventListener('click', (e) => fetchAccessingData())
+            document.getElementById('destructive-log').addEventListener('click', (e) => fetchDestructiveData())
+
+            connectAccessingLog()
+            connectDestructiveLog()
+        }
+
+
+
+
+
+
+        function fetchAccessingData() {
+            axios.get(ContextPathname + '/photoService/api/log/accessing')
+                .then(res => {
+                    accessingLogPane.innerHTML = ''
+                    const logContent = res.data
+                    logContent.forEach((oneLine) => {
+                        const p = document.createElement('p')
+                        p.innerHTML = oneLine
+                        accessingLogPane.appendChild(p)
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
+        function fetchDestructiveData() {
+            axios.get(ContextPathname + '/photoService/api/log/destructive')
+                .then(res => {
+                    destructiveLogPane.innerHTML = ''
+                    const logContent = res.data
+                    logContent.forEach((oneLine) => {
+                        const p = document.createElement('p')
+                        p.innerHTML = oneLine
+                        destructiveLogPane.appendChild(p)
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
+        var stompClientA = null;
+        function connectAccessingLog() {
+            var socket = new SockJS('/phocos/ws');
+            stompClientA = Stomp.over(socket);
+            stompClientA.connect({}, function () {
+                stompClientA.subscribe('/pslog/accessing', function (message) {
+                    console.log(message);
+                    appendAccessingLog(message.body);
                 });
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            });
+        }
+        function appendAccessingLog(logLine) {
+            let newLine = document.createElement('p')
+            newLine.innerText = logLine
+            accessingLogTab.append(newLine)
+        }
+        function disconnect() {
+            if (stompClientA !== null) {
+                stompClientA.disconnect();
+            }
+            console.log("Disconnected");
+        }
 
-
-        axios.get(ContextPathname + '/photoService/api/log/destructive')
-            .then(res => {
-                const logContent = res.data
-                logContent.forEach((oneLine) => {
-                    const p = document.createElement('p')
-                    p.innerHTML = oneLine
-                    destructiveLogTab.appendChild(p)
+        var stompClientD = null;
+        function connectDestructiveLog() {
+            var socket = new SockJS('/phocos/ws');
+            stompClientD = Stomp.over(socket);
+            stompClientD.connect({}, function () {
+                stompClientD.subscribe('/pslog/destructive', function (message) {
+                    console.log(message);
+                    appendAccessingLog(message.body);
                 });
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
+            });
+        }
+        function appendAccessingLog(logLine) {
+            let newLine = document.createElement('p')
+            newLine.innerText = logLine
+            accessingLogTab.append(newLine)
+        }
+        function disconnect() {
+            if (stompClientD !== null) {
+                stompClientD.disconnect();
+            }
+            console.log("Disconnected");
+        }
 
     </script>
 </body>

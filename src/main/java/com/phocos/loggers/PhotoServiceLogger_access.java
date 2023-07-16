@@ -3,10 +3,14 @@ package com.phocos.loggers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.Locale;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -37,7 +41,10 @@ public class PhotoServiceLogger_access {
 	@Autowired
 	private SimpMessagingTemplate msger;
 	
-//	private static final String LOGGER_FILE_PATH= "static/backstage/photoService/photoServiceLogger.txt";
+	private static final String LOGGER_FILE_PATH= "./src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt";
+	
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd(EE) HH:mm:ss '['O']'").withZone(ZoneId.systemDefault()).withLocale(Locale.TRADITIONAL_CHINESE);
+	
 	
 	
 	
@@ -53,72 +60,41 @@ public class PhotoServiceLogger_access {
 	
 	
 	
+	
 	@Before("psController() || psRestfulController()")
 	public void before(JoinPoint joinPoint) throws IOException {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		
+		
 		String calledMethod = joinPoint.getSignature().getName();
+		
 		String memberID = "Guest";
-		
-		
-		
-		PrintValueHelper.printSessionAttributesAndValues(httpSession);
-		
-		
-		
-		
-		
 		Object memberIDinReq = httpSession.getAttribute("memberID");
 		if (memberIDinReq != null) memberID = Integer.toString((int)memberIDinReq); 
 		
 		
-		logger.info(calledMethod+" was called by member: "+ memberID+"......");
+		logger.info("["+calledMethod+"] was called by member: ["+ memberID+"] with below data......");
+		
+		PrintValueHelper.printSessionAttributesAndValues(httpSession);
+		PrintValueHelper.printRequestParamsAndValues(request);
 		
 		
-		
-		
-		// ========== IP Address =========
+		// ========== request info =========
 		String requestMethod = request.getMethod();
-		Enumeration<String> parameterNames = request.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String string = (String) parameterNames.nextElement();
-			System.out.print(string + " ...value:...");
-			try {
-				Object paramVal = request.getParameter(string);
-				System.out.println(paramVal.toString());
-//				PrintValueHelper.printFieldsAndValues(paramVal);
-				
-			} catch (Exception e) {
-				System.out.println("fail to convert "+string+" attribute to string");
-			}
-			
-		}
 		String remoteAddr = request.getRemoteAddr();
 		
-
 		Instant currentTime = Instant.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(EE) HH:mm:ss '['O']'").withZone(ZoneId.systemDefault());
-		String currentTimeString = formatter.format(currentTime);
+		String currentTimeString = DATE_TIME_FORMATTER.format(currentTime);
 		
-		
-		
+		// ========== Composing the log line ==========
 		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
-		
-		
-		String path = "H:\\STS4\\workspace\\Phocos\\src\\main\\resources\\static\\backstage\\photoService\\photoServiceLogger_accessing.txt";
-		
-		File loggerFile = new File(path);
 		System.out.println(logLine);
 		
-		
-		FileWriter logWriter = new FileWriter(loggerFile, true);
+		// ========== Getting & Write into the log file ==========		
+		FileWriter logWriter = new FileWriter(new File(LOGGER_FILE_PATH), true);
 		logWriter.write(logLine);
 		logWriter.write("\r\n");
 		logWriter.close();
-		
-		
-		
-		
 		
 	}
 	
@@ -128,7 +104,6 @@ public class PhotoServiceLogger_access {
 		Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass().getName());
 		String methodName = joinPoint.getSignature().getName();
 		logger.info(methodName+" end......");
-		
 	}
 	
 	
@@ -141,18 +116,12 @@ public class PhotoServiceLogger_access {
 		
 		String calledMethod = joinPoint.getSignature().getName();
 		
-		
 		Instant currentTime = Instant.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(EE) HH:mm:ss '['O']'").withZone(ZoneId.systemDefault());
-		String currentTimeString = formatter.format(currentTime);
-
-		
+		String currentTimeString = DATE_TIME_FORMATTER.format(currentTime);
 		
 		String logLine = currentTimeString + " --- " + memberID+" is "+requestMethod.toUpperCase()+"ing "+calledMethod+" from "+remoteAddr;
-
 		
-		
-		msger.convertAndSend("/pslog/accessing", logLine);
+		msger.convertAndSend("/pslog/destructive", logLine);
 	}
 	
 	
