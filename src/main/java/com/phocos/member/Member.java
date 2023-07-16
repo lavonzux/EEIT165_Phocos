@@ -73,8 +73,6 @@ public class Member {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@ToString.Exclude
 	private List<Article> article = new ArrayList<>();
-
-
     
 // -------------------- 文章留言 --------------------
  	@JsonIgnore

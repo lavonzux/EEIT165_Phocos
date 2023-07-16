@@ -1,8 +1,10 @@
 package com.phocos.forum.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +22,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.phocos.forum.model.Article;
+import com.phocos.forum.model.ArticleDto;
+import com.phocos.forum.model.ArticleLikes;
 import com.phocos.forum.model.ArticlePic;
-import com.phocos.forum.service.ArticlePicService;
+import com.phocos.forum.model.Comment;
+import com.phocos.forum.model.CommentDto;
 import com.phocos.forum.service.ArticleService;
+import com.phocos.forum.service.CommentService;
 import com.phocos.member.Member;
+import com.phocos.member.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -33,7 +40,10 @@ public class ArticleForeController {
 
 	@Autowired
 	private ArticleService articleService;
-
+	@Autowired
+	private CommentService commentService;
+	@Autowired
+	private MemberService memberService;
 
 //	---------------------------------------- 測試有無吃到套版 ----------------------------------------
 //	@GetMapping("/forum/article/mainPage")
@@ -61,19 +71,105 @@ public class ArticleForeController {
 		return "forestage/forum/mainPage";
 	}
 
+//  ---------------------------------------- Ajax/Json最新文章 ----------------------------------------
+	@GetMapping("/forum/article/mainPage/ajax")
+	@ResponseBody
+	public ResponseEntity<?> forumMainPage(@RequestParam(defaultValue = "0") Integer page) {
+		Page<Article> articleList = articleService.findAllByOrderByArticlePostTimeDesc(page, 6);
+		List<ArticleDto> articleDtos = new ArrayList<>();
+		for (Article article : articleList) {
+			ArticleDto dto = new ArticleDto();
+			dto.setArticleId(article.getArticleId());
+			dto.setArticleTitle(article.getArticleTitle());
+			dto.setArticleContent(article.getArticleContent());
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss");
+			String formattedDate = sdf.format(article.getArticlePostTime());
+			dto.setArticlePostTime(formattedDate);
+
+			for (ArticlePic pic : article.getArticlePics()) {
+				dto.setImageBase64(pic.getBase64Image());
+				break;
+			}
+			articleDtos.add(dto);
+		}
+		return ResponseEntity.ok(articleDtos);
+	}
+
 //	---------------------------------------- 用讚數查全部文章(Ajax) ----------------------------------------
+//	@GetMapping("/forum/article/hotArticles")
+//	@ResponseBody
+//	public ResponseEntity<?> getHotArticles(@RequestParam(defaultValue = "0") Integer page) {
+//		Page<Article> hotArticles = articleService.findAllByOrderByArticleLikesCountDesc(page, 6);
+//		
+//		return ResponseEntity.ok(hotArticles.getContent());
+//	}
+
+//	test
 	@GetMapping("/forum/article/hotArticles")
 	@ResponseBody
 	public ResponseEntity<?> getHotArticles(@RequestParam(defaultValue = "0") Integer page) {
 		Page<Article> hotArticles = articleService.findAllByOrderByArticleLikesCountDesc(page, 6);
-		return ResponseEntity.ok(hotArticles.getContent());
+		List<ArticleDto> articleDtos = new ArrayList<>();
+		for (Article article : hotArticles) {
+			ArticleDto dto = new ArticleDto();
+			// 設置其他屬性
+			dto.setArticleId(article.getArticleId());
+			dto.setArticleTitle(article.getArticleTitle());
+			dto.setArticleContent(article.getArticleContent());
+			// 將日期轉換為你需要的格式
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss");
+			String formattedDate = sdf.format(article.getArticlePostTime());
+			dto.setArticlePostTime(formattedDate);
+
+			for (ArticlePic pic : article.getArticlePics()) {
+				dto.setImageBase64(pic.getBase64Image());
+				// 若你的ArticleDto只需要一張圖片，這裡可以用break提前退出循環
+				// 如果需要所有的圖片，你可能需要把imageBase64改為一個List<String>，並把所有的base64字串加入這個列表
+				break;
+			}
+			articleDtos.add(dto);
+		}
+		return ResponseEntity.ok(articleDtos);
 	}
 
 //  ---------------------------------------- 讀取文章 ----------------------------------------
+//	@GetMapping("/forum/article/read/{articleId}")
+//	public String readOne(@PathVariable("articleId") Integer articleId, Model model) {
+//		Article article = articleService.findById(articleId);
+//		model.addAttribute("article", article);
+//		return "forestage/forum/readArticle";
+//	}
+
+//	---------------------------------------- 讀取文章與評論 ----------------------------------------
 	@GetMapping("/forum/article/read/{articleId}")
-	public String readOne(@PathVariable("articleId") Integer articleId, Model model) {
+	public String readOne(@PathVariable("articleId") Integer articleId, Model model, HttpSession session) {
 		Article article = articleService.findById(articleId);
 		model.addAttribute("article", article);
+
+		// 获取文章的所有评论
+		List<Comment> comments = commentService.findByArticleArticleIdOrderByCommentPostTimeDesc(articleId);
+		List<CommentDto> commentDtos = new ArrayList<>();
+
+		for (Comment comment : comments) {
+			Member member = comment.getMember(); // get the member of the comment
+			if (member == null) { // check if the member is null
+				continue; // if it's null, skip this comment
+			}
+
+			Member memberData = memberService.findById(member.getMemberID());
+
+			CommentDto commentDto = new CommentDto();
+			commentDto.setCommentContent(comment.getCommentContent());
+			commentDto.setCommentPostTime(comment.getCommentPostTime());
+			commentDto.setMemberName(memberData.getMemberName());
+			String avatarBase64 = Base64.getEncoder().encodeToString(memberData.getMemberAvatar());
+			commentDto.setMemberAvatar(avatarBase64);
+
+			commentDtos.add(commentDto);
+		}
+
+		model.addAttribute("commentDtos", commentDtos);
 		return "forestage/forum/readArticle";
 	}
 
@@ -142,7 +238,7 @@ public class ArticleForeController {
 		}
 
 		article.setArticlePics(articlePics);
-		articleService.insert(article); // Assuming you have an articleService method to update the Article
+		articleService.insert(article);
 
 		return "redirect:/forum/article/mainPage";
 	}
@@ -153,6 +249,29 @@ public class ArticleForeController {
 		articleService.fakeDelete(articleId);
 		return "redirect:/forum/article/foreMainPage";
 	}
+
+//	我的文章
+	@GetMapping("/myArticles")
+	public String getMyArticles(@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "5") Integer size, Model model, HttpSession session) {
+		Integer memberID = (Integer) session.getAttribute("memberID");
+		Page<Article> articles = articleService.findAllByMemberIDOrderByArticlePostTimeDesc(memberID, page, size);
+		model.addAttribute("myArticles", articles);
+		return "forestage/forum/myArticles";
+	}
+
+//	按讚ㄉ
+	@GetMapping("/myLikedArticles")
+	public String getMyLikedArticles(@RequestParam(defaultValue = "0") Integer page,
+	        @RequestParam(defaultValue = "5") Integer size, Model model, HttpSession session) {
+	    Integer memberID = (Integer) session.getAttribute("memberID");
+	    Page<ArticleLikes> likedArticles = articleService.findLikedArticlesByMemberID(memberID, page, size);
+	    model.addAttribute("myLikedArticles",
+	            likedArticles.getContent().stream().map(ArticleLikes::getArticle).collect(Collectors.toList()));
+	    return "forestage/forum/myLikedArticles";
+	}
+
+
 
 //  ---------------------------------------- 顯示首頁查全部(無任何排序) ----------------------------------------
 //	@GetMapping("/forum/article/mainPage")

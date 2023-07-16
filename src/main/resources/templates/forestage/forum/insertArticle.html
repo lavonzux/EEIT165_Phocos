@@ -15,120 +15,194 @@
 	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
+	<style>
+		.ck-editor__editable {
+			min-height: 400px;
+		}
+
+		#drawArea div {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+	</style>
+
 </head>
 
 <body class="d-flex flex-column h-100">
 	<main class="flex-shrink-0">
-		<!-- Navigation-->
 		<div th:replace="~{forestage/shared/foreTopNav}"></div>
-
-		<!-- Main content -->
 		<div class="container mt-5">
-			<h2>新增文章</h2>
-			<form th:action="@{/forum/article/insert}" method="POST" enctype="multipart/form-data">
-				<!-- 文章標題 -->
-				<div class="mb-3">
-					<label for="articleTitle" class="form-label">文章標題</label>
-					<input type="text" class="form-control" id="articleTitle" name="articleTitle" placeholder="輸入文章標題">
+			<div class="row justify-content-center">
+				<div class="col-lg-8">
+					<h2 class="text-center">新增文章</h2>
+					<form th:action="@{/forum/article/insert}" method="POST" enctype="multipart/form-data">
+						<div class="mb-3">
+							<label for="articleTitle" class="form-label">文章標題</label>
+							<input type="text" class="form-control" id="articleTitle" name="articleTitle"
+								placeholder="輸入文章標題">
+						</div>
+						<div class="mb-3">
+							<label for="articleContent" class="form-label">文章內容</label>
+							<textarea class="form-control" id="articleContent" name="articleContent"></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="hashtag" class="form-label">Hashtag　提醒：以半形空格為分隔，例如"攝影 分享 場地"如此輸入即可</label>
+							<input type="text" class="form-control" id="hashtag" name="hashtag"
+								placeholder="輸入文章的Hashtag">
+						</div>
+						<div class="mb-3">
+							<label for="articlePic" class="form-label">上傳圖片</label>
+							<input class="form-control" type="file" id="articlePic" name="articlePic"
+								onchange="previewFile()" multiple>
+						</div>
+						<div class="mb-3">
+							<div id="previewImage"></div>
+						</div>
+						<div class="row justify-content-center">
+							<button type="submit" class="btn btn-primary btn-sm m-2">提交</button>
+							<button id="autoFillButton" class="btn btn-primary btn-sm m-2">一鍵輸入</button>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-4">
+					<div class="card mb-4">
+						<div class="card-header">
+							<h2 class="text-center">我的小畫布</h2>
+						</div>
+						<div class="card-body" style="height: 500px;">
+							<select id="colorSelector" class="form-select mb-2" style="width: 200px;">
+								<option value="black">黑色</option>
+								<option value="blue">藍色</option>
+								<option value="red">紅色</option>
+								<option value="green">綠色</option>
+								<option value="yellow">黃色</option>
+								<option value="orange">橘色</option>
+								<option value="purple">紫色</option>
+								<option value="pink">粉紅色</option>
+								<option value="brown">棕色</option>
+								<option value="gray">灰色</option>
+							</select>
+							<div id="drawArea"
+								style="height: 350px; width: 350px; border: 1px solid #FFB5A7; margin: auto;">
+								<canvas id="game-canvas" width="350" height="350"></canvas>
+								<div style="display: flex; justify-content: space-around; align-items: center;">
+									<img id="insertCanvasContentButton" class="btn-sm"
+										th:src="@{/forestage/forum/insertArticle/assets/insert.png}"
+										style="cursor: pointer;">
+									<img id="downloadButton" class="mx-auto"
+										th:src="@{/forestage/forum/insertArticle/assets/download.png}"
+										style="cursor: pointer;">
+									<img id="clearCanvas" class="mt-10 mx-auto"
+										th:src="@{/forestage/forum/insertArticle/assets/clean.png}"
+										style="cursor: pointer;">
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
 				</div>
 
-				<!-- CKEditor 文章內容 -->
-				<div class="mb-3">
-					<label for="articleContent" class="form-label">文章內容</label>
-					<textarea class="form-control" id="articleContent" name="articleContent"></textarea>
-				</div>
-
-				<!-- Hashtags -->
-				<div class="mb-3">
-					<label for="hashtag" class="form-label">Hashtag</label>
-					<input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="輸入文章的Hashtag">
-				</div>
-
-				<!-- 圖片上傳 -->
-				<div class="mb-3">
-					<label for="articlePic" class="form-label">上傳圖片</label>
-					<input class="form-control" type="file" id="articlePic" name="articlePic" onchange="previewFile()"
-						multiple>
-				</div>
-
-				<!-- 圖片預覽 -->
-				<div class="mb-3">
-					<div id="previewImage"></div>
-					<!-- 預覽單張圖片 -->
-					<!-- <img id="previewImage" src="#" alt="圖片預覽" style="width: 300px; display: none;"> -->
-				</div>
-
-				<button type="submit" class="btn btn-primary">提交</button>
-				<button id="autoFillButton">一鍵輸入</button>
-			</form>
-		</div>
-
-		<!-- Include CKEditor JS -->
-		<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 
 
-		<!-- Initialize CKEditor -->
-		<script>
-			CKEDITOR.replace('articleContent');
-		</script>
 
-		<!-- Preview uploaded image -->
-		<script>
-			function previewFile() {
-				var files = document.querySelector('#articlePic').files;
-				var preview = document.querySelector('#previewImage');
-				preview.innerHTML = ""; // 清空預覽
+				<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+				<script>
+					// 初始化 CKEditor 4
 
-				Array.from(files).forEach(file => {
-					var reader = new FileReader();
+					var articleContentEditor = CKEDITOR.replace('articleContent');
+					articleContentEditor.setData('<p>Hello World😄</p>');
 
-					reader.onloadend = function () {
-						var img = document.createElement('img'); // 創建新的 img 元素
-						img.src = reader.result; // 將讀取到的結果賦值給 img
-						img.style.width = '300px'; // 設定寬度
-						preview.appendChild(img); // 添加到預覽區域
+
+					document.querySelector("#insertCanvasContentButton").addEventListener("click", function () {
+						console.log('insertCanvasContentButton 被點擊了');  // 在 click 事件觸發時輸出日誌
+
+						// 獲取畫布內容
+						var canvas = document.querySelector("#game-canvas");
+						var image2 = canvas.toDataURL('image/png');
+
+						console.log('圖片已生成，URL 為：', image2);  // 在圖片生成後輸出日誌
+
+						// 插入畫布內容到文章內容中
+						var html = '<img src="' + image2 + '" style="max-width:200px; max-height:200px;" alt="Canvas Image"/>';
+						articleContentEditor.insertHtml(html);
+					});
+				</script>
+
+
+
+				<!-- Include CKEditor JS
+			<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script> -->
+
+				<!-- Initialize CKEditor
+			<script>
+				CKEDITOR.replace('articleContent');
+			</script> -->
+
+				<!-- Preview uploaded image -->
+				<script>
+					function previewFile() {
+						var files = document.querySelector('#articlePic').files;
+						var preview = document.querySelector('#previewImage');
+						preview.innerHTML = ""; // 清空預覽
+
+						Array.from(files).forEach(file => {
+							var reader = new FileReader();
+
+							reader.onloadend = function () {
+								var img = document.createElement('img'); // 創建新的 img 元素
+								img.src = reader.result; // 將讀取到的結果賦值給 img
+								img.style.width = '300px'; // 設定寬度
+								preview.appendChild(img); // 添加到預覽區域
+							}
+
+							if (file) {
+								reader.readAsDataURL(file);
+							}
+						});
 					}
+				</script>
 
-					if (file) {
-						reader.readAsDataURL(file);
-					}
-				});
-			}
-		</script>
+				<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+				<script>
+					document.querySelector('form').addEventListener('submit', function (e) {
+						var hashTagInput = document.querySelector('input[name="hashtag"]');
+						var hashTags = hashTagInput.value.split(' ');
 
-		<script>
-			document.querySelector('form').addEventListener('submit', function (e) {
-				var hashTagInput = document.querySelector('input[name="hashtag"]');
-				var hashTags = hashTagInput.value.split(' ');
+						if (hashTags.length > 5) {
+							e.preventDefault();
+							swal("請注意", "Hashtag 標籤上限為 5 個，您已超過", "error");
+						}
+					});
+				</script>
 
-				if (hashTags.length > 5) {
-					e.preventDefault();
-					swal("請注意", "Hashtag 標籤上限為 5 個，您已超過", "error");
-				}
-			});
-		</script>
+				<script>
+					document.getElementById('autoFillButton').addEventListener('click', function () {
+						// 標題
+						document.getElementById('articleTitle').value = "發現完美場地，點亮攝影創作的舞台－場地分享";
 
-		<script>
-			document.getElementById('autoFillButton').addEventListener('click', function () {
-				// 標題
-				document.getElementById('articleTitle').value = "發現完美場地，點亮攝影創作的舞台－場地分享";
+						// 內容
+						var content = `<p>在攝影創作中，場地的選擇是至關重要的。<strong>一個獨特而適合主題的場地能夠為作品增添豐富的故事性和視覺效果</strong>。現在，我要和大家分享一個令人驚艷的場地，這個場地將成為攝影師們打造出無限創意的舞台。</p><p>這個場地位於城市的心臟地帶，<span class="marker">充滿了獨特的建築風格和歷史韻味</span>。從古老的巷弄到現代摩天大樓，這裡擁有各種風格迥異的場景，給攝影師們<em>提供了豐富多樣的拍攝選擇</em>。無論你是喜歡純樸自然的風景攝影，還是偏愛時尚城市風格的人像攝影，這個場地<strong>都能夠滿足你的需求</strong>。</p><p>除了多樣的場景，這個場地還擁有優越的光線條件。在不同的時間段，陽光透過建築的角度和窗戶灑落，營造出迷人的光影效果。攝影師們可以善用這些自然光來創造獨特而生動的作品。</p><p>最重要的是，這個場地對攝影師們開放，提供了良好的拍攝許可條件。<strong><em>無論你是專業攝影師還是業餘愛好者，只需預約時間，就能夠在這個場地展開你的攝影創作</em></strong>。而且，場地的管理團隊也非常友善和支持，他們願意提供必要的協助，確保你能夠順利完成拍攝計劃。</p><p>總結來說，這個場地是攝影創作的寶藏，擁有<br></p><ul><li>多樣的場景<br></li><li>優越的光線條件<br></li><li>支持性的管理團隊<br></li></ul><p>如果你正在尋找一個能夠<span class="marker">點亮攝影創作的舞台</span>，我強烈推薦你來體驗這個場地的魅力。</p>`;
+						CKEDITOR.instances.articleContent.setData(content);
 
-				// 內容
-				var content = `<p>在攝影創作中，場地的選擇是至關重要的。<strong>一個獨特而適合主題的場地能夠為作品增添豐富的故事性和視覺效果</strong>。現在，我要和大家分享一個令人驚艷的場地，這個場地將成為攝影師們打造出無限創意的舞台。</p><p>這個場地位於城市的心臟地帶，<span class="marker">充滿了獨特的建築風格和歷史韻味</span>。從古老的巷弄到現代摩天大樓，這裡擁有各種風格迥異的場景，給攝影師們<em>提供了豐富多樣的拍攝選擇</em>。無論你是喜歡純樸自然的風景攝影，還是偏愛時尚城市風格的人像攝影，這個場地<strong>都能夠滿足你的需求</strong>。</p><p>除了多樣的場景，這個場地還擁有優越的光線條件。在不同的時間段，陽光透過建築的角度和窗戶灑落，營造出迷人的光影效果。攝影師們可以善用這些自然光來創造獨特而生動的作品。</p><p>最重要的是，這個場地對攝影師們開放，提供了良好的拍攝許可條件。<strong><em>無論你是專業攝影師還是業餘愛好者，只需預約時間，就能夠在這個場地展開你的攝影創作</em></strong>。而且，場地的管理團隊也非常友善和支持，他們願意提供必要的協助，確保你能夠順利完成拍攝計劃。</p><p>總結來說，這個場地是攝影創作的寶藏，擁有<br></p><ul><li>多樣的場景<br></li><li>優越的光線條件<br></li><li>支持性的管理團隊<br></li></ul><p>如果你正在尋找一個能夠<span class="marker">點亮攝影創作的舞台</span>，我強烈推薦你來體驗這個場地的魅力。</p>`;
-				CKEDITOR.instances.articleContent.setData(content);
+						// Hashtag
+						document.getElementById('hashtag').value = "攝影場地 分享 攝影創作 建築 光影 拍攝";
+					});
+				</script>
 
-				// Hashtag
-				document.getElementById('hashtag').value = "攝影場地 分享 攝影創作 建築 光影 拍攝";
-			});
-		</script>
-
-		<!-- 結尾部分 -->
-</body>
+				<script>
+					document.getElementById('downloadButton').addEventListener('click', function () {
+						var canvas = document.getElementById('game-canvas');
+					})
 
 
-<!-- 結尾部分 -->
+				</script>
+				<!-- Game script -->
+				<script th:src="@{/forestage/forum/mainPage/js/game.js}"></script>
+				<!-- 結尾部分 -->
 </body>
 
 </html>

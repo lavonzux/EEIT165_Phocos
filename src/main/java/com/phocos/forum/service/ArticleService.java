@@ -7,11 +7,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phocos.forum.model.Article;
+import com.phocos.forum.model.ArticleLikes;
+import com.phocos.forum.model.ArticleLikesRepository;
 import com.phocos.forum.model.ArticleRepository;
 
 @Service
@@ -19,32 +22,39 @@ public class ArticleService {
 
 	@Autowired
 	private ArticleRepository articleRepo;
+
 //	---------------------------------------- 新增文章 ----------------------------------------
 	public Article insert(Article article) {
 		return articleRepo.save(article);
 	}
+
 //	---------------------------------------- 查全部文章(無排序) ----------------------------------------
 	public List<Article> findAll() {
 		return articleRepo.findAll();
 	}
+
 //	---------------------------------------- 用日期查全部文章 ----------------------------------------
 	public List<Article> findAllByOrderByArticlePostTimeDesc() {
-        return articleRepo.findAllByOrderByArticlePostTimeDesc();
-    }
+		return articleRepo.findAllByOrderByArticlePostTimeDesc();
+	}
+
 //	---------------------------------------- 用日期查全部文章(可換分頁) ----------------------------------------
 	public Page<Article> findAllByOrderByArticlePostTimeDesc(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return articleRepo.findAllByOrderByArticlePostTimeDesc(pageable);
-    }
+		Pageable pageable = PageRequest.of(page, size);
+		return articleRepo.findAllByOrderByArticlePostTimeDesc(pageable);
+	}
+
 //	---------------------------------------- 用讚數查全部文章(可換分頁) ----------------------------------------	
 	public Page<Article> findAllByOrderByArticleLikesCountDesc(Integer page, Integer size) {
-	    Pageable pageable = PageRequest.of(page, size);
-	    return articleRepo.findAllByOrderByArticleLikesCountDesc(pageable);
+		Pageable pageable = PageRequest.of(page, size);
+		return articleRepo.findAllByOrderByArticleLikesCountDesc(pageable);
 	}
+
 //	---------------------------------------- 真刪除 ----------------------------------------
 	public void realDelete(Integer articleId) {
 		articleRepo.deleteById(articleId);
 	}
+
 //	---------------------------------------- 假刪除 ----------------------------------------
 	@Transactional
 	public void fakeDelete(Integer articleId) {
@@ -55,6 +65,7 @@ public class ArticleService {
 			articleRepo.save(article);
 		}
 	}
+
 //	---------------------------------------- 單筆查詢並更新 ----------------------------------------
 	public Article findById(Integer articleId) {
 		Optional<Article> optional = articleRepo.findById(articleId);
@@ -79,6 +90,16 @@ public class ArticleService {
 		}
 		System.out.println("no update data");
 		return null;
+	}
+
+	public Page<Article> findAllByMemberIDOrderByArticlePostTimeDesc(Integer memberID, Integer page, Integer size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return articleRepo.findAllByMemberMemberIDOrderByArticlePostTimeDesc(memberID, pageable);
+	}
+
+	public Page<ArticleLikes> findLikedArticlesByMemberID(Integer memberID, Integer page, Integer size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return articleRepo.findAllByMemberMemberIDAndLiked(memberID, 1, pageable);
 	}
 
 }

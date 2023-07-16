@@ -1,5 +1,6 @@
 package com.phocos.forum.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phocos.member.Member;
 
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class ArticleLikes {
 // -------------------- 跟文章關聯 --------------------	
 	@ManyToOne
 	@JoinColumn(name = "articleId")
+	@JsonBackReference
 	private Article article;
 
 // -------------------- 跟會員關聯 --------------------

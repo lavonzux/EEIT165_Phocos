@@ -1,4 +1,4 @@
- package com.phocos.forum.model;
+package com.phocos.forum.model;
 
 import java.util.Date;
 
@@ -32,6 +32,9 @@ public class Comment {
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date commentPostTime;
+	public Comment() {
+	    this.commentPostTime = new Date();
+	}
 	
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
