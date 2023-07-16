@@ -71,8 +71,6 @@ public class Member {
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Article> article = new ArrayList<>();
-
-
     
 // -------------------- 文章留言 --------------------
  	@JsonIgnore

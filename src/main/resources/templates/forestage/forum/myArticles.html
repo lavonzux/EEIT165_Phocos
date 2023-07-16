@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>我的文章</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- Bootstrap icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+	<main class="flex-shrink-0">
+		<!-- Navigation-->
+		<div th:replace="~{forestage/shared/foreTopNav}"></div>
+		<header class="bg-white py-4">
+			<div class="container px-5">
+				<div class="row">
+					<!-- 左側導覽列區塊 -->
+					<div class="col-lg-4 mt-4">
+						<div class="list-group">
+							<a href="#" class="list-group-item list-group-item-action active">我的文章</a>
+							<a href="#" id="liked-articles" class="list-group-item list-group-item-action">我喜歡的文章</a>
+							<a href="#" class="list-group-item list-group-item-action">我收藏的文章</a>
+						</div>
+					</div>
+					<!-- 右側主要內容區塊 -->
+					<div class="col-lg-8">
+						<div class="row mt-4">
+							<th:block th:each="article:${myArticles}">
+								<div class="col-lg-12">
+									<!-- Blog post-->
+									<div class="card mb-4">
+										<div class="row no-gutters">
+											<div class="col-md-4 d-flex align-items-center">
+												<a href="#!" class="d-block mx-auto">
+													<img th:src="@{/forum/article/{articleId}/image(articleId=${article.articleId})}"
+														alt="..." class="card-img1" style="object-fit: contain;" />
+												</a>
+											</div>
+											<div class="col-md-8">
+												<div class="card-body">
+													<div class="text-muted" style="font-size: 18px;">
+														發布於 <span
+															th:text="${#dates.format(article.articlePostTime,'yyyy-MM-dd, HH:mm:ss')}"></span>
+													</div>
+													<h2 class="card-title h4"
+														th:text="${article}?${article.articleTitle}">
+													</h2>
+
+													<a class="btn btn-primary"
+														th:href="@{'/forum/article/read/' + ${article.articleId}}">Read
+														more →</a>
+												</div>
+											</div>
+										</div>
+									</div>
+							</th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+	</main>
+
+	<!-- 右側主要內容區塊 -->
+	<div class="col-lg-8" id="article-content">
+		<div class="row mt-4" id="liked-articles">
+			<!-- 这里将用于显示我喜欢的文章 -->
+		</div>
+	</div>
+	<script>
+		// 将这个函数添加到一个适当的地方，比如你的主JS文件，或者在HTML底部的一个<script>标签中。
+		$(document).ready(function () {
+			// 当用户点击"我喜欢的文章"链接时调用这个函数
+			$("a:contains('我喜歡的文章')").click(function (e) {
+				e.preventDefault(); // 阻止链接的默认行为，因为我们不想加载一个新页面
+				var url = "/phocos/myLikedArticles"; // 改成你的“我喜欢的文章”的控制器路径
+				// 发送GET请求到服务器
+				$.ajax({
+					type: "GET",
+					url: url,
+					data: {
+						page: 0,
+						size: 5 // 这些是你的分页参数，你可以根据需要调整它们
+					},
+					success: function (data) {
+						// 当从服务器收到数据时，将它添加到"liked-articles" div中
+						$('#liked-articles').html(data);
+					},
+					error: function (e) {
+						console.log("ERROR: ", e);
+					}
+				});
+			});
+		});
+
+	</script>
+</body>
+
+</html>

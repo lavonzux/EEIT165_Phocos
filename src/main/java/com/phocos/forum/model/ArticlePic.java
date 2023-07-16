@@ -1,5 +1,7 @@
 package com.phocos.forum.model;
 
+import java.util.Base64;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,5 +33,9 @@ public class ArticlePic {
 	@JsonBackReference
 	@JoinColumn(name = "articleId")
 	private Article article;
+//	Test
+	 public String getBase64Image() {
+	        return Base64.getEncoder().encodeToString(articlePic);
+	    }
 }
 	

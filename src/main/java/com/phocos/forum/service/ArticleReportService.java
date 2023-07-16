@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+import com.phocos.forum.model.Article;
 import com.phocos.forum.model.ArticleReport;
 import com.phocos.forum.model.ArticleReportRepository;
 
@@ -56,5 +58,6 @@ public class ArticleReportService {
 		List<ArticleReport> articleReportList = articleReportRepo.findByArticleArticleId(articleId);
 		return articleReportList;
 	}
-
+	
+	
 }

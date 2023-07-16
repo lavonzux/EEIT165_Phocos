@@ -17,7 +17,14 @@
 	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="module">import 'https://cdn.skypack.dev/emoji-picker-element';</script>
 	<style>
+		.btn-space {
+			margin-top: 8px;
+			margin-bottom: 0px;
+			margin-right: 10px;
+		}
+
 		.img-btn {
 			border: none;
 			background: transparent;
@@ -48,7 +55,9 @@
 								<!-- Post title-->
 								<h1 class="fw-bolder mb-1" th:text="${article.articleTitle}">Welcome to Blog Post!</h1>
 								<!-- Post meta content-->
-								<div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap
+								<div class="text-muted" style="font-size: 18px; margin: 10px 0;">
+									發布於 <span
+										th:text="${#dates.format(article.articlePostTime,'yyyy-MM-dd, HH:mm:ss')}"></span>
 								</div>
 								<!-- Post hashtags-->
 								<th:block th:each="hashtag : ${#strings.arraySplit(article.hashtag, ' ')}">
@@ -122,7 +131,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary"
-												data-bs-dismiss="modal">關閉</button>
+												data-bs-dismiss="modal">取消</button>
 											<button type="button" class="btn btn-danger"
 												onclick="reportArticle()">提交</button>
 											<button id="autoFillReportButton">一鍵輸入檢舉</button>
@@ -132,29 +141,79 @@
 								</div>
 							</div>
 
-
-
 						</div>
 					</div>
+
 
 					<!-- Comments section-->
 					<section class="mb-5">
 						<div class="card bg-light">
 							<div class="card-body">
 								<!-- Comment form-->
-								<form id="comment-form" class="mb-4">
-									<textarea id="comment-content" class="form-control" rows="3"
-										placeholder="Join the discussion and leave a comment!"></textarea>
+								<!-- Comment form-->
+								<form id="comment-form" class="mb-4" style="position: relative;"> <!-- 添加這行 -->
+									<textarea id="comment-content" class="form-control" rows="3" style="resize: none;"
+										placeholder="歡迎分享你的想法一起交流唷😊"></textarea>
+
+									<!-- Comment Button Group -->
+									<div class="d-flex justify-content-end">
+										<!-- Quick Comment Button -->
+										<button id="quick-comment" type="button"
+											class="btn btn-space btn-secondary">一鍵輸入</button> <!-- 修改這行 -->
+
+										<!-- Emoji Picker Toggle Button -->
+										<button id="emoji-toggle" type="button"
+											class="btn btn-space btn-secondary">😊</button> <!-- 修改這行 -->
+
+										<!-- Submit Button -->
+										<button type="submit" class="btn btn-secondary mt-2">送出回覆</button>
+									</div>
+
+									<!-- Emoji Picker -->
+									<emoji-picker style="display: none; position: absolute; right: 0;"></emoji-picker>
+									<!-- 修改這行 -->
 
 									<!-- Hidden input field for the article ID -->
 									<input type="hidden" id="article-id" th:value="${article.articleId}" />
-
-									<button type="submit" class="btn btn-primary mt-2">Submit</button>
 								</form>
+
 
 								<!-- Comment list -->
 								<div id="comment-list">
+									<div th:each="commentDto : ${commentDtos}" class="d-flex mb-4"
+										style="border-top: 2.5px solid #E3D5CA; padding-top: 1.5rem;">
+										<div class="flex-shrink-0" style="width: 80px; height: 80px;">
+											<img class="rounded-circle" style="width: 80px; height: 80px;"
+												th:src="@{'data:image/jpeg;base64,'+${commentDto.memberAvatar}}"
+												alt="Avatar" />
+										</div>
+										<div class="ms-3"
+											style="background-color: #fff1e6; padding: 10px; border-radius: 5px;">
+											<div class="fw-bold" th:text="${commentDto.memberName}"></div>
+											<p class="comment-content" th:text="${commentDto.commentContent}"></p>
+											<small class="text-muted comment-time"
+												th:text="${#dates.format(commentDto.commentPostTime, 'yyyy-MM-dd HH:mm')}"></small>
+
+											<!-- <button class="btn btn-primary btn-sm edit-btn"
+												th:attr="data-comment-id=${commentDto.commentId}">Edit</button>
+											<button class="btn btn-danger btn-sm delete-btn"
+												th:attr="data-comment-id=${commentDto.commentId}">Delete</button> -->
+
+											<img th:src="@{/forestage/forum/readArticle/assets/edit.png}"
+												class="btn  btn-sm edit-btn"
+												th:attr="data-comment-id=${commentDto.commentId}"
+												onclick="editFunction()" style="width: 50px;" />
+
+											<img th:src="@{/forestage/forum/readArticle/assets/delete.png}"
+												class="btn  btn-sm delete-btn"
+												th:attr="data-comment-id=${commentDto.commentId}"
+												onclick="deleteFunction()" style="width: 50px;" />
+
+
+										</div>
+									</div>
 								</div>
+
 							</div>
 						</div>
 					</section>
@@ -267,8 +326,176 @@
 		});
 	</script>
 
-	<!-- 回覆的 -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var emojiPicker = document.querySelector('emoji-picker');
+			var commentInput = document.querySelector('#comment-content');
+			var emojiToggle = document.querySelector('#emoji-toggle');
+			var quickComment = document.querySelector('#quick-comment');
+
+			emojiPicker.addEventListener('emoji-click', function (event) {
+				// 將選中的表情符號添加到輸入框的末尾
+				commentInput.value += event.detail.unicode;
+			});
+
+			emojiToggle.addEventListener('click', function (event) {
+				// 切換表情符號選擇器的顯示和隱藏
+				if (emojiPicker.style.display === 'none') {
+					emojiPicker.style.display = '';
+				} else {
+					emojiPicker.style.display = 'none';
+				}
+			});
+
+			quickComment.addEventListener('click', function (event) {
+				// 將預定義的留言填充到留言框
+				commentInput.value = "謝謝你的分享，內容非常精彩！看了讓人很心動😊❤️";
+			});
+		});
+	</script>
+
+
+	<!-- 回覆的DTO版本 -->
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#comment-form').on('submit', function (event) {
+				event.preventDefault();
+
+				var commentContent = $('#comment-content').val();
+				var articleId = $('#article-id').val();
+
+				if (!articleId || isNaN(articleId)) {
+					console.log('Invalid articleId:', articleId);
+					return;
+				}
+
+				axios({
+					method: 'post',
+					url: '/phocos/comment/add',
+					data: {
+						articleId: articleId,
+						commentContent: commentContent,
+					},
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(function (response) {
+						console.log(response);
+						// 從服務器回應取出評論數據
+						var commentDto = response.data;
+						// Append new comment to comment list
+						// Append new comment to comment list
+						$('#comment-list').prepend(`
+							<div class="d-flex mb-4" data-comment-id="${commentDto.commentId}">
+								<div class="flex-shrink-0" style="width: 80px; height: 80px;">
+									<img class="rounded-circle" style="width: 80px; height: 80px;"
+										src="data:image/jpeg;base64,${commentDto.memberAvatar}" alt="Avatar" />
+								</div>
+								<div class="ms-3" style="background-color: #FEFAE0; padding: 10px; border-radius: 5px;">
+									<div class="fw-bold">${commentDto.memberName}</div>
+									<p class="comment-content">${commentDto.commentContent}</p>
+									<small class="text-muted comment-time">${new Date(commentDto.commentPostTime).toLocaleString()}</small>
+									<button class="btn btn-primary btn-sm edit-btn" data-comment-id="${commentDto.commentId}">Edit</button>
+									<button class="btn btn-danger btn-sm delete-btn" data-comment-id="${commentDto.commentId}">Delete</button>
+								</div>
+							</div>
+						`);
+						// Clear the comment content
+						$('#comment-content').val('');
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+			});
+		});
+
+		$(document).on('click', '.edit-btn', function () {
+			var commentId = $(this).data('comment-id');
+			console.log('Edit button clicked, commentId: ', commentId);
+			var commentElement = $(this).siblings('.comment-content');
+			var originalCommentContent = commentElement.text();
+
+			// Replace the comment content element with a textarea
+			commentElement.replaceWith('<textarea class="form-control edit-comment-textarea" style="height: 100px;">' + originalCommentContent + '</textarea>');
+
+
+			// Replace the edit button with a save button, remember to carry the data-comment-id attribute
+			$(this).replaceWith('<img class="btn btn-sm save-btn" data-comment-id="' + commentId + '" src="/phocos/forestage/forum/readArticle/assets/save.png" style="width: 50px;" onclick="saveFunction()"/>');
+		});
+		// 	$(this).replaceWith('<button class="btn btn-primary btn-sm save-btn" data-comment-id="' + commentId + '">Save</button>');
+		// });
+
+		// Save edited comment
+		$(document).on('click', '.save-btn', function () {
+			var commentId = $(this).data('comment-id');
+			console.log('Save button clicked, commentId: ', commentId);
+			var newCommentContent = $(this).siblings('.edit-comment-textarea').val();
+
+			// Store `this` into a new variable
+			var button = $(this);
+
+			axios({
+				method: 'put',
+				url: '/phocos/comment/update/' + commentId,
+				data: {
+					commentContent: newCommentContent,
+				},
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(function (response) {
+					console.log(response);
+					// Replace the textarea with a p element
+					button.siblings('.edit-comment-textarea').replaceWith('<p class="comment-content">' + newCommentContent + '</p>');
+					// Replace the save button with an edit button, remember to carry the data-comment-id attribute
+					button.replaceWith('<button class="btn btn-primary btn-sm edit-btn" data-comment-id="' + commentId + '">Edit</button>');
+					// Update the comment time
+					button.siblings('.comment-time').text(new Date(response.data.commentUpdateTime).toLocaleString());
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+		});
+
+		$(document).on('click', '.delete-btn', function () {
+			var commentId = $(this).data('comment-id');
+			console.log('Delete button clicked, commentId: ', commentId);
+
+			// var commentId = $(this).parent().parent().data('comment-id'); // 由於你把 data-comment-id 屬性放在了評論的 <div> 上，所以我們需要用 parent().parent() 來讀取它
+			// console.log('Delete button clicked, commentId: ', commentId);
+
+			axios({
+				method: 'delete',
+				url: '/phocos/comment/delete/' + commentId, // 根據你的 URL 結構調整此路徑
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(function (response) {
+					console.log(response);
+					// Remove the comment from the page
+					$(`[data-comment-id="${commentId}"]`).remove(); // 在這裡，我們也需要改成直接刪除那個 <div>，而不是刪除它的父元素
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+		});
+
+
+
+
+	</script>
+
+
+
+
+
+
+	<!-- 回覆的 -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script>
 		$(document).ready(function () {
 			$('#comment-form').on('submit', function (event) {
@@ -314,18 +541,9 @@
 					});
 			});
 		});
-	</script>
+	</script> -->
 
 
-	// axios({
-	// method: 'post',
-	// url: '/phocos/comment/add',
-	// params: {
-	// articleId: articleId,
-	// commentContent: commentContent,
-
-	// },
-	// })
 
 </body>
 
