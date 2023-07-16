@@ -91,7 +91,7 @@ public class PhotoServiceController {
 
 		model.addAttribute("resultBean", resultBean);
 		System.out.printf("PhotoService ID %d has been added to Database successfully",resultBean.getServiceID());
-		return "backstage/photoService/ConfirmCreatedPhotoService";
+		return "redirect:/photoService";
 
 	}
 	
@@ -168,7 +168,7 @@ public class PhotoServiceController {
 			resultPage = psService.readAllByPage(page-1, 5);
 			System.out.println("memberID do not exist");
 		}
-		
+		System.out.println(resultPage.getContent().get(0).getServiceType().getTypeName());
 		model.addAttribute("resultPage", resultPage);
 		return "forestage/photoService/ReadAllPhotoService";
 	}
