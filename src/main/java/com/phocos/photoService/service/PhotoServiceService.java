@@ -185,36 +185,21 @@ public class PhotoServiceService {
 		if (dto.getServiceDesc()!=null) returnPSB.setServiceDesc(dto.getServiceDesc());
 		
 		
-		/*
-		try {
-			MultipartFile[] inputRefPics = dto.getInputRefPics();
-			System.out.print("The length of inputRefPic is:... ");
-			System.out.println(inputRefPics.length);
-			
-			MultipartFile multipartFile = inputRefPics[0];
-			System.out.println(multipartFile.isEmpty());
-			byte[] bytes = multipartFile.getBytes();
-			System.out.println(bytes.length);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		*/
-		
-		
-		
 		
 		if (dto.getInputRefPics()!=null && !dto.getInputRefPics()[0].isEmpty()) {
 			List<ReferencePicture> refPics = rpRepo.findAllByPhotoServiceServiceID(dto.getServiceID());
 			
 			// removing the pictures client want to delete
 			List<Integer> picIDsToDelete = dto.getPicIDsToDelete();
+			ArrayList<ReferencePicture> refPicsToDelete = new ArrayList<ReferencePicture>();
 			for (int picIDToDelete : picIDsToDelete) {
 				for (ReferencePicture oneRefPic : refPics) {
 					if (picIDToDelete == oneRefPic.getPictureID()) {
-						refPics.remove(oneRefPic);
+						refPicsToDelete.add(oneRefPic);
 					}
 				}
 			}
+			refPics.removeAll(refPicsToDelete);
 			
 			// adding the new pictures
 			for (MultipartFile oneInput : dto.getInputRefPics()) {
