@@ -16,6 +16,7 @@
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -58,8 +59,8 @@
 													</h2>
 
 													<a class="btn btn-primary"
-														th:href="@{'/forum/article/read/' + ${article.articleId}}">Read
-														more →</a>
+														th:href="@{'/forum/article/read/' + ${article.articleId}}">
+														閱讀更多→</a>
 												</div>
 											</div>
 										</div>
@@ -72,29 +73,23 @@
 		</header>
 	</main>
 
-	<!-- 右側主要內容區塊 -->
 	<div class="col-lg-8" id="article-content">
 		<div class="row mt-4" id="liked-articles">
-			<!-- 这里将用于显示我喜欢的文章 -->
 		</div>
 	</div>
 	<script>
-		// 将这个函数添加到一个适当的地方，比如你的主JS文件，或者在HTML底部的一个<script>标签中。
 		$(document).ready(function () {
-			// 当用户点击"我喜欢的文章"链接时调用这个函数
 			$("a:contains('我喜歡的文章')").click(function (e) {
-				e.preventDefault(); // 阻止链接的默认行为，因为我们不想加载一个新页面
-				var url = "/phocos/myLikedArticles"; // 改成你的“我喜欢的文章”的控制器路径
-				// 发送GET请求到服务器
+				e.preventDefault();
+				var url = "/phocos/myLikedArticles";
 				$.ajax({
 					type: "GET",
 					url: url,
 					data: {
 						page: 0,
-						size: 5 // 这些是你的分页参数，你可以根据需要调整它们
+						size: 5
 					},
 					success: function (data) {
-						// 当从服务器收到数据时，将它添加到"liked-articles" div中
 						$('#liked-articles').html(data);
 					},
 					error: function (e) {

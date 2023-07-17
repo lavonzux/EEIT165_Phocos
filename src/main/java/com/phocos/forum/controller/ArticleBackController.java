@@ -3,12 +3,14 @@ package com.phocos.forum.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.phocos.forum.model.Article;
 import com.phocos.forum.service.ArticleService;
@@ -34,6 +36,24 @@ public class ArticleBackController {
 		model.addAttribute("articleList", articleList);
 		return "backstage/forum/forumBackPage";
 	}
+	
+	
+//	@GetMapping("/forum/backPage")
+//	public String forumAdmin(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//	    Page<Article> articleList = articleService.findAllByOrderByArticlePostTimeDesc(page, size);
+//	    model.addAttribute("articleList", articleList);
+//	    return "backstage/forum/forumBackPage";
+//	}
+	
+//	Test3
+//	@GetMapping("/forum/backPage")
+//	@ResponseBody
+//	public List<Article> forumAdmin(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//	    Page<Article> articleList = articleService.findAllByOrderByArticlePostTimeDesc(page, size);
+//	    return articleList.getContent();
+//	}
+
+
 
 //	---------------------------------------- 編輯 ----------------------------------------
 	@GetMapping("/forum/edit")

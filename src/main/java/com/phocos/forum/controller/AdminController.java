@@ -36,6 +36,12 @@ public class AdminController {
 //        return new ResponseEntity<>(reportStatus, HttpStatus.OK);
 //    }
     
+//  @GetMapping("/reports")
+//  public ResponseEntity<List<ArticleReport>> getAllReports() {
+//      List<ArticleReport> reports = articleReportService.findAll();
+//      return new ResponseEntity<>(reports, HttpStatus.OK);
+//  }
+    
 //    嘗試2
     @GetMapping("/reports/status")
     public ResponseEntity<Map<Integer, Integer>> getAllReports() {
@@ -47,11 +53,7 @@ public class AdminController {
         return new ResponseEntity<>(reportStatus, HttpStatus.OK);
     }
     
-//    @GetMapping("/reports")
-//    public ResponseEntity<List<ArticleReport>> getAllReports() {
-//        List<ArticleReport> reports = articleReportService.findAll();
-//        return new ResponseEntity<>(reports, HttpStatus.OK);
-//    }
+
 
     @GetMapping("/reports/{reportId}")
     public ResponseEntity<ArticleReport> getReportDetails(@PathVariable Integer reportId) {
