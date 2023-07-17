@@ -152,12 +152,12 @@
             var socket = new SockJS('/phocos/ws');
             stompClientA = Stomp.over(socket);
             stompClientA.connect({}, function () {
-                stompClientA.subscribe('/pslog/accessing', function (message) {
-                    appendAccessingLog(message.body);
+                stompClientA.subscribe('/topic/log_accessing', function (message) {
+                    appendAccessingPane(message.body);
                 });
             });
         }
-        function appendAccessingLog(logLine) {
+        function appendAccessingPane(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
             accessingWebSocketPane.appendChild(newLine)
@@ -174,12 +174,12 @@
             var socket = new SockJS('/phocos/ws');
             stompClientD = Stomp.over(socket);
             stompClientD.connect({}, function () {
-                stompClientD.subscribe('/pslog/destructive', function (message) {
-                    appendAccessingLog(message.body);
+                stompClientD.subscribe('/topic/log_destructive', function (message) {
+                    appendDestructivePane(message.body);
                 });
             });
         }
-        function appendAccessingLog(logLine) {
+        function appendDestructivePane(logLine) {
             let newLine = document.createElement('p')
             newLine.innerText = logLine
             destructiveWebSocketPane.appendChild(newLine)
