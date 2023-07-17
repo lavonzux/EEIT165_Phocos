@@ -32,7 +32,7 @@ public class ArticleService {
 	public List<Article> findAll() {
 		return articleRepo.findAll();
 	}
-
+	
 //	---------------------------------------- 用日期查全部文章 ----------------------------------------
 	public List<Article> findAllByOrderByArticlePostTimeDesc() {
 		return articleRepo.findAllByOrderByArticlePostTimeDesc();
