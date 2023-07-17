@@ -6,16 +6,16 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phocos.forum.model.Article;
 import com.phocos.forum.model.ArticleLikes;
-import com.phocos.forum.model.ArticleLikesRepository;
 import com.phocos.forum.model.ArticleRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ArticleService {
@@ -92,6 +92,35 @@ public class ArticleService {
 		return null;
 	}
 
+//	新的更新
+	public void update(Article updatedArticle) {
+		// Find the article in the database
+		Optional<Article> articleOpt = articleRepo.findById(updatedArticle.getArticleId());
+
+		if (articleOpt.isPresent()) {
+			Article article = articleOpt.get();
+
+			// Update the article details
+			article.setArticleTitle(updatedArticle.getArticleTitle());
+			article.setArticleContent(updatedArticle.getArticleContent());
+			article.setHashtag(updatedArticle.getHashtag());
+			article.setArticlePics(updatedArticle.getArticlePics());
+
+			// Save the updated article
+			articleRepo.save(article);
+		} else {
+			// The article was not found
+			throw new EntityNotFoundException(
+					"The article with ID " + updatedArticle.getArticleId() + " was not found.");
+		}
+	}
+
+//	hashtag查詢
+//	public Page<Article> searchArticlesByHashtag(String hashtag, Pageable pageable) {
+//		return articleRepo.findByHashtag(hashtag, pageable);
+//	}
+
+// 先隔開一下
 	public Page<Article> findAllByMemberIDOrderByArticlePostTimeDesc(Integer memberID, Integer page, Integer size) {
 		Pageable pageable = PageRequest.of(page, size);
 		return articleRepo.findAllByMemberMemberIDOrderByArticlePostTimeDesc(memberID, pageable);

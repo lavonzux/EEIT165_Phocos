@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -6,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	<meta name="description" content="" />
 	<meta name="author" content="" />
-	<title>論壇新增文章</title>
+	<title>論壇更新文章</title>
 	<!-- Favicon-->
 	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 	<!-- Bootstrap icons-->
@@ -35,42 +34,51 @@
 		<div class="container mt-5">
 			<div class="row justify-content-center">
 				<div class="col-lg-8">
-					<h2 class="text-center" style="font-weight:bold;">新增文章</h2>
-					<form th:action="@{/forum/article/insert}" method="POST" enctype="multipart/form-data">
+					<h2 class="text-center" style="font-weight:bold;">更新文章</h2>
+					<form th:action="@{/forum/article/update/{articleId}(articleId=${article.articleId})}"
+						id="updateForm" method="POST" enctype="multipart/form-data">
 						<div class="mb-3">
 							<label for="articleTitle" class="form-label"
-								style="background-color: rgba(173, 216, 230,0.5); font-size: 18px;">文章標題</label>
+								style="background-color: rgba(251, 195, 188,0.5); font-size: 18px;">文章標題</label>
 							<input type="text" class="form-control" id="articleTitle" name="articleTitle"
-								placeholder="輸入文章標題">
+								th:value="${article.articleTitle}" placeholder="輸入文章標題">
 						</div>
 						<div class="mb-3">
 							<label for="articleContent" class="form-label"
-								style="background-color: rgba(173, 216, 230,0.5); font-size: 18px;">文章內容</label>
-							<textarea class="form-control" id="articleContent" name="articleContent"></textarea>
+								style="background-color: rgba(251, 195, 188,0.5); font-size: 18px;">文章內容</label>
+							<textarea class="form-control" id="articleContent" name="articleContent"
+								style="background-color: rgba(251, 195, 188,0.5); font-size: 18px;">
+			[[${article.articleContent}]]
+		</textarea>
 						</div>
 						<div class="mb-3">
 							<label for="hashtag" class="form-label"
-								style="background-color: rgba(173, 216, 230,0.5);font-size: 18px;">Hashtag　提醒：以半形空格為分隔，例如"攝影
+								style="background-color: rgba(251, 195, 188,0.5);font-size: 18px;">Hashtag　提醒：以半形空格為分隔，例如"攝影
 								分享 場地"如此輸入即可</label>
-
 							<input type="text" class="form-control" id="hashtag" name="hashtag"
-								placeholder="輸入文章的Hashtag">
+								th:value="${article.hashtag}" placeholder="輸入文章的Hashtag">
 						</div>
 						<div class="mb-3">
 							<label for="articlePic" class="form-label"
-								style="background-color: rgba(173, 216, 230,0.5); font-size: 18px;">上傳圖片</label>
+								style="background-color: rgba(251, 195, 188,0.5); font-size: 18px;">上傳圖片</label>
 							<input class="form-control" type="file" id="articlePic" name="articlePic"
 								onchange="previewFile()" multiple>
+							<div id="previewImage">
+								<a href="#!" class="d-block mx-auto">
+									<img th:src="@{/forum/article/{articleId}/image(articleId=${article.articleId})}"
+										alt="..." class="card-img1"
+										style="object-fit: contain; width: 200px; height: 200px;" />
+								</a>
+							</div>
 						</div>
-						<div class="mb-3">
-							<div id="previewImage"></div>
-						</div>
+
 						<div class="row justify-content-center">
-							<button type="submit" class="btn btn-primary btn-lg m-2" style="width: auto;">提交</button>
-							<button id="autoFillButton" class="btn btn-primary btn-lg m-2"
-								style="width: auto;">一鍵輸入</button>
+							<button type="submit" class="btn btn-primary m-2"
+								style="font-size: 20px; width: 80px; padding: 10px 10px;">提交</button>
 						</div>
+
 					</form>
+
 				</div>
 				<div class="col-lg-4">
 					<div class="card mb-4">
@@ -118,10 +126,18 @@
 				<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 				<script>
 					// 初始化 CKEditor 4
-
+					var articleContentElement = document.getElementById('articleContent');
 					var articleContentEditor = CKEDITOR.replace('articleContent');
-					articleContentEditor.setData('<p>Hello World😄</p>');
 
+					// 只有當文章內容為空時，才設定默認內容
+					if (!articleContentElement.value) {
+						articleContentEditor.setData('<p>Hello World😄</p>');
+					}
+
+					document.getElementById('updateForm').addEventListener('submit', function () {
+						var editorContent = articleContentEditor.getData();
+						document.getElementById('articleContent').value = editorContent;
+					});
 
 					document.querySelector("#insertCanvasContentButton").addEventListener("click", function () {
 						console.log('insertCanvasContentButton 被點擊了');  // 在 click 事件觸發時輸出日誌
@@ -186,19 +202,7 @@
 					});
 				</script>
 
-				<script>
-					document.getElementById('autoFillButton').addEventListener('click', function () {
-						// 標題
-						document.getElementById('articleTitle').value = "發現完美場地，點亮攝影創作的舞台－場地分享";
 
-						// 內容
-						var content = `<p>在攝影創作中，場地的選擇是至關重要的。<strong>一個獨特而適合主題的場地能夠為作品增添豐富的故事性和視覺效果</strong>。現在，我要和大家分享一個令人驚艷的場地，這個場地將成為攝影師們打造出無限創意的舞台。</p><p>這個場地位於城市的心臟地帶，<span class="marker">充滿了獨特的建築風格和歷史韻味</span>。從古老的巷弄到現代摩天大樓，這裡擁有各種風格迥異的場景，給攝影師們<em>提供了豐富多樣的拍攝選擇</em>。無論你是喜歡純樸自然的風景攝影，還是偏愛時尚城市風格的人像攝影，這個場地<strong>都能夠滿足你的需求</strong>。</p><p>除了多樣的場景，這個場地還擁有優越的光線條件。在不同的時間段，陽光透過建築的角度和窗戶灑落，營造出迷人的光影效果。攝影師們可以善用這些自然光來創造獨特而生動的作品。</p><p>最重要的是，這個場地對攝影師們開放，提供了良好的拍攝許可條件。<strong><em>無論你是專業攝影師還是業餘愛好者，只需預約時間，就能夠在這個場地展開你的攝影創作</em></strong>。而且，場地的管理團隊也非常友善和支持，他們願意提供必要的協助，確保你能夠順利完成拍攝計劃。</p><p>總結來說，這個場地是攝影創作的寶藏，擁有<br></p><ul><li>多樣的場景<br></li><li>優越的光線條件<br></li><li>支持性的管理團隊<br></li></ul><p>如果你正在尋找一個能夠<span class="marker">點亮攝影創作的舞台</span>，我強烈推薦你來體驗這個場地的魅力。</p>`;
-						CKEDITOR.instances.articleContent.setData(content);
-
-						// Hashtag
-						document.getElementById('hashtag').value = "攝影場地 分享 攝影創作 建築 光影 拍攝";
-					});
-				</script>
 
 				<script>
 					document.getElementById('downloadButton').addEventListener('click', function () {

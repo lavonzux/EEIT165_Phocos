@@ -198,8 +198,8 @@ h1,
   }
 
   50% {
-    transform: scale(1.2);
-    filter: brightness(2);
+    transform: scale(2);
+    filter: brightness(4);
   }
 
   100% {

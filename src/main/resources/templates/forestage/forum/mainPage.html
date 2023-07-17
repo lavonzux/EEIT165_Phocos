@@ -84,15 +84,15 @@
 							<li class="nav-item">
 								<a class="nav-link" href="page3.html">精選文章</a>
 							</li>
-							<li class="nav-item">
+							<!--<li class="nav-item">
 								<a class="nav-link disabled">Disabled</a>
-							</li>
+							</li>-->
 						</ul>
 
 
 						<!-- 新增的卡片程式碼部分 -->
 						<div class="row mt-4"> <!-- 在這裡添加了 'mt-4'，這會產生一個上邊距（margin-top）-->
-							<th:block th:each="article:${articleList}">
+							<th:block th:each="article: ${articleList}">
 								<div class="col-lg-12">
 									<!-- Blog post-->
 									<div class="card mb-4">
@@ -114,13 +114,20 @@
 													<h2 class="card-title h4"
 														th:text="${article}?${article.articleTitle}">
 													</h2>
+
 													<!-- 要將CKEditor編輯器的內容正確顯示，而不只是純文字，可以在th:text標籤替換為th:utext。th:utext會將其內容作為未經過轉譯的HTML處理，而不是僅僅將其視為純文本 -->
 													<p class="card-text"
 														th:utext="${article}?${article.articleContent}">
 													</p>
-													<a class="btn btn-primary"
-														th:href="@{'/forum/article/read/' + ${article.articleId}}">Read
-														more →</a>
+
+
+													<div style="text-align: right;">
+														<a class="btn btn-primary btn-lg"
+															th:href="@{'/forum/article/read/' + ${article.articleId}}">閱讀更多
+															→</a>
+													</div>
+
+
 												</div>
 											</div>
 										</div>
@@ -128,6 +135,7 @@
 								</div>
 							</th:block>
 						</div>
+
 
 						<nav aria-label="Page navigation example">
 							<ul class="pagination justify-content-end paginationByWen">
@@ -157,31 +165,6 @@
 			</div>
 		</header>
 
-
-
-
-		<!-- Call to action-->
-		<!-- <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
-            <div
-                class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
-                <div class="mb-4 mb-xl-0">
-                    <div class="fs-3 fw-bold text-white">New products, delivered to you.</div>
-                    <div class="text-white-50">Sign up for our newsletter for the latest updates.</div>
-                </div>
-                <div class="ms-xl-4">
-                    <div class="input-group mb-2">
-                        <input class="form-control" type="text" placeholder="Email address..."
-                            aria-label="Email address..." aria-describedby="button-newsletter" />
-                        <button class="btn btn-outline-light" id="button-newsletter" type="button">Sign
-                            up</button>
-                    </div>
-                    <div class="small text-white-50">We care about privacy, and will never share your data.
-                    </div>
-                </div>
-            </div>
-        </aside> -->
-
-
 	</main>
 	<script>
 		$(document).ready(function () {
@@ -197,19 +180,36 @@
 						articleListDiv.empty();
 						for (var i = 0; i < data.length; i++) {
 							var article = data[i];
+
+							var colDiv = $('<div class="col-lg-12"></div>');
 							var articleDiv = $('<div class="card mb-4"></div>');
 							var row = $('<div class="row no-gutters"></div>');
-							var imgDiv = $('<div class="col-md-4 d-flex align-items-center"><a href="#!" class="d-block mx-auto"><img class="card-img1" src="data:image/png;base64,' + article.imageBase64 + '" alt="..." style="object-fit: contain;"></a></div>');
+							var imgDiv = $('<div class="col-md-4 d-flex align-items-center"></div>');
+							var aTag = $('<a href="#!" class="d-block mx-auto"></a>');
+							var imgTag = $('<img class="card-img1" alt="..." style="object-fit: contain;">');
+							imgTag.attr('src', 'data:image/png;base64,' + article.imageBase64);
+							aTag.append(imgTag);
+							imgDiv.append(aTag);
 							row.append(imgDiv);
+
 							var cardBodyDiv = $('<div class="col-md-8"><div class="card-body"></div></div>');
 							var cardBody = cardBodyDiv.find('.card-body');
-							cardBody.append('<div class="small text-muted">' + article.articlePostTime + '</div>');
-							cardBody.append('<h2 class="card-title h4">' + article.articleTitle + '</h2>');
-							cardBody.append('<p class="card-text">' + article.articleContent + '</p>');
-							cardBody.append('<a class="btn btn-primary" href="/phocos/forum/article/read/' + article.articleId + '">Read more →</a>');
+							cardBody.append('<div class="text-muted" style="font-size: 18px;">發布於 ' + article.articlePostTime + '</div>');
+
+							var title = $('<h2 class="card-title h4"></h2>').html(article.articleTitle);
+							cardBody.append(title);
+
+							var content = $('<p class="card-text"></p>').html(article.articleContent);
+							cardBody.append(content);
+
+							var readMore = $('<div style="text-align: right;"><a class="btn btn-primary btn-lg">閱讀更多 →</a></div>');
+							readMore.find('a').attr('href', '/phocos/forum/article/read/' + article.articleId);
+							cardBody.append(readMore);
+
 							row.append(cardBodyDiv);
 							articleDiv.append(row);
-							articleListDiv.append(articleDiv);
+							colDiv.append(articleDiv);
+							articleListDiv.append(colDiv);
 						}
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
@@ -218,68 +218,29 @@
 				});
 			}
 
-			loadArticles('http://localhost:8080/phocos/forum/article/mainPage/ajax');   // 頁面加載時取得最新文章的數據
+			loadArticles('http://localhost:8080/phocos/forum/article/mainPage/ajax');
 
 			$('#hot-articles-link').on('click', function (e) {
 				e.preventDefault();
 				$('button, .nav-link').removeClass('active');
 				$(this).addClass('active');
-				loadArticles('http://localhost:8080/phocos/forum/article/hotArticles');  // 點擊「熱門文章」時取得熱門文章的數據
+				loadArticles('http://localhost:8080/phocos/forum/article/hotArticles');
 			});
+
 			$('#new-articles-link').on('click', function (e) {
 				e.preventDefault();
 				$('button, .nav-link').removeClass('active');
 				$(this).addClass('active');
-				loadArticles('http://localhost:8080/phocos/forum/article/mainPage/ajax');  // 點擊「最新文章」時重新取得最新文章的數據
+				loadArticles('http://localhost:8080/phocos/forum/article/mainPage/ajax');
 			});
 
 		});
-
-	</script>
-
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="card mb-4">
-					<div class="card-header">
-						<h2>我的小畫布</h2>
-					</div>
-					<div class="card-body">
-						<select id="colorSelector" class="form-select mb-2" style="width: 200px;">
-							<option value="black">黑色</option>
-							<option value="blue">藍色</option>
-							<option value="red">紅色</option>
-							<option value="green">綠色</option>
-							<option value="yellow">黃色</option>
-							<option value="orange">橘色</option>
-							<option value="purple">紫色</option>
-							<option value="pink">粉紅色</option>
-							<option value="brown">棕色</option>
-							<option value="gray">灰色</option>
-						</select>
-						<div id="drawArea" style="height: 300px; width: 300px; border: 1px solid black; margin: auto;">
-							<canvas id="game-canvas" width="300" height="300"></canvas>
-						</div>
-						<button id="clearCanvas" class="btn btn-danger mt-2 d-block mx-auto">清除畫布</button>
-						<button id="downloadButton" class="btn btn-success mt-2 d-block mx-auto">下載畫作</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-
-	<script>
-
 	</script>
 
 	<!-- Footer-->
 	<div th:replace="~{forestage/shared/foreFooter}"></div>
 	<!-- Bootstrap core JS-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Game script -->
-	<script th:src="@{/forestage/forum/mainPage/js/game.js}"></script>
 
 	<!-- Core theme JS-->
 	<script th:src="@{/forestage/forum/mainPage/js/scripts.js}"></script>
