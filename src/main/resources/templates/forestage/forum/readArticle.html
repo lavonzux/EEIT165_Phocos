@@ -13,6 +13,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link th:href="@{/forestage/forum/mainPage/css/styles.css}" rel="stylesheet" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -34,6 +35,33 @@
 		.img-btn img {
 			max-width: 100%;
 			height: auto;
+		}
+
+		.swal-overlay.custom-swal {
+			background-color: rgba(255, 255, 255, 0.5);
+			/* semi-transparent white background */
+		}
+
+		.swal-modal.custom-swal {
+			background-color: white;
+			/* white box */
+			border: 1px solid #aaa;
+			/* subtle border */
+		}
+
+		.swal-title.custom-swal {
+			color: #444;
+			/* dark grey title */
+		}
+
+		.swal-text.custom-swal {
+			color: #555;
+			/* grey text */
+		}
+
+		.swal-button.custom-swal {
+			background-color: #007BFF;
+			/* blue button */
 		}
 	</style>
 </head>
@@ -76,13 +104,42 @@
 							<section class="mb-5" th:utext="${article.articleContent}"></section>
 
 							<!-- 喜歡與收藏數量 -->
-							<p>Likes: <span th:text="${article.articleLikesCount}"></span></p>
-							<p>Collected: <span th:text="${article.articleCollectCount}"></span></p>
+							<div style="display: flex; gap: 10px;">
+								<p style="margin-bottom: 0;">
+									<i class="fas fa-heart" style="color: #f08080; font-size: 24px;"></i>
+									<span th:text="${article.articleLikesCount}"></span>
+								</p>
+								<p style="margin-bottom: 0;">
+									<i class="fas fa-star" style="color: #7bc4c4; font-size: 24px;"></i>
+									<span th:text="${article.articleCollectCount}"></span>
+								</p>
+							</div>
+
+
+
+
 
 						</article>
 						<!-- Action buttons -->
 						<div class="btn-group" role="group" aria-label="Basic example"
 							style="position: absolute; bottom: 10px; right: 10px;">
+
+
+
+							<a th:href="@{/forum/article/update/{articleId}(articleId=${article.articleId})}"
+								style="display: inline-block; width: 35px; height: 35px; margin-right: 10px;">
+								<img th:src="@{/forestage/forum/readArticle/assets/edit.png}" alt="Edit"
+									style="max-width: 100%; max-height: 100%;" />
+							</a>
+
+							<button type="button" class="img-btn btn-danger" id="deleteButton" data-bs-toggle="modal"
+								data-bs-target="#deleteModal"
+								th:attr="onclick='setCurrentArticleId('+${article.articleId}+')'"
+								th:if="${article.member.memberID} == ${currentMemberId}"
+								style="display: inline-block; width: 35px; height: 35px;margin-right: 10px;">
+								<img th:src="@{/forestage/forum/readArticle/assets/delete.png}"
+									alt="Delete button image" style="max-width: 100%; max-height: 100%;">
+							</button>
 
 
 							<button type="button" class="img-btn" id="likeButton"
@@ -103,6 +160,8 @@
 								<img th:src="@{/forestage/forum/readArticle/assets/report.png}"
 									alt="Report button image">
 							</button>
+
+
 
 							<!-- Modal -->
 							<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
@@ -130,12 +189,14 @@
 											<textarea class="form-control" id="reportContent" rows="3"></textarea>
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary"
-												data-bs-dismiss="modal">取消</button>
 											<button type="button" class="btn btn-danger"
+												data-bs-dismiss="modal">取消</button>
+											<button type="button" class="btn btn-secondary"
 												onclick="reportArticle()">提交</button>
-											<button id="autoFillReportButton">一鍵輸入檢舉</button>
+											<button id="autoFillReportButton"
+												style="background-color: #89a7b3; border-radius: .35rem; padding: .375rem .75rem;color: #fff;">一鍵輸入檢舉</button>
 										</div>
+
 
 									</div>
 								</div>
@@ -243,7 +304,17 @@
 							setTimeout(() => {
 								likeButton.classList.remove('zoom-and-shake');
 							}, 500);
-							swal("好的！", "已經加到 '我喜歡的文章'！", "success");  // 顯示彈出訊息
+							swal({
+								title: "好的！",
+								text: "已經加到 「我喜歡的文章」！",
+								icon: "success",
+								button: {
+									text: "OK",
+									closeModal: true,
+								},
+								className: "custom-swal"
+							});
+
 						} else {
 							likeButton.classList.add('shrink-and-fade-effect');
 							setTimeout(() => {
@@ -290,7 +361,7 @@
 
 	<script>
 		var currentArticleId = null;
-		var reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
+		var reportModal = new bootstrap.Modal(document.getElementById('reportModal')); // Keep this line here
 
 		function setCurrentArticleId(articleId) {
 			currentArticleId = articleId;
@@ -309,7 +380,7 @@
 			axios.post(`/phocos/article/${currentArticleId}/report`, data)
 				.then(function (response) {
 					console.log(response.data);
-					reportModal.hide();
+					reportModal.hide();  // reportModal should be defined in the scope outside this function
 				})
 				.catch(function (error) {
 					console.log(error);

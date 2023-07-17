@@ -13,6 +13,99 @@
 	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://unpkg.com/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+	<style>
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 60px;
+			height: 34px;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #d5bdaf;
+			transition: .4s;
+			border-radius: 34px;
+			/* 添加圆角 */
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: #eddcd2;
+			/* 按钮颜色 */
+			transition: .4s;
+			border-radius: 50%;
+			/* 按钮圆角 */
+		}
+
+		input:checked+.slider {
+			background-color: #cc8b86;
+			/* 按钮打开的颜色 */
+		}
+
+		input:checked+.slider:before {
+			transform: translateX(26px);
+		}
+
+		input[type="submit"].btn.btn-sm.btn-custom-edit {
+			background-color: #cc8b86;
+			color: rgb(255, 255, 255);
+			border: none;
+			transition: background-color .4s;
+		}
+
+		input[type="submit"].btn.btn-sm.btn-custom-edit:hover {
+			background-color: #FEFAE0;
+			color: #6B705C;
+		}
+
+		button[type="submit"].btn.btn-sm.btn-custom-delete {
+			background-color: #d6ccc2;
+			color: #463f3a;
+			border: none;
+			transition: background-color .4s;
+		}
+
+		button[type="submit"].btn.btn-sm.btn-custom-delete:hover {
+			background-color: #c0b7a9;
+			color: white;
+		}
+
+		button.btn.btn-sm.viewReportButton {
+			background-color: #89a7b3;
+			/* 淡藍色調 */
+			color: white;
+			border: none;
+			transition: background-color .4s;
+		}
+
+		button.btn.btn-sm.viewReportButton:hover {
+			background-color: #71898a;
+			/* 滑鼠懸停時稍微變暗 */
+			color: white;
+		}
+
+		table#datatablesSimple th {
+			text-align: center;
+		}
+	</style>
 </head>
 
 <head th:replace="~{backstage/shared_layout/scriptSource}"></head>
@@ -27,7 +120,7 @@
 				<div class="container-fluid px-4">
 					<h1 class="mt-4">論壇管理系統</h1>
 					<ol class="breadcrumb mb-4">
-						<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="index.html">影遇後台</a></li>
 						<li class="breadcrumb-item active">論壇管理</li>
 					</ol>
 					<div class="card mb-4">
@@ -74,24 +167,36 @@
 											<td
 												th:text="${article}?${#dates.format(article.articleUpdateTime,'yyyy-MM-dd, HH:mm:ss')}">
 											</td>
-											<td th:text="${article}?${article.articleState}"></td>
 
 											<td>
+												<label class="switch">
+													<input type="checkbox" th:checked="${article.articleState == 1}"
+														onchange="changeArticleState(this, '${article.id}')">
+													<span class="slider"></span>
+												</label>
+											</td>
+
+
+											<td>
+												<!-- 編輯按鈕 -->
 												<form th:action="@{/forum/edit}" method="get" style="display: inline;">
 													<input name="articleId" th:value="${article.articleId}"
 														type="hidden" />
 													<input type="submit" value="編輯"
-														class="btn btn-outline-success btn-sm" />
+														class="btn btn-custom-edit btn-sm" />
 												</form>
+
+												<!-- 刪除按鈕 -->
 												<form th:action="@{/forum/delete}" method="post"
 													style="display: inline;">
 													<input name="articleId" th:value="${article.articleId}"
 														type="hidden" />
 													<input name="_method" th:value="delete" type="hidden" />
 													<button type="submit"
-														class="btn btn-outline-danger btn-sm deleteButton"
+														class="btn btn-custom-delete deleteButton btn-sm"
 														id="deleteButton">刪除</button>
 												</form>
+
 											</td>
 											<td>
 												<button class="btn btn-outline-info btn-sm viewReportButton"
@@ -120,10 +225,12 @@
 							</div>
 							<div class="modal-footer">
 								<div class="modal-footer">
-									<button type="button" class="btn btn-primary"
-										id="sendReportEmailButton">寄送檢舉通知</button>
+									<button type="button" class="btn btn-primary" id="sendReportEmailButton"
+										style="background-color: #cc8b86; color: #ffffff;">寄送檢舉通知</button>
 									<button type="button" class="btn btn-secondary" data-dismiss="modal"
-										id="modalCloseButton">關閉</button>
+										id="modalCloseButton"
+										style="background-color: #89a7b3; color: #ffffff;">關閉</button>
+
 								</div>
 
 							</div>
@@ -179,10 +286,17 @@
 										second: '2-digit'
 									}).format(date);
 
+									let reportTypeMap = {
+										"spam": "垃圾訊息",
+										"abuse": "濫用或騷擾",
+										"false_information": "虛假資訊",
+										"plagiarism": "抄襲",
+										"other": "其他"
+									};
 									// 將報告的內容填充到模態框中
 									$('#reportTime').text('檢舉時間：' + formattedDate);
 									// Set the value of the selector to the report type
-									$('#reportType').val(report.reportType);
+									$('#reportType').text('檢舉類型：' + reportTypeMap[report.reportType]);
 									$('#reportContent').text('檢舉內容：' + report.reportContent);
 
 									// 打開模態框
@@ -246,13 +360,37 @@
 					});
 				</script>
 
+				<script>
+					function changeArticleState(element, articleId) {
+						let newState = element.checked ? 1 : 0;
+						// 這裡需要發送一個請求到你的後端服務來改變文章的狀態。
+						// 你可能需要使用Ajax，Fetch API，或者其他的技術來實現這個功能。
+						// 以下只是一個基本的示例，並不一定能在你的應用中工作。
+						fetch('/api/articles/' + articleId + '/state', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ state: newState })
+						})
+							.then(response => response.json())
+							.then(data => {
+								// 在這裡處理服務器返回的數據
+								console.log(data);
+							})
+							.catch((error) => {
+								console.error('Error:', error);
+							});
+					}
+
+				</script>
+
+
 			</main>
 			<footer th:replace="~{backstage/shared_layout/layout-static :: footer}" class="py-4 bg-light mt-auto">
 			</footer>
 		</div>
 	</div>
-
-</body>
 
 </body>
 

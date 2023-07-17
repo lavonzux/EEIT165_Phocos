@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -147,7 +148,6 @@ public class ArticleForeController {
 		Article article = articleService.findById(articleId);
 		model.addAttribute("article", article);
 
-		// 获取文章的所有评论
 		List<Comment> comments = commentService.findByArticleArticleIdOrderByCommentPostTimeDesc(articleId);
 		List<CommentDto> commentDtos = new ArrayList<>();
 
@@ -168,7 +168,10 @@ public class ArticleForeController {
 
 			commentDtos.add(commentDto);
 		}
-
+		Member currentMember = (Member) session.getAttribute("member");
+		if (currentMember != null) {
+			model.addAttribute("currentMemberId", currentMember.getMemberID());
+		}
 		model.addAttribute("commentDtos", commentDtos);
 		return "forestage/forum/readArticle";
 	}
@@ -249,6 +252,13 @@ public class ArticleForeController {
 		articleService.fakeDelete(articleId);
 		return "redirect:/forum/article/foreMainPage";
 	}
+	
+//	查詢
+//	@GetMapping("/articles/search")
+//    public Page<Article> searchArticlesByHashtag(@RequestParam String hashtag, Pageable pageable) {
+//        return articleService.searchArticlesByHashtag(hashtag, pageable);
+//    }
+	
 
 //	我的文章
 	@GetMapping("/myArticles")
@@ -257,21 +267,91 @@ public class ArticleForeController {
 		Integer memberID = (Integer) session.getAttribute("memberID");
 		Page<Article> articles = articleService.findAllByMemberIDOrderByArticlePostTimeDesc(memberID, page, size);
 		model.addAttribute("myArticles", articles);
+//		要給更新文章用的
+		Member currentMember = (Member) session.getAttribute("member");
+		if (currentMember != null) {
+			model.addAttribute("currentMemberId", currentMember.getMemberID());
+		}
 		return "forestage/forum/myArticles";
 	}
 
 //	按讚ㄉ
 	@GetMapping("/myLikedArticles")
 	public String getMyLikedArticles(@RequestParam(defaultValue = "0") Integer page,
-	        @RequestParam(defaultValue = "5") Integer size, Model model, HttpSession session) {
-	    Integer memberID = (Integer) session.getAttribute("memberID");
-	    Page<ArticleLikes> likedArticles = articleService.findLikedArticlesByMemberID(memberID, page, size);
-	    model.addAttribute("myLikedArticles",
-	            likedArticles.getContent().stream().map(ArticleLikes::getArticle).collect(Collectors.toList()));
-	    return "forestage/forum/myLikedArticles";
+			@RequestParam(defaultValue = "5") Integer size, Model model, HttpSession session) {
+		Integer memberID = (Integer) session.getAttribute("memberID");
+		Page<ArticleLikes> likedArticles = articleService.findLikedArticlesByMemberID(memberID, page, size);
+		model.addAttribute("myLikedArticles",
+				likedArticles.getContent().stream().map(ArticleLikes::getArticle).collect(Collectors.toList()));
+		return "forestage/forum/myLikedArticles";
 	}
 
+	
+	@GetMapping("/forum/article/update/{articleId}")
+	public String showUpdateForm(@PathVariable("articleId") Integer articleId, Model model, HttpSession session) {
+	    Article article = articleService.findById(articleId);
+	    model.addAttribute("article", article);
 
+	    // Add currentMemberId here
+	    Member currentMember = (Member) session.getAttribute("member");
+	    if (currentMember != null) {
+	        model.addAttribute("currentMemberId", currentMember.getMemberID());
+	    }
+
+	    return "forestage/forum/updateArticle"; 
+	}
+
+	
+// 更新文章超長的
+	@PostMapping("/forum/article/update/{articleId}")
+	public String update(@PathVariable("articleId") Integer articleId,
+			@RequestParam("articleTitle") String articleTitle, @RequestParam("articleContent") String articleContent,
+			@RequestParam("hashtag") String hashTag, @RequestParam(value = "articlePic", required = false) MultipartFile[] pics,
+			HttpServletRequest request, Model model) {
+
+		HttpSession session = request.getSession();
+		Member currentMember = (Member) session.getAttribute("member");
+		if (currentMember != null) {
+			model.addAttribute("currentMemberId", currentMember.getMemberID());
+		}
+
+		Article article = articleService.findById(articleId);
+		if (article == null || !article.getMember().getMemberID().equals(currentMember.getMemberID())) {
+		    model.addAttribute("errorMessage", "You are not allowed to edit this article.");
+		    return "redirect:/forum/article/mainPage";
+		}
+
+		String[] hashtags = hashTag.split(" ");
+		if (hashtags.length > 5) {
+			model.addAttribute("errorMessage", "Too many hashtags. Maximum is 5.");
+			System.out.println("還是你???????????????????");
+			return "redirect:/forum/article/mainPage";
+		}
+		String processedHashtags = Arrays.stream(hashtags)
+				.map(hashtag -> hashtag.startsWith("#") ? hashtag : "#" + hashtag).collect(Collectors.joining(" "));
+
+		article.setArticleTitle(articleTitle);
+		article.setArticleContent(articleContent);
+		article.setHashtag(processedHashtags);
+
+		List<ArticlePic> articlePics = new ArrayList<ArticlePic>();
+		for (MultipartFile pic : pics) {
+			try {
+				ArticlePic articlePic = new ArticlePic();
+				byte[] picByte = pic.getBytes();
+				articlePic.setArticlePic(picByte);
+				articlePic.setArticle(article);
+				articlePics.add(articlePic);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		article.setArticlePics(articlePics);
+
+		articleService.update(article);
+
+		return "redirect:/forum/article/read/" + articleId;
+	}
 
 //  ---------------------------------------- 顯示首頁查全部(無任何排序) ----------------------------------------
 //	@GetMapping("/forum/article/mainPage")

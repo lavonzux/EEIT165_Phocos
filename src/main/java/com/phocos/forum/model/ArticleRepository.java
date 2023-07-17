@@ -20,4 +20,11 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
 	 @Query("select a from Article a, ArticleLikes al where al.member.memberID = :memberID and al.liked = :liked and a.articleId = al.article.articleId")
 	 Page<ArticleLikes> findAllByMemberMemberIDAndLiked(Integer memberID, Integer liked, Pageable pageable);
+
+//	 @Query("select a from Article a where a.hashtag like %:hashtag%")
+//	 Page<Article> findByHashtag(String hashtag, Pageable pageable);
+
+	 
 }
+
+
