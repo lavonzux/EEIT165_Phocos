@@ -152,7 +152,7 @@
             var socket = new SockJS('/phocos/ws');
             stompClientA = Stomp.over(socket);
             stompClientA.connect({}, function () {
-                stompClientA.subscribe('/pslog/accessing', function (message) {
+                stompClientA.subscribe('/topic/log_accessing', function (message) {
                     appendAccessingPane(message.body);
                 });
             });
@@ -174,7 +174,7 @@
             var socket = new SockJS('/phocos/ws');
             stompClientD = Stomp.over(socket);
             stompClientD.connect({}, function () {
-                stompClientD.subscribe('/pslog/destructive', function (message) {
+                stompClientD.subscribe('/topic/log_destructive', function (message) {
                     appendDestructivePane(message.body);
                 });
             });
