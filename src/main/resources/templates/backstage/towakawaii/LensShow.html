@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="zh-TW">
+
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>商品管理</title>
-<title>首頁</title>
-<link th:href="@{/backstage/shared_layout/css/styles.css}"
-	rel="stylesheet" />
-<style>
-#add {
-	border: 0.5px solid rgb(195, 195, 195);
-	float: right;
-	font-size: 14px;
-	background-color: #d1f0c2;
-}
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>商品管理</title>
+	<title>首頁</title>
+	<link th:href="@{/backstage/shared_layout/css/styles.css}"
+		rel="stylesheet" />
+	<style>
+		#add {
+			border: 0.5px solid rgb(195, 195, 195);
+			float: right;
+			font-size: 14px;
+			background-color: #d1f0c2;
+		}
 
-#back {
-	border: 0.5px solid rgb(195, 195, 195);
-	float: right;
-	font-size: 14px;
-	background-color: #c2f0ec;
-}
+		#back {
+			border: 0.5px solid rgb(195, 195, 195);
+			float: right;
+			font-size: 14px;
+			background-color: #c2f0ec;
+		}
 
-#del {
-	border: 0.5px solid rgb(195, 195, 195);
-	font-size: 14px;
-	background-color: #ffadadd4;
-}
+		#del {
+			border: 0.5px solid rgb(195, 195, 195);
+			font-size: 14px;
+			background-color: #ffadadd4;
+		}
 
-#editStudio {
-	border: 0.5px solid rgb(195, 195, 195);
-	font-size: 14px;
-	background-color: #d1f0c2;
-}
+		#editStudio {
+			border: 0.5px solid rgb(195, 195, 195);
+			font-size: 14px;
+			background-color: #d1f0c2;
+		}
 
-#enter {
-	border: 0.5px solid rgb(195, 195, 195);
-	font-size: 14px;
-	background-color: #c2f0ec;
-}
+		#enter {
+			border: 0.5px solid rgb(195, 195, 195);
+			font-size: 14px;
+			background-color: #c2f0ec;
+		}
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-th, td {
-	border: 0.5px solid rgb(195, 195, 195);
-	padding: 8px;
-	text-align: left;
-	border-radius: 5%;
-}
+		th,
+		td {
+			border: 0.5px solid rgb(195, 195, 195);
+			padding: 8px;
+			text-align: left;
+			border-radius: 5%;
+		}
 
-.table-img {
-	position: absolute;
-	right: 17px;
-	top: 99px;
-	width: 600px;
-	height: auto;
-	z-index: 1;
-}
-</style>
+		.table-img {
+			position: absolute;
+			right: 17px;
+			top: 99px;
+			width: 300px;
+			height: auto;
+			z-index: 1;
+		}
+	</style>
 </head>
+
 <body class="sb-nav-fixed">
 	<ul th:replace="~{backstage/shared_layout/layout-static :: navbar}"></ul>
 	<div id="layoutSidenav">
@@ -107,96 +110,96 @@ th, td {
 										<tr>
 											<td>鏡頭型號:</td>
 											<td><span id="lensModel" name="lensModel"
-												th:text="${lens.lensModel}"></span> <img class="table-img"
-												th:src="@{'/downloadlensImage/' + ${lens.productID}}" /></td>
+													th:text="${lens.lensModel}"></span> <img class="table-img"
+													th:src="@{'/downloadlensImage/' + ${lens.productID}}" /></td>
 										</tr>
 										<tr>
 											<td>鏡頭品牌:</td>
 											<td><span type="text" id="lensBrand" name="lensBrand"
-												th:text="${lens.lensBrand}"></span></td>
+													th:text="${lens.lensBrand}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭價格:</td>
 											<td><span type="number" id="lensPrice" name="lensPrice"
-												th:text="${lens.lensPrice}"></span></td>
+													th:text="${lens.lensPrice}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭接環:</td>
 											<td><span type="text" id="lensMount" name="lensMount"
-												th:text="${lens.lensMount}"></span></td>
+													th:text="${lens.lensMount}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭焦距:</td>
 											<td><span type="text" id="lensFocalLength"
-												name="lensFocalLength" th:text="${lens.lensFocalLength}"></span></td>
+													name="lensFocalLength" th:text="${lens.lensFocalLength}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭鏡組:</td>
 											<td><span type="text" id="lensGroup" name="lensGroup"
-												th:text="${lens.lensGroup}"></span></td>
+													th:text="${lens.lensGroup}"></span></td>
 										</tr>
 										<tr>
 											<td>光學防手震:</td>
 											<td><span type="text" id="lensOIS" name="lensOIS"
-												th:text="${lens.lensOIS}"></span></td>
+													th:text="${lens.lensOIS}"></span></td>
 										</tr>
 										<tr>
 											<td>放大倍率:</td>
 											<td><span type="text" id="lensMagnification"
-												name="lensMagnification"
-												th:text="${lens.lensMagnification}"></span></td>
+													name="lensMagnification"
+													th:text="${lens.lensMagnification}"></span></td>
 										</tr>
 										<tr>
 											<td>最近對焦距離:</td>
 											<td><span type="text" id="lensMinFocusDist"
-												name="lensMinFocusDist" th:text="${lens.lensMinFocusDist}"></span>
+													name="lensMinFocusDist" th:text="${lens.lensMinFocusDist}"></span>
 											</td>
 										</tr>
 										<tr>
 											<td>最小光圈:</td>
 											<td><span type="number" id="lensApertureMin"
-												name="lensApertureMin" th:text="${lens.lensApertureMin}"></span>
+													name="lensApertureMin" th:text="${lens.lensApertureMin}"></span>
 											</td>
 										</tr>
 										<tr>
 											<td>最大光圈:</td>
 											<td><span type="number" id="lensApertureMax"
-												name="lensApertureMax" th:text="${lens.lensApertureMax}"></span></td>
+													name="lensApertureMax" th:text="${lens.lensApertureMax}"></span></td>
 										</tr>
 										<tr>
 											<td>光圈葉片:</td>
 											<td><span type="text" id="lensBlades" name="lensBlades"
-												th:text="${lens.lensBlades}"></span></td>
+													th:text="${lens.lensBlades}"></span></td>
 										</tr>
 										<tr>
 											<td>濾鏡尺寸:</td>
 											<td><span type="text" id="lensFilterSize"
-												name="lensFilterSize" th:text="${lens.lensFilterSize}"></span></td>
+													name="lensFilterSize" th:text="${lens.lensFilterSize}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭尺寸:</td>
 											<td><span type="text" id="lensDims" name="lensDims"
-												th:text="${lens.lensDims}"></span></td>
+													th:text="${lens.lensDims}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭重量:</td>
 											<td><span type="number" id="lensWeight"
-												name="lensWeight" th:text="${lens.lensWeight}"></span></td>
+													name="lensWeight" th:text="${lens.lensWeight}"></span></td>
 										</tr>
 										<tr>
 											<td>鏡頭視角:</td>
 											<td><span type="text" id="lensFOV" name="lensFOV"
-												th:text="${lens.lensFOV}"></span></td>
+													th:text="${lens.lensFOV}"></span></td>
 										</tr>
 										<tr>
 											<td>驅動方式:</td>
 											<td><span type="text" id="lensDrive" name="lensDrive"
-												th:text="${lens.lensDrive}"></span></td>
+													th:text="${lens.lensDrive}"></span></td>
 										</tr>
 										<tr>
 											<td>庫存數量:</td>
 											<td><span type="number" id="lensStocks"
-												name="lensStocks" th:text="${lens.lensStocks}"></span></td>
+													name="lensStocks" th:text="${lens.lensStocks}"></span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -226,6 +229,7 @@ th, td {
 	<script>
 
 
-        </script>
+	</script>
 </body>
+
 </html>
