@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ import com.phocos.photoService.model.ReferencePicture;
 import com.phocos.photoService.model.ReferencePictureRepository;
 import com.phocos.photoService.model.ServiceType;
 import com.phocos.photoService.model.ServiceTypeRepository;
+
+import lombok.Data;
 
 @Service
 @Transactional
@@ -38,6 +41,35 @@ public class PhotoServiceService {
 	
 	@Autowired
 	private ReferencePictureRepository rpRepo;
+	
+	
+	private class MemberACCL{
+		private Member member = null;
+		private char level = 'D';
+		public void setMember(Member member) {
+			
+			if (member.getMemberID()==34) {
+				level = 'O';
+			}else {
+				switch (member.getMemberID()) {
+				case 12:
+				
+					break;
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	private MemberACCL accl = null;
+	
+	
+	
+	private Pageable pageSpec = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+	public void setPageSpec(Pageable pageSpec) { this.pageSpec = pageSpec; }
+	public void setPageSpec(int pageIndex, int pageSize) { this.pageSpec = PageRequest.of(0, 5, Direction.DESC, "createdOn");}
 	
 	
 	
@@ -73,8 +105,8 @@ public class PhotoServiceService {
 
 	
 	public Page<PhotoService> readAllByPage() {
-		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
-		return psRepo.findAll(page);
+//		PageRequest page = PageRequest.of(0, 5, Direction.DESC, "createdOn");
+		return psRepo.findAll(pageSpec);
 	}
 	
 	public Page<PhotoService> readAllByPage(int includeDeleted) {
