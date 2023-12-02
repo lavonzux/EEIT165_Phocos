@@ -17,6 +17,7 @@ public class GetPic {
 		return imageBytes;
 	}
 
+	/*
 	public static void main(String[] args) {
 		try {
 			String imagePath = "C:/images/1.jpg";
@@ -28,6 +29,7 @@ public class GetPic {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 	public static String bytesToHexString(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
