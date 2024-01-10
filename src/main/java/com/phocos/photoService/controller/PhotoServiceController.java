@@ -160,10 +160,13 @@ public class PhotoServiceController {
 		
 		Page<PhotoService> resultPage = null;
 		
+		session.setAttribute("memberID", 34);				
+
+		resultPage = psService.readAllByPage();
+		
 		Integer memberID = (Integer) session.getAttribute("memberID");
 		if (memberID!=null && memberID == 34) {
 			System.out.println("memberID is:..."+memberID);
-			resultPage = psService.readAllByPage();
 		}else {
 			resultPage = psService.readAllByPage(page-1, 5);
 			System.out.println("memberID do not exist");
