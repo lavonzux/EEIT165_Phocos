@@ -4,7 +4,11 @@ mvnw.cmd
 cMsg.txt
 src/main/resources/static/backstage/photoService/photoServiceLogger_accessing.txt
 src/main/resources/static/backstage/photoService/photoServiceLogger_destructive.txt
-
+keystore.p12
+*.key
+*.pem
+*.p7b
+*.crt
 
 HELP.md
 target/
