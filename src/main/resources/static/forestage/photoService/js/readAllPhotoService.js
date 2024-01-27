@@ -1,6 +1,6 @@
 const currentHref = window.location.href
 // console.log(window.location);
-const ContextPathname = currentHref.substring(0, currentHref.indexOf('phocos') + 6)
+const ContextPathname = window.location.origin + "/phocos";
 // console.log(ContextPathname);
 
 
